@@ -1,0 +1,16 @@
+[
+{
+  "modid": "BottledAnimals",
+  "name": "Bottled Animals",
+  "description": "Manage your animals like items in a noiseless way!",
+  "version": "1.0",
+  "mcversion": "1.7.10",
+  "url": "WIP",
+  "updateUrl": "",
+  "authorList": ["Ermans"],
+  "credits": "Thanks to Pahimar for his tutorials, to Crazypants (EnderIO) and to CofhTeam.",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]

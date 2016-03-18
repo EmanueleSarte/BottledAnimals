@@ -1,0 +1,76 @@
+#Creative tabs
+itemGroup.bottledanimals=Bottled Animals
+
+
+#Item
+item.bottledanimals:bottle.name=Empty Bottle
+item.bottledanimals:blankPattern.name=Blank Pattern
+item.bottledanimals:animalCircuit.name=Animal Circuit
+item.bottledanimals:brokenPattern.name=Broken Pattern
+item.bottledanimals:squidFood.name=Squid Food
+item.bottledanimals:milkBucket.name=Milk Bucket
+item.bottledanimals:foodBucket.name=Food Bucket
+item.bottledanimals:rancherGear.name=Gear
+
+
+    #Bottled Animals
+item.bottledanimals:animalBottle.chicken.name=Bottled Chicken
+item.bottledanimals:animalBottle.pig.name=Bottled Pig
+item.bottledanimals:animalBottle.sheep.name=Bottled Sheep
+item.bottledanimals:animalBottle.squid.name=Bottled Squid
+item.bottledanimals:animalBottle.horse.name=Bottled Horse
+item.bottledanimals:animalBottle.moosh.name=Bottled Mooshroom
+item.bottledanimals:animalBottle.wolf.name=Bottled Wolf
+item.bottledanimals:animalBottle.cow.name=Bottled Cow
+item.bottledanimals:animalBottle.ocelot.name=Bottled Ocelot
+    #Digitalized Animals
+item.bottledanimals:digitalizedAnimal.chicken.name=Digitalized Chicken
+item.bottledanimals:digitalizedAnimal.pig.name=Digitalized Pig
+item.bottledanimals:digitalizedAnimal.sheep.name=Digitalized Sheep
+item.bottledanimals:digitalizedAnimal.squid.name=Digitalized Squid
+item.bottledanimals:digitalizedAnimal.horse.name=Digitalized Horse
+item.bottledanimals:digitalizedAnimal.moosh.name=Digitalized Mooshroom
+item.bottledanimals:digitalizedAnimal.wolf.name=Digitalized Wolf
+item.bottledanimals:digitalizedAnimal.cow.name=Digitalized Cow
+item.bottledanimals:digitalizedAnimal.ocelot.name=Digitalized Ocelot
+    #Digitalized Baby Animals
+item.bottledanimals:digitalizedBabyAnimal.babyChicken.name=Digitalized Baby Chicken
+item.bottledanimals:digitalizedBabyAnimal.babyPig.name=Digitalized Baby Pig
+item.bottledanimals:digitalizedBabyAnimal.babySheep.name=Digitalized Baby Sheep
+item.bottledanimals:digitalizedBabyAnimal.babySquid.name=Digitalized Baby Squid
+item.bottledanimals:digitalizedBabyAnimal.babyHorse.name=Digitalized Baby Horse
+item.bottledanimals:digitalizedBabyAnimal.babyMoosh.name=Digitalized Baby Mooshroom
+item.bottledanimals:digitalizedBabyAnimal.babyWolf.name=Digitalized Baby Wolf
+item.bottledanimals:digitalizedBabyAnimal.babyCow.name=Digitalized Baby Cow
+item.bottledanimals:digitalizedBabyAnimal.babyOcelot.name=Digitalized Baby Ocelot
+
+
+
+
+#Machine
+tile.bottledanimals:animalDigitizer.name=Animal Digitizer
+tile.bottledanimals:breeder.name=Animal Breeder
+tile.bottledanimals:growthAccelerator.name=Growth Accelerator
+tile.bottledanimals:dropExtractor.name=Drop Extractor
+tile.bottledanimals:rancher.name=Animal Rancher
+tile.bottledanimals:wirelessFeeder.name=Wireless Feeder
+tile.bottledanimals:foodCrusher.name=Food Crusher
+
+#Block
+block.bottledanimals:machineFrame.name=Machine Frame
+
+
+#Fluid
+fluid.bottledanimals.food=Liquid Food
+fluid.bottledanimals.milk=Milk
+
+
+
+#NEI lang
+bottledanimals.nei.animalDigitizer=Animal Digitizer
+bottledanimals.nei.breeder=Breeder
+bottledanimals.nei.dropExtractor=Drop Extractor
+bottledanimals.nei.growthAccelerator=Growth Accelerator
+bottledanimals.nei.wirelessFeeder=Wireless Feeder
+bottledanimals.nei.rancher=Rancher
+bottledanimals.nei.foodCrusher=Food Crusher

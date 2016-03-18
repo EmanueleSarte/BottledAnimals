@@ -1,0 +1,53 @@
+package com.ermans.bottledanimals.item.simple;
+
+import com.ermans.bottledanimals.init.ModItems;
+import com.ermans.bottledanimals.item.ItemBottledAnimals;
+import com.ermans.bottledanimals.reference.Animals;
+import com.ermans.bottledanimals.reference.Names;
+import net.minecraft.entity.EntityList;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.passive.EntityAnimal;
+import net.minecraft.entity.passive.EntitySquid;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+
+public class ItemBottle extends ItemBottledAnimals {
+
+    public ItemBottle() {
+        super(Names.Items.BOTTLE);
+    }
+
+    @Override
+    public boolean itemInteractionForEntity(ItemStack itemStack, EntityPlayer player, EntityLivingBase entity) {
+        if (entity.worldObj.isRemote) {
+            return false;
+        }
+        if (!(entity instanceof EntityAnimal) && !(entity instanceof EntitySquid)) {
+            return false;
+        }
+        if (!EntityList.classToStringMapping.containsKey(entity.getClass())) {
+            return false;
+        }
+        if (((entity instanceof EntityAnimal)) &&
+                (((EntityAnimal) entity).getGrowingAge() < 0)) {
+            return false;
+        }
+        Animals entityAnimals = Animals.getAnimalsFromEntityName(EntityList.classToStringMapping.get(entity.getClass()).toString());
+        if (entityAnimals == null) {
+            return false;
+        }
+        entity.setDead();
+        if (entity.isDead) {
+            player.getHeldItem().stackSize -= 1;
+            if (player.getHeldItem().stackSize <= 0) {
+                player.inventory.mainInventory[player.inventory.currentItem] = null;
+            }
+            ItemStack filledBottle = new ItemStack(ModItems.itemAnimalInABottle, 1, entityAnimals.getID());
+            if (!player.inventory.addItemStackToInventory(filledBottle)) {
+                player.dropPlayerItemWithRandomChoice(filledBottle, true);
+            }
+            player.inventoryContainer.detectAndSendChanges();
+        }
+        return true;
+    }
+}
