@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class BreederRecipeHandler extends HandlerBase {
+public class BreederRecipeHandler extends HandlerRecipeBase {
     private static final BreederManager recManager = BreederManager.INSTANCE;
 
 

@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class DropExtractorRecipeHandler extends HandlerBase {
+public class DropExtractorRecipeHandler extends HandlerRecipeBase {
 
     private static final DropExtractorManager recManager = DropExtractorManager.INSTANCE;
 

@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class RancherRecipeHandler extends HandlerBase {
+public class RancherRecipeHandler extends HandlerRecipeBase {
     private final RancherManager recManager = RancherManager.INSTANCE;
 
 

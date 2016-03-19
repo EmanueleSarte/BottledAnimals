@@ -12,7 +12,7 @@ import org.lwjgl.opengl.GL11;
 import java.awt.*;
 
 
-public abstract class HandlerBase extends TemplateRecipeHandler {
+public abstract class HandlerRecipeBase extends TemplateRecipeHandler {
 
 
     protected int offY;

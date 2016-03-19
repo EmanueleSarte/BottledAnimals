@@ -15,10 +15,9 @@ import java.util.Collection;
 import java.util.List;
 
 
-public class AnimalDigitizerRecipeHandler extends HandlerBase {
+public class AnimalDigitizerRecipeHandler extends HandlerRecipeBase {
 
     private final AnimalDigitizerManager recManager = AnimalDigitizerManager.INSTANCE;
-
 
 
     @Override

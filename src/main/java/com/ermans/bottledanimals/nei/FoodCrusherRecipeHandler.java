@@ -3,7 +3,7 @@ package com.ermans.bottledanimals.nei;
 
 import codechicken.lib.gui.GuiDraw;
 import codechicken.nei.PositionedStack;
-import com.ermans.bottledanimals.block.machine.animaldigitizer.GuiAnimalDigitizer;
+import com.ermans.bottledanimals.block.machine.foodcrusher.GuiFoodCrusher;
 import com.ermans.bottledanimals.block.machine.foodcrusher.TileFoodCrusher;
 import com.ermans.bottledanimals.block.machine.rancher.TileRancher;
 import com.ermans.bottledanimals.client.render.RenderUtil;
@@ -19,13 +19,13 @@ import net.minecraftforge.fluids.FluidStack;
 
 import java.util.Collection;
 
-public class FoodCrusherRecipeHandler extends HandlerBase {
+public class FoodCrusherRecipeHandler extends HandlerRecipeBase {
 
     private final FoodCrusherManager recManager = FoodCrusherManager.INSTANCE;
 
     @Override
     public Class<? extends GuiContainer> getGuiClass() {
-        return GuiAnimalDigitizer.class;
+        return GuiFoodCrusher.class;
     }
 
     @Override
@@ -118,7 +118,7 @@ public class FoodCrusherRecipeHandler extends HandlerBase {
                 container = new PositionedStack(new ItemStack(input.getItem().getContainerItem()), 115, 47 + offY);
             } else if (input.getItem() == Items.mushroom_stew) {
                 container = new PositionedStack(new ItemStack(Items.bowl), 115, 47 + offY);
-            }else{
+            } else {
                 container = null;
             }
         }

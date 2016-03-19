@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class GrowthAcceleratorRecipeHandler extends HandlerBase {
+public class GrowthAcceleratorRecipeHandler extends HandlerRecipeBase {
     private final GrowthAcceleratorManager recManager = GrowthAcceleratorManager.INSTANCE;
 
 
