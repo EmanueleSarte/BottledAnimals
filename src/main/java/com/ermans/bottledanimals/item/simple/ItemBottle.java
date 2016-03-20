@@ -28,8 +28,7 @@ public class ItemBottle extends ItemBottledAnimals {
         if (!EntityList.classToStringMapping.containsKey(entity.getClass())) {
             return false;
         }
-        if (((entity instanceof EntityAnimal)) &&
-                (((EntityAnimal) entity).getGrowingAge() < 0)) {
+        if (entity instanceof EntityAnimal && ((EntityAnimal) entity).getGrowingAge() < 0) {
             return false;
         }
         Animals entityAnimals = Animals.getAnimalsFromEntityName(EntityList.classToStringMapping.get(entity.getClass()).toString());
@@ -38,16 +37,26 @@ public class ItemBottle extends ItemBottledAnimals {
         }
         entity.setDead();
         if (entity.isDead) {
-            player.getHeldItem().stackSize -= 1;
-            if (player.getHeldItem().stackSize <= 0) {
-                player.inventory.mainInventory[player.inventory.currentItem] = null;
+
+            if (itemStack != null && itemStack.stackSize > 0) {
+                --itemStack.stackSize;
+                if (itemStack.stackSize <= 0) {
+                    itemStack = null;
+                }
+
+                ItemStack filledBottle = new ItemStack(ModItems.itemAnimalInABottle, 1, entityAnimals.getID());
+                if (!player.inventory.addItemStackToInventory(filledBottle)) {
+                    player.dropPlayerItemWithRandomChoice(filledBottle, false);
+                }
+
+                player.inventoryContainer.detectAndSendChanges();
+                return true;
+
+
             }
-            ItemStack filledBottle = new ItemStack(ModItems.itemAnimalInABottle, 1, entityAnimals.getID());
-            if (!player.inventory.addItemStackToInventory(filledBottle)) {
-                player.dropPlayerItemWithRandomChoice(filledBottle, true);
-            }
-            player.inventoryContainer.detectAndSendChanges();
         }
+
+
         return true;
     }
 }
