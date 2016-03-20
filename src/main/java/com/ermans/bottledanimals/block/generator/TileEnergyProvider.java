@@ -2,6 +2,7 @@ package com.ermans.bottledanimals.block.generator;
 
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyProvider;
+import cofh.api.energy.IEnergyStorage;
 import com.ermans.bottledanimals.block.IEnergyBA;
 import com.ermans.bottledanimals.block.machine.TileInventory;
 import com.ermans.bottledanimals.helper.TargetPointHelper;
@@ -12,6 +13,9 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 public abstract class TileEnergyProvider extends TileInventory implements IEnergyProvider, IEnergyBA {
 
+    protected static final int MAX_RF = 80;
+    protected static final int CAPACITY = 32000;
+
     public boolean[][] DF_VALID_SIDE = new boolean[][]{
             {false, true, true, true, true, true},
             {true, false, true, true, true, true},
@@ -21,12 +25,38 @@ public abstract class TileEnergyProvider extends TileInventory implements IEnerg
             {true, true, true, true, true, false},
     };
 
-    protected EnergyStorage storage = new EnergyStorage(32000);
+    protected EnergyStorage storage;
+    protected int lastOutEnergy;
+    protected boolean doSync;
+
+    @Override
+    public void initTile() {
+        super.initTile();
+        this.storage = new EnergyStorage(CAPACITY,CAPACITY,MAX_RF);
+    }
+
+
+    @Override
+    public void updateEntity() {
+        if (!worldObj.isRemote && doSync) {
+            doSync = false;
+            PacketHandler.INSTANCE.sendToAllAround(new MessageEnergy(this.xCoord, this.yCoord, this.zCoord, this.storage.getEnergyStored()), TargetPointHelper.getTargetPoint(this));
+        }
+    }
 
 
 
-    protected void syncEnergy(){
-        PacketHandler.INSTANCE.sendToAllAround(new MessageEnergy(this.xCoord, this.yCoord, this.zCoord, this.storage.getEnergyStored()), TargetPointHelper.getTargetPoint(this));
+    protected void modifyEnergyStored(int energy) {
+        if (!worldObj.isRemote && energy != 0) {
+            doSync = true;
+        }
+        storage.modifyEnergyStored(energy);
+    }
+
+
+    @Override
+    public IEnergyStorage getEnergyStorage() {
+        return storage;
     }
 
     @Override
@@ -37,9 +67,9 @@ public abstract class TileEnergyProvider extends TileInventory implements IEnerg
     @Override
     public int extractEnergy(ForgeDirection from, int maxExtract, boolean simulate) {
         if (!worldObj.isRemote && maxExtract > 0 && !simulate){
-            syncEnergy();
+            doSync = true;
         }
-        return storage.extractEnergy(maxExtract, simulate);
+        return lastOutEnergy = storage.extractEnergy(maxExtract, simulate);
     }
 
     @Override

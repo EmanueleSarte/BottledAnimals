@@ -9,7 +9,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
-public abstract class TileMachine extends TileInventory implements IEnergyInfoReceiver {
+public abstract class TileMachine extends TilePowered implements IEnergyInfoReceiver {
 
 
     protected byte powerMult;
@@ -22,8 +22,6 @@ public abstract class TileMachine extends TileInventory implements IEnergyInfoRe
 
     public boolean isActive;
     public boolean updateEntity;
-
-    public boolean needSyncText;
 
 
     @Override

@@ -15,17 +15,22 @@ public class BlockBasicGenerator extends BlockMachine{
 
 
     @Override
-    public Object getServerGuiElement(int i, EntityPlayer entityPlayer, World world, int i1, int i2, int i3) {
+    public Object getServerGuiElement(int i, EntityPlayer player, World world, int x, int y, int z) {
+        TileEntity te = world.getTileEntity(x, y, z);
+        if (te instanceof TileBasicGenerator) {
+            return new ContainerBasicGenerator(player.inventory, (TileBasicGenerator) te);
+        }
         return null;
     }
 
     @Override
-    public Object getClientGuiElement(int i, EntityPlayer entityPlayer, World world, int i1, int i2, int i3) {
-        return null;
+    public Object getClientGuiElement(int i,  EntityPlayer player, World world, int x, int y, int z) {
+        TileEntity te = world.getTileEntity(x, y, z);
+        return new GuiBasicGenerator(player.inventory, (TileBasicGenerator) te);
     }
 
     @Override
     public TileEntity createNewTileEntity(World world, int i) {
-        return null;
+        return new TileBasicGenerator();
     }
 }

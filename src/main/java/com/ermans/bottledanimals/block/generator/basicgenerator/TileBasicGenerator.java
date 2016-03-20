@@ -1,37 +1,12 @@
 package com.ermans.bottledanimals.block.generator.basicgenerator;
 
-import com.ermans.bottledanimals.block.generator.TileEnergyProvider;
+import com.ermans.bottledanimals.block.generator.TileGenerator;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityFurnace;
 
-public class TileBasicGenerator extends TileEnergyProvider {
+public class TileBasicGenerator extends TileGenerator {
 
     private static final int fuel = 0;
-
-    protected int remaining;
-
-
-    @Override
-    public void updateEntity() {
-        if (!worldObj.isRemote) {
-            if (remaining > 0) {
-
-                remaining--;
-
-
-            } else {
-                if (hasPassedRedstoneTest()) {
-                    if (inventory[fuel] != null) {
-                        int burnTime = TileEntityFurnace.getItemBurnTime(inventory[fuel]);
-                        if (burnTime > 0) {
-                            remaining = burnTime * 20;
-                        }
-                    }
-                }
-            }
-        }
-    }
-
 
 
     @Override
@@ -47,6 +22,18 @@ public class TileBasicGenerator extends TileEnergyProvider {
 
     @Override
     public boolean isItemValidForSlot(int i, ItemStack itemStack) {
-        return false;
+        return TileEntityFurnace.getItemBurnTime(itemStack) > 0;
     }
+
+
+    @Override
+    protected boolean canStart() {
+        return inventory[fuel] != null && TileEntityFurnace.getItemBurnTime(inventory[fuel]) != 0;
+    }
+
+    @Override
+    protected int startProcess() {
+        return TileEntityFurnace.getItemBurnTime(inventory[fuel]) * 20;
+    }
+
 }

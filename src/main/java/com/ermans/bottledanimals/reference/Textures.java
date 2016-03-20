@@ -24,6 +24,7 @@ public final class Textures {
         public static final ResourceLocation WIRELESS_FEEDER = getResourceLocation("wirelessFeeder.png");
         public static final ResourceLocation RANCHER = getResourceLocation("rancher.png");
         public static final ResourceLocation FOOD_CRUSHER = getResourceLocation("foodCrusher.png");
+        public static final ResourceLocation BASIC_GENERATOR = getResourceLocation("basicGenerator.png");
 
         public static final ResourceLocation NEI_GUI = getResourceLocation("nei.png");
 
@@ -40,6 +41,7 @@ public final class Textures {
             public static final String PROGRESS_MULT = getElementsLocation("Progress_Multiplier.png");
             public static final String PROGRESS_MILK = getElementsLocation("Progress_Milk.png");
             public static final String PROGRESS_SHEARS = getElementsLocation("Progress_Shears.png");
+            public static final String PROGRESS_FIRE = getElementsLocation("Progress_Fire.png");
 
         }
 
