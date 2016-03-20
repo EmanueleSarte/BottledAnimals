@@ -29,7 +29,7 @@ public abstract class BlockMachine extends BlockBase implements IGuiHandler, ITi
     private static final String MACHINE_TOP = Reference.MOD_ID_LOWERCASE + ":" + "machineTop";
     private static final String MACHINE_DOWN = Reference.MOD_ID_LOWERCASE + ":" + "machineDown";
 
-    private static final IIcon[][] iconBuffer = new IIcon[2][6];
+    private IIcon[][] iconBuffer = new IIcon[2][6];
 
     private IIcon[] iconMachine;
 
@@ -114,7 +114,6 @@ public abstract class BlockMachine extends BlockBase implements IGuiHandler, ITi
     }
 
 
-
     @Override
     public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase player, ItemStack stack) {
         super.onBlockPlacedBy(world, x, y, z, player, stack);
@@ -138,19 +137,17 @@ public abstract class BlockMachine extends BlockBase implements IGuiHandler, ITi
         this.iconMachine[1] = iIconRegister.registerIcon(Reference.MOD_ID_LOWERCASE + ":" + getMachineTextureName() + "On");
 
         //we are registering the side icons (except the front icon, which is different) only once
-        if (iconBuffer[0][0] == null) {
-            iconBuffer[0][0] = iIconRegister.registerIcon(MACHINE_DOWN);
-            iconBuffer[0][1] = iIconRegister.registerIcon(MACHINE_TOP);
-            iconBuffer[0][2] = iIconRegister.registerIcon(MACHINE_SIDE);
-            iconBuffer[0][4] = iIconRegister.registerIcon(MACHINE_SIDE);
-            iconBuffer[0][5] = iIconRegister.registerIcon(MACHINE_SIDE);
+        iconBuffer[0][0] = iIconRegister.registerIcon(MACHINE_DOWN);
+        iconBuffer[0][1] = iIconRegister.registerIcon(MACHINE_TOP);
+        iconBuffer[0][2] = iIconRegister.registerIcon(MACHINE_SIDE);
+        iconBuffer[0][4] = iIconRegister.registerIcon(MACHINE_SIDE);
+        iconBuffer[0][5] = iIconRegister.registerIcon(MACHINE_SIDE);
 
-            iconBuffer[1][0] = iIconRegister.registerIcon(MACHINE_DOWN);
-            iconBuffer[1][1] = iIconRegister.registerIcon(MACHINE_TOP);
-            iconBuffer[1][2] = iIconRegister.registerIcon(MACHINE_SIDE);
-            iconBuffer[1][4] = iIconRegister.registerIcon(MACHINE_SIDE);
-            iconBuffer[1][5] = iIconRegister.registerIcon(MACHINE_SIDE);
-        }
+        iconBuffer[1][0] = iIconRegister.registerIcon(MACHINE_DOWN);
+        iconBuffer[1][1] = iIconRegister.registerIcon(MACHINE_TOP);
+        iconBuffer[1][2] = iIconRegister.registerIcon(MACHINE_SIDE);
+        iconBuffer[1][4] = iIconRegister.registerIcon(MACHINE_SIDE);
+        iconBuffer[1][5] = iIconRegister.registerIcon(MACHINE_SIDE);
     }
 
     @Override
@@ -200,7 +197,7 @@ public abstract class BlockMachine extends BlockBase implements IGuiHandler, ITi
         if (tile != null && tile instanceof TileMachine) {
             if (((TileMachine) tile).isActive) {
                 return 14;
-            }else{
+            } else {
                 return 0;
             }
         }
