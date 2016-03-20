@@ -1,6 +1,6 @@
 package com.ermans.bottledanimals.block.machine.rancher;
 
-import com.ermans.bottledanimals.block.machine.BlockMachine;
+import com.ermans.bottledanimals.block.BlockMachine;
 import com.ermans.bottledanimals.reference.Names;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
@@ -11,10 +11,6 @@ public class BlockRancher extends BlockMachine {
         super(Names.Machines.RANCHER);
     }
 
-    @Override
-    protected String getMachineTextureName() {
-        return Names.Machines.RANCHER;
-    }
 
     @Override
     public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {

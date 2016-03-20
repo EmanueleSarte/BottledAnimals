@@ -1,6 +1,6 @@
 package com.ermans.bottledanimals.block.machine.foodcrusher;
 
-import com.ermans.bottledanimals.block.machine.BlockMachine;
+import com.ermans.bottledanimals.block.BlockMachine;
 import com.ermans.bottledanimals.reference.Names;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
@@ -12,10 +12,6 @@ public class BlockFoodCrusher extends BlockMachine {
         super(Names.Machines.FOOD_CRUSHER);
     }
 
-    @Override
-    protected String getMachineTextureName() {
-        return Names.Machines.FOOD_CRUSHER;
-    }
 
     @Override
     public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {

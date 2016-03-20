@@ -167,6 +167,10 @@ public abstract class TileInventory extends TileReconfigurable implements ISided
 
     abstract protected int getNumOutput();
 
+    @Override
+    public int getSizeInventory() {
+        return getNumInput() + getNumOutput();
+    }
 
     //Don't mess with inventory or Itemstack here
     public class InventoryHelper {

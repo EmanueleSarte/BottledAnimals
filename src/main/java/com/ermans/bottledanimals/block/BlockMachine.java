@@ -1,9 +1,8 @@
-package com.ermans.bottledanimals.block.machine;
+package com.ermans.bottledanimals.block;
 
 import com.ermans.bottledanimals.BottledAnimals;
 import com.ermans.bottledanimals.BottledAnimalsTab;
-import com.ermans.bottledanimals.block.BlockBase;
-import com.ermans.bottledanimals.block.TileBottledAnimals;
+import com.ermans.bottledanimals.block.machine.TileMachine;
 import com.ermans.bottledanimals.reference.Reference;
 import cpw.mods.fml.common.network.IGuiHandler;
 import cpw.mods.fml.relauncher.Side;
@@ -47,9 +46,6 @@ public abstract class BlockMachine extends BlockBase implements IGuiHandler, ITi
 
     }
 
-
-    protected abstract String getMachineTextureName();
-
     @Override
     public void onNeighborChange(IBlockAccess world, int x, int y, int z, int tileX, int tileY, int tileZ) {
         TileEntity te = world.getTileEntity(x, y, z);
@@ -67,7 +63,7 @@ public abstract class BlockMachine extends BlockBase implements IGuiHandler, ITi
     }
 
     private boolean openGui(World world, int x, int y, int z, EntityPlayer entityPlayer) {
-        entityPlayer.openGui(BottledAnimals.instance, this.guiId, world, x, y, z);
+        entityPlayer.openGui(BottledAnimals.INSTANCE, this.guiId, world, x, y, z);
         return true;
     }
 
@@ -134,8 +130,8 @@ public abstract class BlockMachine extends BlockBase implements IGuiHandler, ITi
         this.blockIcon = iIconRegister.registerIcon(MACHINE_SIDE);
         //we are registering the frond-side icons for every machine
         this.iconMachine = new IIcon[2];
-        this.iconMachine[0] = iIconRegister.registerIcon(Reference.MOD_ID_LOWERCASE + ":" + getMachineTextureName());
-        this.iconMachine[1] = iIconRegister.registerIcon(Reference.MOD_ID_LOWERCASE + ":" + getMachineTextureName() + "On");
+        this.iconMachine[0] = iIconRegister.registerIcon(Reference.MOD_ID_LOWERCASE + ":" + blockName);
+        this.iconMachine[1] = iIconRegister.registerIcon(Reference.MOD_ID_LOWERCASE + ":" + blockName + "On");
 
         //we are registering the side icons (except the front icon, which is different) only once
         if (iconBuffer[0][0] == null) {

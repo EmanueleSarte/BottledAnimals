@@ -28,6 +28,8 @@ public class Names {
         public static final String WIRELESS_FEEDER = "wirelessFeeder";
         public static final String RANCHER = "rancher";
         public static final String FOOD_CRUSHER = "foodCrusher";
+
+        public static final String BASIC_GENERATOR = "basicGenerator";
     }
 
     public static final class Blocks {

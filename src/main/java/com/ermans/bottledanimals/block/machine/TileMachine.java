@@ -134,11 +134,6 @@ public abstract class TileMachine extends TileInventory implements IEnergyInfoRe
     }
 
     @Override
-    public int getSizeInventory() {
-        return getNumInput() + getNumOutput();
-    }
-
-    @Override
     public ItemStack decrStackSize(int slot, int amount) {
         ItemStack stack = super.decrStackSize(slot, amount);
         if (!worldObj.isRemote && remaining > 0 && isActive && shouldStopIfChangeSlot(slot, 0) && !canStillProcess(this.recipeCode)) {

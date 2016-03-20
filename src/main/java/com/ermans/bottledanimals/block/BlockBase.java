@@ -19,7 +19,7 @@ public abstract class BlockBase extends Block {
         }
     };
 
-    private final String blockName;
+    protected final String blockName;
 
 
     public BlockBase(String blockName) {

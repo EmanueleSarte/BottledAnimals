@@ -1,6 +1,6 @@
 package com.ermans.bottledanimals.block.machine.growthaccelerator;
 
-import com.ermans.bottledanimals.block.machine.BlockMachine;
+import com.ermans.bottledanimals.block.BlockMachine;
 import com.ermans.bottledanimals.reference.Names;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
@@ -10,11 +10,6 @@ public class BlockGrowthAccelerator extends BlockMachine {
 
     public BlockGrowthAccelerator() {
         super(Names.Machines.GROWTH_ACCELERATOR);
-    }
-
-    @Override
-    protected String getMachineTextureName() {
-        return Names.Machines.GROWTH_ACCELERATOR;
     }
 
 

@@ -1,6 +1,6 @@
 package com.ermans.bottledanimals.block.machine.wirelessfeeder;
 
-import com.ermans.bottledanimals.block.machine.BlockMachine;
+import com.ermans.bottledanimals.block.BlockMachine;
 import com.ermans.bottledanimals.reference.Names;
 import com.ermans.bottledanimals.reference.Reference;
 import cpw.mods.fml.relauncher.Side;
@@ -19,15 +19,9 @@ public class BlockWirelessFeeder extends BlockMachine {
     }
 
     @Override
-    protected String getMachineTextureName() {
-        return Names.Machines.WIRELESS_FEEDER;
-    }
-
-
-    @Override
     @SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister iIconRegister) {
-        this.blockIcon = iIconRegister.registerIcon(Reference.MOD_ID_LOWERCASE + ":" + getMachineTextureName());
+        this.blockIcon = iIconRegister.registerIcon(Reference.MOD_ID_LOWERCASE + ":" + blockName);
 
     }
 
