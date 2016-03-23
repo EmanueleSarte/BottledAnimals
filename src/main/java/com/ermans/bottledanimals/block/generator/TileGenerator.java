@@ -2,6 +2,7 @@ package com.ermans.bottledanimals.block.generator;
 
 import cofh.api.energy.IEnergyReceiver;
 import com.ermans.api.IEnergyInfoProvider;
+import com.ermans.bottledanimals.block.machine.ContainerMachine;
 import com.ermans.bottledanimals.helper.BlockPos;
 import com.ermans.bottledanimals.helper.BlockPosHelper;
 import com.ermans.bottledanimals.helper.TargetPointHelper;
@@ -10,6 +11,7 @@ import com.ermans.bottledanimals.network.message.MessageTile;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.inventory.ICrafting;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -25,6 +27,7 @@ public abstract class TileGenerator extends TileEnergyProvider implements IEnerg
 
 
     protected STATE state;
+
     public enum STATE {
         LOW_GEN,
         BALANCING,
@@ -48,6 +51,7 @@ public abstract class TileGenerator extends TileEnergyProvider implements IEnerg
         boolean hasChanged = isActive;
         STATE stateChanged = state;
         int actualRateVar = actualRate;
+        int lastEnergyOutVar = lastEnergyOut;
 
         if (!worldObj.isRemote) {
 
@@ -58,7 +62,7 @@ public abstract class TileGenerator extends TileEnergyProvider implements IEnerg
                 if (lastEnergyOut == 0) {
                     if (isStorageHalfFull()) {
                         actualRate--;
-                        if (actualRate <= 0){
+                        if (actualRate <= 0) {
                             actualRate = 1;
                         }
                         energyGenerated = actualRate;
@@ -70,14 +74,14 @@ public abstract class TileGenerator extends TileEnergyProvider implements IEnerg
                 } else {
                     if (isStorageHalfFull()) {
 
-                        if (actualRate > lastEnergyOut){
+                        if (actualRate > lastEnergyOut) {
                             actualRate--;
-                            if (actualRate < lastEnergyOut){
+                            if (actualRate < lastEnergyOut) {
                                 actualRate = lastEnergyOut;
                             }
-                        }else{
+                        } else {
                             actualRate++;
-                            if (actualRate > lastEnergyOut){
+                            if (actualRate > lastEnergyOut) {
                                 actualRate = lastEnergyOut;
                             }
                         }
@@ -96,22 +100,23 @@ public abstract class TileGenerator extends TileEnergyProvider implements IEnerg
                 if (remaining <= 0) {
                     isActive = false;
                     sendUpdate = true;
-                    state = STATE.OFF;
                 }
 
-            } else {
+            }
 
+            if (remaining <= 0) {
                 if (hasPassedRedstoneTest()) {
-                    if (!isStorageFull()) {
-                        if (canStart()) {
-                            remaining = totalFuel = startProcess();
-                            sendUpdate = true;
-                            isActive = true;
-                        }
+                    if (!isStorageFull() && canStart()) {
+                        remaining = totalFuel = startProcess();
+                        sendUpdate = true;
+                        isActive = true;
                     }
                 }
-                if (actualRate != 0) {
-                    actualRate = 0;
+                if (!isActive) {
+                    state = STATE.OFF;
+                    if (actualRate != 0) {
+                        actualRate = 0;
+                    }
                 }
             }
 
@@ -135,7 +140,7 @@ public abstract class TileGenerator extends TileEnergyProvider implements IEnerg
             }
         }
 
-        if (actualRateVar != actualRate || stateChanged != state) {
+        if (actualRateVar != actualRate || stateChanged != state || lastEnergyOut != lastEnergyOutVar) {
             sendUpdate = true;
         }
 
@@ -146,10 +151,10 @@ public abstract class TileGenerator extends TileEnergyProvider implements IEnerg
 
 
     protected void syncMachine(boolean updateTexture) {
-        //this is called clientside (I mean the message) to update the texture
         PacketHandler.INSTANCE.sendToAllAround(new MessageTile(this, updateTexture), TargetPointHelper.getTargetPoint(this));
         markDirty();
-        //This is called server side to update light
+
+
         if (updateTexture) {
             worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
         }
@@ -173,7 +178,7 @@ public abstract class TileGenerator extends TileEnergyProvider implements IEnerg
     abstract protected int startProcess();
 
 
-    public STATE getState(){
+    public STATE getState() {
         return state;
     }
 
@@ -217,6 +222,11 @@ public abstract class TileGenerator extends TileEnergyProvider implements IEnerg
     public int getFuelScaled(int scale) {
         if (!isActive || remaining == 0) return 0;
         return remaining * scale / totalFuel;
+    }
+
+
+    public void addCraftingToCrafters(ContainerMachine containerMachinem, ICrafting crafting) {
+
     }
 
 

@@ -1,6 +1,6 @@
 package com.ermans.bottledanimals.block.machine.wirelessfeeder;
 
-import com.ermans.bottledanimals.block.BlockMachine;
+import com.ermans.bottledanimals.block.machine.BlockMachine;
 import com.ermans.bottledanimals.reference.Names;
 import com.ermans.bottledanimals.reference.Reference;
 import cpw.mods.fml.relauncher.Side;

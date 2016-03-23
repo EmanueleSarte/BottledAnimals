@@ -33,7 +33,7 @@ public class GuiBasicGenerator extends GuiBaseAdv {
         elementEnergyStored.setPosition(119, 21);
         addElement(elementEnergyStored);
 
-        this.speed = (ElementDualScaled) addElement(new ElementDualScaled(this, 78, 45).setMode(0).setSize(16, 16).setTexture(Textures.Gui.Element.PROGRESS_FIRE, 32, 16));
+        this.speed = (ElementDualScaled) addElement(new ElementDualScaled(this, 78, 45).setMode(0).setSize(14, 14).setTexture(Textures.Gui.Element.PROGRESS_FIRE, 32, 16));
 
         this.icon = (ElementIcon) addElement(new ElementIcon(this, 25, 27, IconRegistry.getIcon("GeneratorOff")));
         this.icon.setSize(16, 16);

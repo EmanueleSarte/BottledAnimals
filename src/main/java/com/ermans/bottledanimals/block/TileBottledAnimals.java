@@ -11,16 +11,11 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 public abstract class TileBottledAnimals extends TileBase implements IRedstoneControl {
 
-    //field for the tileName
     protected String tileName;
-    //Field storing the facing of this tileentity
     protected byte facing;
 
-    //Here we are setting a default RSControlMode
     protected ControlMode rsControlMode = ControlMode.DISABLED;
-    //Is RS powered?
-    protected boolean isPowered;
-
+    protected boolean isRedstonePowered;
 
 
     public TileBottledAnimals setTileName(String tileName) {
@@ -28,38 +23,33 @@ public abstract class TileBottledAnimals extends TileBase implements IRedstoneCo
         return this;
     }
 
-    public String getTileName() {
-        return this.tileName;
-    }
 
-    public byte getFacing() {
-        return this.facing;
-    }
-
-    public void setFacing(byte facing) {
-        this.facing = facing;
-    }
-
-    //@formatter:off
-    public void setFacing(float playerRotationYaw){
-        switch (MathHelper.floor_double(playerRotationYaw * 4.0F / 360.0F + 0.5D) & 0x3){
-            case 0: this.facing = (byte) ForgeDirection.NORTH.ordinal(); break;
-            case 1: this.facing = (byte) ForgeDirection.EAST.ordinal(); break;
-            case 2: this.facing = (byte) ForgeDirection.SOUTH.ordinal(); break;
-            case 3: this.facing = (byte) ForgeDirection.WEST.ordinal(); break;
+    public void setFacing(float playerRotationYaw) {
+        switch (MathHelper.floor_double(playerRotationYaw * 4.0F / 360.0F + 0.5D) & 0x3) {
+            case 0:
+                this.facing = (byte) ForgeDirection.NORTH.ordinal();
+                break;
+            case 1:
+                this.facing = (byte) ForgeDirection.EAST.ordinal();
+                break;
+            case 2:
+                this.facing = (byte) ForgeDirection.SOUTH.ordinal();
+                break;
+            case 3:
+                this.facing = (byte) ForgeDirection.WEST.ordinal();
+                break;
         }
     }
-    //@formatter:on
 
 
     public boolean hasPassedRedstoneTest() {
-        return (this.rsControlMode.isDisabled()) || (this.isPowered == this.rsControlMode.getState());
+        return (this.rsControlMode.isDisabled()) || (this.isRedstonePowered == this.rsControlMode.getState());
     }
 
     public void onNeighborChange() {
-        boolean wasPowered = this.isPowered;
-        this.isPowered = worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
-        if (wasPowered != this.isPowered && !rsControlMode.isDisabled()) {
+        boolean wasPowered = this.isRedstonePowered;
+        this.isRedstonePowered = worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
+        if (wasPowered != this.isRedstonePowered && !rsControlMode.isDisabled()) {
             // TODO: 22/01/2016 SYNC CLIENT?
         }
     }
@@ -86,14 +76,25 @@ public abstract class TileBottledAnimals extends TileBase implements IRedstoneCo
 
     @Override
     public boolean isPowered() {
-        return isPowered;
+        return isRedstonePowered;
     }
 
     @Override
     public void setPowered(boolean isPowered) {
-        this.isPowered = isPowered;
+        this.isRedstonePowered = isPowered;
     }
 
+    public void setFacing(byte facing) {
+        this.facing = facing;
+    }
+
+    public String getTileName() {
+        return this.tileName;
+    }
+
+    public byte getFacing() {
+        return this.facing;
+    }
 
     @Override
     public void readFromNBT(NBTTagCompound nbtTagCompound) {
@@ -101,7 +102,7 @@ public abstract class TileBottledAnimals extends TileBase implements IRedstoneCo
         this.facing = nbtTagCompound.getByte("facing");
         this.tileName = nbtTagCompound.getString("tileName");
         this.rsControlMode = ControlMode.values()[nbtTagCompound.getByte("rsControlMode")];
-        this.isPowered = nbtTagCompound.getBoolean("isPowered");
+        this.isRedstonePowered = nbtTagCompound.getBoolean("isRedstonePowered");
     }
 
     @Override
@@ -110,7 +111,7 @@ public abstract class TileBottledAnimals extends TileBase implements IRedstoneCo
         nbtTagCompound.setByte("facing", this.facing);
         nbtTagCompound.setString("tileName", this.tileName);
         nbtTagCompound.setByte("rsControlMode", (byte) this.rsControlMode.ordinal());
-        nbtTagCompound.setBoolean("isPowered", this.isPowered);
+        nbtTagCompound.setBoolean("isRedstonePowered", this.isRedstonePowered);
     }
 
     public void fromBytes(ByteBuf buf) {

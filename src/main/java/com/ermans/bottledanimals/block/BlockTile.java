@@ -1,8 +1,8 @@
 package com.ermans.bottledanimals.block;
 
+import com.ermans.api.IEnergyInfoBA;
 import com.ermans.bottledanimals.BottledAnimals;
 import com.ermans.bottledanimals.BottledAnimalsTab;
-import com.ermans.bottledanimals.block.machine.TileMachine;
 import com.ermans.bottledanimals.reference.Reference;
 import cpw.mods.fml.common.network.IGuiHandler;
 import cpw.mods.fml.relauncher.Side;
@@ -20,22 +20,23 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public abstract class BlockMachine extends BlockBase implements IGuiHandler, ITileEntityProvider {
+public abstract class BlockTile extends BlockBase implements IGuiHandler, ITileEntityProvider {
 
 
     @SideOnly(Side.CLIENT)
-    private static final String MACHINE_SIDE = Reference.MOD_ID_LOWERCASE + ":" + "machineSide";
-    private static final String MACHINE_TOP = Reference.MOD_ID_LOWERCASE + ":" + "machineTop";
-    private static final String MACHINE_DOWN = Reference.MOD_ID_LOWERCASE + ":" + "machineDown";
+    protected String tileSide;
+    @SideOnly(Side.CLIENT)
+    protected String tileTop = Reference.MOD_ID_LOWERCASE + ":" + "machineTop";
+    @SideOnly(Side.CLIENT)
+    protected String tileDown = Reference.MOD_ID_LOWERCASE + ":" + "machineDown";
 
-    private static final IIcon[][] iconBuffer = new IIcon[2][6];
+    @SideOnly(Side.CLIENT)
+    protected IIcon[][] iconBuffer = new IIcon[2][6];
 
-    private IIcon[] iconMachine;
-
-    private int guiId;
+    protected int guiId;
 
 
-    public BlockMachine(String machineName) {
+    public BlockTile(String machineName) {
         super(machineName);
         setHardness(3.0F);
         setStepSound(soundTypeMetal);
@@ -110,7 +111,6 @@ public abstract class BlockMachine extends BlockBase implements IGuiHandler, ITi
     }
 
 
-
     @Override
     public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase player, ItemStack stack) {
         super.onBlockPlacedBy(world, x, y, z, player, stack);
@@ -127,32 +127,35 @@ public abstract class BlockMachine extends BlockBase implements IGuiHandler, ITi
     @SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister iIconRegister) {
 
-        this.blockIcon = iIconRegister.registerIcon(MACHINE_SIDE);
-        //we are registering the frond-side icons for every machine
-        this.iconMachine = new IIcon[2];
-        this.iconMachine[0] = iIconRegister.registerIcon(Reference.MOD_ID_LOWERCASE + ":" + blockName);
-        this.iconMachine[1] = iIconRegister.registerIcon(Reference.MOD_ID_LOWERCASE + ":" + blockName + "On");
+        this.blockIcon = iIconRegister.registerIcon(getTileSideTexture());
 
-        //we are registering the side icons (except the front icon, which is different) only once
-        if (iconBuffer[0][0] == null) {
-            iconBuffer[0][0] = iIconRegister.registerIcon(MACHINE_DOWN);
-            iconBuffer[0][1] = iIconRegister.registerIcon(MACHINE_TOP);
-            iconBuffer[0][2] = iIconRegister.registerIcon(MACHINE_SIDE);
-            iconBuffer[0][4] = iIconRegister.registerIcon(MACHINE_SIDE);
-            iconBuffer[0][5] = iIconRegister.registerIcon(MACHINE_SIDE);
+        iconBuffer[0][0] = iIconRegister.registerIcon(getTileBottomTexture());
+        iconBuffer[0][1] = iIconRegister.registerIcon(getTileTopTexture());
+        iconBuffer[0][2] = iIconRegister.registerIcon(getTileSideTexture());
+        iconBuffer[0][3] = iIconRegister.registerIcon(getTileFrontTexture());
+        iconBuffer[0][4] = iIconRegister.registerIcon(getTileSideTexture());
+        iconBuffer[0][5] = iIconRegister.registerIcon(getTileSideTexture());
 
-            iconBuffer[1][0] = iIconRegister.registerIcon(MACHINE_DOWN);
-            iconBuffer[1][1] = iIconRegister.registerIcon(MACHINE_TOP);
-            iconBuffer[1][2] = iIconRegister.registerIcon(MACHINE_SIDE);
-            iconBuffer[1][4] = iIconRegister.registerIcon(MACHINE_SIDE);
-            iconBuffer[1][5] = iIconRegister.registerIcon(MACHINE_SIDE);
-        }
+        iconBuffer[1][0] = iIconRegister.registerIcon(getTileBottomTexture());
+        iconBuffer[1][1] = iIconRegister.registerIcon(getTileTopTexture());
+        iconBuffer[1][2] = iIconRegister.registerIcon(getTileSideTexture());
+        iconBuffer[1][3] = iIconRegister.registerIcon(getTileFrontTexture() + "On");
+        iconBuffer[1][4] = iIconRegister.registerIcon(getTileSideTexture());
+        iconBuffer[1][5] = iIconRegister.registerIcon(getTileSideTexture());
     }
+
+    protected abstract String getTileSideTexture();
+
+    protected abstract String getTileTopTexture();
+
+    protected abstract String getTileBottomTexture();
+
+    protected abstract String getTileFrontTexture();
+
 
     @Override
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(int side, int meta) {
-        if (side == 3) return this.iconMachine[1];
         return iconBuffer[0][side];
     }
 
@@ -160,13 +163,14 @@ public abstract class BlockMachine extends BlockBase implements IGuiHandler, ITi
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
         TileEntity te = world.getTileEntity(x, y, z);
-        if (te instanceof TileMachine) {
-            TileMachine tileMachine = (TileMachine) te;
-            int iconIndex = sideAndFacingToSpriteOffset[side][tileMachine.getFacing()];
-            if (iconIndex == 3) {
-                return iconMachine[tileMachine.isActive ? 1 : 0];
+
+        if (te instanceof TileBottledAnimals){
+            int iconIndex = sideAndFacingToSpriteOffset[side][((TileBottledAnimals) te).getFacing()];
+            if (te instanceof IEnergyInfoBA){
+                return iconBuffer[((IEnergyInfoBA) te).isActive() ? 1 : 0][iconIndex];
+            }else{
+                return iconBuffer[0][iconIndex];
             }
-            return iconBuffer[tileMachine.isActive ? 1 : 0][iconIndex];
         }
         return null;
     }
@@ -193,13 +197,14 @@ public abstract class BlockMachine extends BlockBase implements IGuiHandler, ITi
     @Override
     public int getLightValue(IBlockAccess world, int x, int y, int z) {
         TileEntity tile = world.getTileEntity(x, y, z);
-        if (tile != null && tile instanceof TileMachine) {
-            if (((TileMachine) tile).isActive) {
+        if (tile instanceof IEnergyInfoBA) {
+            if (((IEnergyInfoBA) tile).isActive()) {
                 return 14;
-            }else{
+            } else {
                 return 0;
             }
         }
         return 0;
     }
 }
+

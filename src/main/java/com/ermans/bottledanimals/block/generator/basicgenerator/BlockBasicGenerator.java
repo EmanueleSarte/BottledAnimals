@@ -1,18 +1,19 @@
 package com.ermans.bottledanimals.block.generator.basicgenerator;
 
 
-import com.ermans.bottledanimals.block.BlockMachine;
+import com.ermans.bottledanimals.block.generator.BlockGenerator;
 import com.ermans.bottledanimals.reference.Names;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
-public class BlockBasicGenerator extends BlockMachine{
+public class BlockBasicGenerator extends BlockGenerator {
+
+
 
     public BlockBasicGenerator() {
         super(Names.Machines.BASIC_GENERATOR);
     }
-
 
     @Override
     public Object getServerGuiElement(int i, EntityPlayer player, World world, int x, int y, int z) {
@@ -33,4 +34,6 @@ public class BlockBasicGenerator extends BlockMachine{
     public TileEntity createNewTileEntity(World world, int i) {
         return new TileBasicGenerator();
     }
+
+
 }

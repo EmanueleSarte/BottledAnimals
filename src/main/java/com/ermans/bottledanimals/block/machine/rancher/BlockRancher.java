@@ -1,6 +1,6 @@
 package com.ermans.bottledanimals.block.machine.rancher;
 
-import com.ermans.bottledanimals.block.BlockMachine;
+import com.ermans.bottledanimals.block.machine.BlockMachine;
 import com.ermans.bottledanimals.reference.Names;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
