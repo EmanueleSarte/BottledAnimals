@@ -1,6 +1,6 @@
 package com.ermans.bottledanimals.network.message;
 
-import com.ermans.bottledanimals.block.IEnergyBA;
+import com.ermans.api.IEnergyBA;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;

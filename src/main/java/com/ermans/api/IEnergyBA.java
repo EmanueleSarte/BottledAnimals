@@ -1,4 +1,4 @@
-package com.ermans.bottledanimals.block;
+package com.ermans.api;
 
 
 import cofh.api.energy.IEnergyStorage;

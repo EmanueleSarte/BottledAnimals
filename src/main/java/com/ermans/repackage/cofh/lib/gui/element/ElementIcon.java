@@ -50,6 +50,7 @@ public class ElementIcon extends ElementBase {
 		return color.getColor();
 	}
 
+	@Override
 	public ElementIcon setTooltipText(List<String> tooltipText){
 		this.tooltipText = tooltipText;
 		return this;

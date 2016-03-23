@@ -3,7 +3,7 @@ package com.ermans.bottledanimals.block.machine;
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyReceiver;
 import cofh.api.energy.IEnergyStorage;
-import com.ermans.bottledanimals.block.IEnergyBA;
+import com.ermans.api.IEnergyBA;
 import com.ermans.bottledanimals.helper.TargetPointHelper;
 import com.ermans.bottledanimals.network.PacketHandler;
 import com.ermans.bottledanimals.network.message.MessageEnergy;

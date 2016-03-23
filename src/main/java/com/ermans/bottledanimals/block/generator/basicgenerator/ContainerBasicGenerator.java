@@ -12,6 +12,6 @@ public class ContainerBasicGenerator extends ContainerMachine{
         super(invPlayer, entity);
 
         this.tileBasicGenerator = entity;
-        addSlotToContainer(new SlotAcceptValid(tileBasicGenerator, 0, 58, 27));
+        addSlotToContainer(new SlotAcceptValid(tileBasicGenerator, 0, 77, 27));
     }
 }

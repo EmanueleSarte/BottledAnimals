@@ -1,6 +1,6 @@
 package com.ermans.bottledanimals.block.machine;
 
-import com.ermans.bottledanimals.block.IEnergyInfoReceiver;
+import com.ermans.api.IMachineInfo;
 import com.ermans.bottledanimals.helper.TargetPointHelper;
 import com.ermans.bottledanimals.network.PacketHandler;
 import com.ermans.bottledanimals.network.message.MessageTile;
@@ -9,7 +9,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
-public abstract class TileMachine extends TilePowered implements IEnergyInfoReceiver {
+public abstract class TileMachine extends TilePowered implements IMachineInfo {
 
 
     protected byte powerMult;
@@ -185,14 +185,14 @@ public abstract class TileMachine extends TilePowered implements IEnergyInfoRece
     }
 
     @Override
-    public int getInfoMaxReceiveEnergyPerTick() {
-        return getMaxReceiveEnergy();
-    }
-
-    @Override
     public int getInfoTimePercentage() {
         if (!isActive) return 0;
         return (operationTime - remaining) * 100 / operationTime;
+    }
+
+    @Override
+    public boolean isActive() {
+        return isActive;
     }
 
     @Override
