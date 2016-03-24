@@ -199,5 +199,14 @@ public abstract class BlockTile extends BlockBase implements IGuiHandler, ITileE
         }
         return 0;
     }
+
+    @Override
+    public boolean onBlockEventReceived(World world, int x, int y, int z, int event, int value) {
+        TileEntity tile = world.getTileEntity(x, y, z);
+        if (tile != null){
+            return tile.receiveClientEvent(event, value);
+        }
+        return super.onBlockEventReceived(world, x, y, z, event, value);
+    }
 }
 

@@ -2,7 +2,6 @@ package com.ermans.bottledanimals.block.generator;
 
 import cofh.api.energy.IEnergyReceiver;
 import com.ermans.api.IEnergyInfoProvider;
-import com.ermans.bottledanimals.block.machine.ContainerMachine;
 import com.ermans.bottledanimals.helper.BlockPos;
 import com.ermans.bottledanimals.helper.BlockPosHelper;
 import com.ermans.bottledanimals.helper.TargetPointHelper;
@@ -11,7 +10,6 @@ import com.ermans.bottledanimals.network.message.MessageTile;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.inventory.ICrafting;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -140,25 +138,30 @@ public abstract class TileGenerator extends TileEnergyProvider implements IEnerg
             }
         }
 
-        if (actualRateVar != actualRate || stateChanged != state || lastEnergyOut != lastEnergyOutVar) {
-            sendUpdate = true;
+        if (isActive && checkTick(4) || actualRateVar != actualRate || stateChanged != state || lastEnergyOut != lastEnergyOutVar) {
+            this.worldObj.addBlockEvent(xCoord, yCoord, zCoord, getBlockType(), 1, actualRate);
+            this.worldObj.addBlockEvent(xCoord, yCoord, zCoord, getBlockType(), 2, state.ordinal());
+            this.worldObj.addBlockEvent(xCoord, yCoord, zCoord, getBlockType(), 3, lastEnergyOut);
+            this.worldObj.addBlockEvent(xCoord, yCoord, zCoord, getBlockType(), 4, remaining);
         }
 
-        if (sendUpdate || isActive && checkTick(4)) {
+        if (sendUpdate) {
             syncMachine(hasChanged != isActive);
+            this.worldObj.addBlockEvent(xCoord, yCoord, zCoord, getBlockType(), 5, totalFuel);
         }
     }
 
 
     protected void syncMachine(boolean updateTexture) {
+
         PacketHandler.INSTANCE.sendToAllAround(new MessageTile(this, updateTexture), TargetPointHelper.getTargetPoint(this));
         markDirty();
-
 
         if (updateTexture) {
             worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
         }
     }
+
 
     protected boolean isStorageHalfFull() {
         return getEnergyStored(null) * 2 >= getMaxEnergyStored(null);
@@ -225,10 +228,30 @@ public abstract class TileGenerator extends TileEnergyProvider implements IEnerg
     }
 
 
-    public void addCraftingToCrafters(ContainerMachine containerMachinem, ICrafting crafting) {
+    ////DATA SYNC
 
+    @Override
+    public boolean receiveClientEvent(int action, int value) {
+        switch (action) {
+            case 1:
+                actualRate = value;
+                return true;
+            case 2:
+                state = STATE.values()[value];
+                return true;
+            case 3:
+                lastEnergyOut = value;
+                return true;
+            case 4:
+                remaining = value;
+                return true;
+            case 5:
+                totalFuel = value;
+                return true;
+            default:
+                return super.receiveClientEvent(action, value);
+        }
     }
-
 
     @Override
     public void readFromNBT(NBTTagCompound nbt) {
@@ -253,22 +276,22 @@ public abstract class TileGenerator extends TileEnergyProvider implements IEnerg
     @Override
     public void toBytes(ByteBuf buf) {
         super.toBytes(buf);
-        buf.writeInt(remaining);
-        buf.writeInt(totalFuel);
-        buf.writeInt(actualRate);
-        buf.writeInt(lastEnergyOut);
-        buf.writeByte(state.ordinal());
+//        buf.writeInt(remaining);
+//        buf.writeInt(totalFuel);
+//        buf.writeInt(actualRate);
+//        buf.writeInt(lastEnergyOut);
+//        buf.writeByte(state.ordinal());
         buf.writeBoolean(isActive);
     }
 
     @Override
     public void fromBytes(ByteBuf buf) {
         super.fromBytes(buf);
-        remaining = buf.readInt();
-        totalFuel = buf.readInt();
-        actualRate = buf.readInt();
-        lastEnergyOut = buf.readInt();
-        state = STATE.values()[buf.readByte()];
+//        remaining = buf.readInt();
+//        totalFuel = buf.readInt();
+//        actualRate = buf.readInt();
+//        lastEnergyOut = buf.readInt();
+//        state = STATE.values()[buf.readByte()];
         isActive = buf.readBoolean();
     }
 

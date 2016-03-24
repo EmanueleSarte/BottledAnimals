@@ -42,6 +42,7 @@ public final class Textures {
             public static final String PROGRESS_MILK = getElementsLocation("Progress_Milk.png");
             public static final String PROGRESS_SHEARS = getElementsLocation("Progress_Shears.png");
             public static final String PROGRESS_FIRE = getElementsLocation("Progress_Fire.png");
+            public static final String PROGRESS_FLUID_IN = getElementsLocation("Progress_FluidIn.png");
 
         }
 
@@ -57,3 +58,4 @@ public final class Textures {
 
 
 }
+

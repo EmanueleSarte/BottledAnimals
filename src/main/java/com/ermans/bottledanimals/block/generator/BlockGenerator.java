@@ -3,8 +3,10 @@ package com.ermans.bottledanimals.block.generator;
 
 import com.ermans.bottledanimals.block.BlockTile;
 import com.ermans.bottledanimals.reference.Reference;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 
-public abstract class BlockGenerator extends BlockTile{
+public abstract class BlockGenerator extends BlockTile {
 
     public BlockGenerator(String machineName) {
         super(machineName);
@@ -30,4 +32,7 @@ public abstract class BlockGenerator extends BlockTile{
     protected String getTileFrontTexture() {
         return Reference.MOD_ID_LOWERCASE + ":" + blockName;
     }
+
+
+
 }

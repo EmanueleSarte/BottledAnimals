@@ -21,7 +21,7 @@ public abstract class TileMachine extends TilePowered implements IMachineInfo {
     public int recipeCode;
 
     public boolean isActive;
-    public boolean updateEntity;
+    public boolean checkForRecipes;
 
 
     @Override
@@ -29,14 +29,14 @@ public abstract class TileMachine extends TilePowered implements IMachineInfo {
         super.initTile();
         this.powerMult = 1;
         this.timeMult = 1;
-        this.updateEntity = true;
+        this.checkForRecipes = true;
     }
 
     @Override
     public void updateEntity() {
         super.updateEntity();
 
-        if (updateEntity) {
+        if (checkForRecipes) {
             if (worldObj.isRemote) {
                 return;
             }
