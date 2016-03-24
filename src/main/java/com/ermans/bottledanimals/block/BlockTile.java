@@ -24,13 +24,6 @@ public abstract class BlockTile extends BlockBase implements IGuiHandler, ITileE
 
 
     @SideOnly(Side.CLIENT)
-    protected String tileSide;
-    @SideOnly(Side.CLIENT)
-    protected String tileTop = Reference.MOD_ID_LOWERCASE + ":" + "machineTop";
-    @SideOnly(Side.CLIENT)
-    protected String tileDown = Reference.MOD_ID_LOWERCASE + ":" + "machineDown";
-
-    @SideOnly(Side.CLIENT)
     protected IIcon[][] iconBuffer = new IIcon[2][6];
 
     protected int guiId;

@@ -1,9 +1,9 @@
 package com.ermans.bottledanimals.block.machine.wirelessfeeder;
 
-import com.ermans.bottledanimals.block.machine.ContainerMachine;
+import com.ermans.bottledanimals.block.machine.ContainerTile;
 import net.minecraft.entity.player.InventoryPlayer;
 
-public class ContainerWirelessFeeder extends ContainerMachine {
+public class ContainerWirelessFeeder extends ContainerTile {
 
     public ContainerWirelessFeeder(InventoryPlayer invPlayer, TileWirelessFeeder entity) {
         super(invPlayer, entity);

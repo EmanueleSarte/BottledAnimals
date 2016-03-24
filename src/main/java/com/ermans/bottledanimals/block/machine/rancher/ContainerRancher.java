@@ -1,11 +1,11 @@
 package com.ermans.bottledanimals.block.machine.rancher;
 
-import com.ermans.bottledanimals.block.machine.ContainerMachine;
+import com.ermans.bottledanimals.block.machine.ContainerTile;
 import com.ermans.repackage.cofh.lib.gui.slot.SlotAcceptValid;
 import com.ermans.repackage.cofh.lib.gui.slot.SlotRemoveOnly;
 import net.minecraft.entity.player.InventoryPlayer;
 
-public class ContainerRancher extends ContainerMachine {
+public class ContainerRancher extends ContainerTile {
 
     public ContainerRancher(InventoryPlayer invPlayer, TileRancher entity) {
         super(invPlayer, entity);
