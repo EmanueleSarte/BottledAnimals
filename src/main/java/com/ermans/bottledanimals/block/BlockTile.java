@@ -64,27 +64,28 @@ public abstract class BlockTile extends BlockBase implements IGuiHandler, ITileE
 
     @Override
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int metadata, float xClicked, float yClicked, float zClicked) {
-        if (player.isSneaking()) {
-            return false;
-        }
 
         if (!world.isRemote) {
             ItemStack equipped = player.getCurrentEquippedItem();
             TileEntity tileEntity = world.getTileEntity(x, y, z);
+
             if (tileEntity != null) {
-                if (equipped == null) {
-                    return openGui(world, x, y, z, player);
-                } else {
-                    if (tileEntity instanceof TileBase) {
-                        return ((TileBase) tileEntity).handleRightClick(player, metadata, xClicked, yClicked, zClicked) || openGui(world, x, y, z, player);
+                if (tileEntity instanceof TileBase) {
+
+                    if (((TileBase) tileEntity).handleRightClick(player, equipped, xClicked, yClicked, zClicked)) {
+                        return true;
                     }
                 }
+                if (player.isSneaking()) {
+                    return false;
+                }
+                openGui(world, x, y, z, player);
+                return true;
 
             }
         }
-        return false;
+        return true;
     }
-
 
     @Override
     public void breakBlock(World worldIn, int x, int y, int z, Block block, int par6) {

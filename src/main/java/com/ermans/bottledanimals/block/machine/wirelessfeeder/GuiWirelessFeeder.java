@@ -10,7 +10,6 @@ import net.minecraft.entity.player.InventoryPlayer;
 public class GuiWirelessFeeder extends GuiBaseAdv {
 
     private final TileWirelessFeeder tile;
-    private ElementDualScaled speed;
 
     public GuiWirelessFeeder(InventoryPlayer invPlayer, TileWirelessFeeder entity) {
         super(new ContainerWirelessFeeder(invPlayer, entity), Textures.Gui.WIRELESS_FEEDER, entity);
@@ -30,13 +29,8 @@ public class GuiWirelessFeeder extends GuiBaseAdv {
         ElementButtonOption buttonHeal = (ElementButtonOption) addElement(new ElementButtonOptionWF(this, 30, 18, 16, 16).setTexture(Textures.WIDGET_TEXTURE_STRING, 256, 256));
         buttonHeal.setDefaultValue(tile.getMode().ordinal());
 
-        speed = ((ElementDualScaled) addElement(new ElementDualScaled(this, 135, 30).setMode(1).setSize(14, 7).setTexture(Textures.Gui.Element.PROGRESS_FLUID_IN, 32, 16)));
     }
 
-    @Override
-    protected void updateElementInformation() {
-        speed.setQuantity(tile.getProgressScaled(14));
-    }
 
     public TileWirelessFeeder getTile() {
         return tile;

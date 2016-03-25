@@ -21,7 +21,9 @@ public class TileRancher extends TileFluidTank {
 
     private static final int animal = 0;
     private static final int gear = 1;
-    private static final int output = 2;
+    private static final int fluidInput = 2;
+    private static final int output = 3;
+    private static final int fluidOutput = 4;
 
 
     @Override
@@ -34,6 +36,10 @@ public class TileRancher extends TileFluidTank {
 
         this.tank.setCapacity(TANK_CAPACITY);
         this.fluidTile = ModFluids.milk;
+
+        this.transferFluid = true;
+        this.drainSlotInput = 2;
+        this.drainSlotOutput = 4;
     }
 
 
@@ -103,12 +109,12 @@ public class TileRancher extends TileFluidTank {
 
     @Override
     protected int getNumInput() {
-        return 2;
+        return 3;
     }
 
     @Override
     protected int getNumOutput() {
-        return 1;
+        return 2;
     }
 
     @Override

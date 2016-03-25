@@ -96,6 +96,32 @@ public class FluidHelper {
     }
 
 
+    public static FluidContainerRegistry.FluidContainerData getFluidContainerData(Fluid fluid, ItemStack container){
+        if (fluid == null || container == null){
+            return null;
+        }
+        for (FluidContainerRegistry.FluidContainerData fluidContainerData : FluidContainerRegistry.getRegisteredFluidContainerData()) {
+            if (fluidContainerData.fluid.getFluid() == fluid && fluidContainerData.emptyContainer.isItemEqual(container)){
+               return fluidContainerData;
+            }
+        }
+        return null;
+    }
+
+    public static boolean isContainerData(ItemStack container){
+        if (container == null){
+            return false;
+        }
+        for (FluidContainerRegistry.FluidContainerData fluidContainerData : FluidContainerRegistry.getRegisteredFluidContainerData()) {
+            if ( fluidContainerData.emptyContainer.isItemEqual(container)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+
     /* PACKETS */
     public static void writeFluidStackToPacket(FluidStack fluid, DataOutput data) throws IOException {
 

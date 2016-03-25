@@ -1,6 +1,7 @@
 package com.ermans.repackage.cofh.lib.util.helpers;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
@@ -79,5 +80,34 @@ public final class ItemHelper {
             return false;
         }
         return thisStack.isItemEqual(onThisStack) && onThisStack.stackSize + thisStack.stackSize <= onThisStack.getMaxStackSize();
+    }
+
+    public static ItemStack decreaseStackSize(ItemStack itemStack, int amount){
+        if (itemStack == null || amount == 0){
+            return itemStack;
+        }
+
+        itemStack.stackSize -= amount;
+        if (itemStack.stackSize <= 0){
+            return null;
+        }
+        return itemStack;
+    }
+
+    public static boolean addItemStackToPlayer(EntityPlayer player, ItemStack itemStack, boolean dropIfFull){
+        if (player == null) {
+            return false;
+        }
+        if (itemStack == null){
+            return true;
+        }
+
+        if (!player.inventory.addItemStackToInventory(itemStack)) {
+            if (dropIfFull) {
+                player.dropPlayerItemWithRandomChoice(itemStack, false);
+            }
+            return false;
+        }
+        return true;
     }
 }

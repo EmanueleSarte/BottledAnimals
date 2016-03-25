@@ -2,8 +2,15 @@ package com.ermans.bottledanimals.block.machine;
 
 
 import com.ermans.bottledanimals.helper.TargetPointHelper;
+import com.ermans.bottledanimals.init.ModFluids;
+import com.ermans.bottledanimals.init.ModItems;
 import com.ermans.bottledanimals.network.PacketHandler;
 import com.ermans.bottledanimals.network.message.MessageFluid;
+import com.ermans.repackage.cofh.lib.util.helpers.FluidHelper;
+import com.ermans.repackage.cofh.lib.util.helpers.ItemHelper;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.*;
@@ -13,29 +20,42 @@ public abstract class TileFluidTank extends TileMachine implements IFluidHandler
     public FluidTank tank;
 
     private boolean doSync;
-
     protected Fluid fluidTile;
 
-    protected int getFluidAmount() {
-        return tank.getFluidAmount();
-    }
+    protected int drainSlotInput;
+    protected int drainSlotOutput;
+    protected int fillSlot;
+    protected boolean transferFluid;
 
-    protected int getTankCapacity() {
-        return tank.getCapacity();
-    }
+    private static int MAX_TRANSFER_RATE = FluidContainerRegistry.BUCKET_VOLUME;
 
     @Override
     public void initTile() {
         super.initTile();
         this.tank = new FluidTank(0);
+        this.transferFluid = false;
+        this.drainSlotInput = -1;
+        this.drainSlotOutput = -1;
+        this.fillSlot = -1;
+
     }
 
     @Override
     public void updateEntity() {
         super.updateEntity();
-        if (!worldObj.isRemote && doSync) {
-            doSync = false;
-            PacketHandler.INSTANCE.sendToAllAround(new MessageFluid(this, getFluidName()), TargetPointHelper.getTargetPoint(this));
+        if (!worldObj.isRemote) {
+            if (doSync) {
+                doSync = false;
+                PacketHandler.INSTANCE.sendToAllAround(new MessageFluid(this, getFluidName()), TargetPointHelper.getTargetPoint(this));
+            }
+            if (transferFluid && hasPassedRedstoneTest() && checkTick(20)) {
+                if (!isTankEmpty() && drainSlotInput != -1 && drainSlotOutput != -1) {
+                    drainFluidIntoItems(drainSlotInput, drainSlotOutput);
+                }
+                if (!isTankFull() && fillSlot != -1) {
+                    fillFluidFromItems(fillSlot);
+                }
+            }
         }
     }
 
@@ -47,8 +67,16 @@ public abstract class TileFluidTank extends TileMachine implements IFluidHandler
         return fluidTile.getName();
     }
 
-    protected boolean hasTankEnoughSpace(int amout) {
-        return tank.getFluidAmount() + amout <= tank.getCapacity();
+    protected boolean hasTankEnoughSpace(int amount) {
+        return tank.getFluidAmount() + amount <= tank.getCapacity();
+    }
+
+    protected boolean isTankEmpty() {
+        return tank.getFluidAmount() == 0;
+    }
+
+    protected boolean isTankFull() {
+        return tank.getFluidAmount() >= tank.getCapacity();
     }
 
     protected void modifyFluidAmount(Fluid fluid, int amount) {
@@ -58,20 +86,93 @@ public abstract class TileFluidTank extends TileMachine implements IFluidHandler
         } else if (amount < 0) {
             tank.drain(-1 * amount, true);
         }
-        if (!worldObj.isRemote && amount != 0){
+        if (!worldObj.isRemote && amount != 0) {
             markDirtyFluid();
         }
     }
 
 
-    protected boolean isTankFull(){
-        return tank.getFluidAmount() >= tank.getCapacity();
-    }
-
-    protected int getTankFreeSpace(){
+    protected int getTankFreeSpace() {
         return tank.getCapacity() - tank.getFluidAmount();
     }
 
+
+    protected void fillFluidFromItems(int slot) {
+        ItemStack itemStack = inventory[slot];
+        if (itemStack != null) {
+            if (FluidHelper.isFluidContainerItem(itemStack)) {
+
+                IFluidContainerItem fluidContainer = (IFluidContainerItem) itemStack.getItem();
+                if (FluidHelper.isFluidEqual(ModFluids.food, fluidContainer.getFluid(itemStack))) {
+
+                    FluidStack drain = fluidContainer.drain(itemStack, Math.min(MAX_TRANSFER_RATE, getTankFreeSpace()), true);
+                    modifyFluidAmount(drain.getFluid(), drain.amount);
+                }
+            } else if (hasTankEnoughSpace(FluidContainerRegistry.BUCKET_VOLUME)) {
+                if (FluidHelper.hasFluidTag(itemStack)) {
+                    if (FluidHelper.isFluidTagEquals(itemStack, ModFluids.food)) {
+                        modifyFluidAmount(ModFluids.food, MAX_TRANSFER_RATE);
+                        decrStackSize(slot, 1);
+                    }
+                } else if (itemStack.getItem() == ModItems.foodBucket) {
+                    modifyFluidAmount(ModFluids.food, MAX_TRANSFER_RATE);
+                    decrStackSize(slot, 64);
+                    increaseStackSize(slot, new ItemStack(Items.bucket));
+
+                }
+            }
+        }
+    }
+
+    protected void drainFluidIntoItems(int slotInput, int slotOutput) {
+        ItemStack itemStack = inventory[slotInput];
+        if (itemStack != null) {
+            if (FluidHelper.isFluidContainerItem(itemStack)) {
+                IFluidContainerItem fluidContainer = (IFluidContainerItem) itemStack.getItem();
+                FluidStack fluidStack = fluidContainer.getFluid(itemStack);
+                if (fluidStack == null || (fluidContainer.getCapacity(itemStack) - fluidStack.amount > 0 && fluidStack.getFluid() == fluidTile)) {
+                    int filled = fluidContainer.fill(itemStack, new FluidStack(fluidTile, Math.min(MAX_TRANSFER_RATE, tank.getFluidAmount())), true);
+                    modifyFluidAmount(fluidTile, filled);
+                    FluidStack fluidStackAfterFill = fluidContainer.getFluid(itemStack);
+                    if (fluidStackAfterFill.amount == fluidContainer.getCapacity(itemStack)) {
+                        ItemStack copy = inventory[slotInput].copy();
+                        copy.stackSize = 1;
+                        decrStackSize(slotInput, 1);
+                        increaseStackSize(slotOutput, copy);
+                    }
+                }
+            } else {
+                FluidContainerRegistry.FluidContainerData containerData = FluidHelper.getFluidContainerData(fluidTile, itemStack);
+                if (containerData != null && getFluidAmount() >= containerData.fluid.amount) {
+                    if (inventory[slotOutput] == null ||
+                            (inventory[slotOutput].isItemEqual(containerData.filledContainer) &&
+                                    inventory[slotOutput].stackSize + containerData.filledContainer.stackSize <= inventory[slotOutput].getMaxStackSize())) {
+
+                        modifyFluidAmount(fluidTile, -1 * containerData.fluid.amount);
+                        decrStackSize(slotInput, 1);
+                        increaseStackSize(slotOutput, containerData.filledContainer);
+                    }
+                }
+            }
+        }
+    }
+
+
+    @Override
+    public boolean handleRightClick(EntityPlayer player, ItemStack itemStack, float xClicked, float yClicked, float zClicked) {
+        if (transferFluid && !isTankEmpty() && drainSlotInput != -1) {
+            if (itemStack != null && itemStack.getItem() == Items.bucket && tank.getFluidAmount() >= FluidContainerRegistry.BUCKET_VOLUME) {
+                ItemStack filledContainer = FluidHelper.getFluidContainerData(fluidTile, itemStack).filledContainer;
+                filledContainer.stackSize = 1;
+                ItemHelper.decreaseStackSize(itemStack, 1);
+                ItemHelper.addItemStackToPlayer(player, filledContainer, true);
+                modifyFluidAmount(fluidTile, -1 * FluidContainerRegistry.BUCKET_VOLUME);
+                player.inventoryContainer.detectAndSendChanges();
+                return true;
+            }
+        }
+        return false;
+    }
 
     @Override
     public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
@@ -113,6 +214,14 @@ public abstract class TileFluidTank extends TileMachine implements IFluidHandler
             markDirtyFluid();
         }
         return res;
+    }
+
+    protected int getFluidAmount() {
+        return tank.getFluidAmount();
+    }
+
+    protected int getTankCapacity() {
+        return tank.getCapacity();
     }
 
     @Override

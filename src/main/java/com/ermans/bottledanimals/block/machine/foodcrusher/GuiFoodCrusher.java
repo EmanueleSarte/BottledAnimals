@@ -27,7 +27,7 @@ public class GuiFoodCrusher extends GuiBaseAdv {
         addElement(new ElementEnergyStored(this, tile.getEnergyStorage()));
         addElement(new ElementFluidTank(this, tile.getFluidTank()).setGauge(1));
 
-        this.speed = ((ElementDualScaled) addElement(new ElementDualScaled(this, 79, 44).setMode(0).setSize(16, 16).setTexture(Textures.Gui.Element.PROGRESS_SAW, 32, 16)));
+        this.speed = ((ElementDualScaled) addElement(new ElementDualScaled(this, 61, 41).setMode(0).setSize(16, 16).setTexture(Textures.Gui.Element.PROGRESS_SAW, 32, 16)));
     }
 
     @Override
