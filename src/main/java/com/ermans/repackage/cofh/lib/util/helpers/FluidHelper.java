@@ -37,42 +37,53 @@ public class FluidHelper {
 
     /* IFluidContainer Interaction */
     public static int fillFluidContainerItem(ItemStack container, FluidStack resource, boolean doFill) {
-
         return isFluidContainerItem(container) && container.stackSize == 1 ? ((IFluidContainerItem) container.getItem()).fill(container, resource, doFill) : 0;
     }
 
     public static FluidStack drainFluidContainerItem(ItemStack container, int maxDrain, boolean doDrain) {
-
         return isFluidContainerItem(container) && container.stackSize == 1 ? ((IFluidContainerItem) container.getItem()).drain(container, maxDrain, doDrain) : null;
     }
 
     public static FluidStack extractFluidFromHeldContainer(EntityPlayer player, int maxDrain, boolean doDrain) {
-
         ItemStack container = player.getCurrentEquippedItem();
-
         return isFluidContainerItem(container) && container.stackSize == 1 ? ((IFluidContainerItem) container.getItem()).drain(container, maxDrain, doDrain) : null;
     }
 
     public static int insertFluidIntoHeldContainer(EntityPlayer player, FluidStack resource, boolean doFill) {
-
         ItemStack container = player.getCurrentEquippedItem();
-
         return isFluidContainerItem(container) && container.stackSize == 1 ? ((IFluidContainerItem) container.getItem()).fill(container, resource, doFill) : 0;
     }
 
     public static boolean isPlayerHoldingFluidContainerItem(EntityPlayer player) {
-
         return isFluidContainerItem(player.getCurrentEquippedItem());
     }
 
     public static boolean isFluidContainerItem(ItemStack container) {
-
         return container != null && container.getItem() instanceof IFluidContainerItem;
     }
 
     public static FluidStack getFluidStackFromContainerItem(ItemStack container) {
-
         return ((IFluidContainerItem) container.getItem()).getFluid(container);
+    }
+
+    public static boolean hasFluidTag(ItemStack itemStack) {
+        return !(itemStack == null || !itemStack.hasTagCompound()) && itemStack.getTagCompound().hasKey("Fluid") && itemStack.getTagCompound().getString("Fluid") != null;
+    }
+
+    public static FluidStack getFluidStackFromFluidTag(ItemStack itemStack){
+        Fluid fluid = FluidRegistry.getFluid(itemStack.getTagCompound().getString("Fluid"));
+        if (fluid == null){
+            return null;
+        }
+        return new FluidStack(fluid, FluidContainerRegistry.BUCKET_VOLUME);
+    }
+
+    public static boolean isFluidTagEquals(ItemStack itemStack, Fluid fluid){
+        return itemStack.getTagCompound().getString("Fluid").equals(fluid.getName());
+    }
+
+    public static boolean canGetFluidStack(ItemStack itemStack){
+        return hasFluidTag(itemStack) || isFluidContainerItem(itemStack);
     }
 
     public static ItemStack setDefaultFluidTag(ItemStack container, FluidStack resource) {

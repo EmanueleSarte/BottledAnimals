@@ -64,6 +64,15 @@ public abstract class TileFluidTank extends TileMachine implements IFluidHandler
     }
 
 
+    protected boolean isTankFull(){
+        return tank.getFluidAmount() >= tank.getCapacity();
+    }
+
+    protected int getTankFreeSpace(){
+        return tank.getCapacity() - tank.getFluidAmount();
+    }
+
+
     @Override
     public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
 

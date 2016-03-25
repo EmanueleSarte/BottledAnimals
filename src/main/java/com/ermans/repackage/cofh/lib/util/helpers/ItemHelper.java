@@ -69,4 +69,15 @@ public final class ItemHelper {
         }
         return stack;
     }
+
+    public static boolean canPutOn(ItemStack thisStack, ItemStack onThisStack){
+        if (thisStack == null || onThisStack == null){
+            return true;
+        }
+
+        if (!onThisStack.isStackable() || !thisStack.isStackable()){
+            return false;
+        }
+        return thisStack.isItemEqual(onThisStack) && onThisStack.stackSize + thisStack.stackSize <= onThisStack.getMaxStackSize();
+    }
 }

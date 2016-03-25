@@ -5,7 +5,6 @@ import com.ermans.bottledanimals.init.ModFluids;
 import com.ermans.bottledanimals.init.ModItems;
 import com.ermans.bottledanimals.network.PacketHandler;
 import com.ermans.bottledanimals.network.message.MessageWirelessFeederButton;
-import com.ermans.bottledanimals.recipe.FakeRecipe;
 import com.ermans.bottledanimals.recipe.IRecipe;
 import com.ermans.repackage.cofh.lib.util.helpers.FluidHelper;
 import io.netty.buffer.ByteBuf;
@@ -37,9 +36,7 @@ public class TileWirelessFeeder extends TileFluidTank {
     private static final int output = 1;
 
     private static byte BUCKET_MAX_STACKSIZE = (byte) (new ItemStack(Items.bucket)).getMaxStackSize();
-
-    //0 = IFluidContainer 1=nbtTag with "Fluid" 2=bucket
-    protected int inputType;
+    private static int MAX_TRANSFER = FluidContainerRegistry.BUCKET_VOLUME;
 
 
     protected Mode mode = Mode.BOTH;
@@ -58,6 +55,8 @@ public class TileWirelessFeeder extends TileFluidTank {
         this.tank.setCapacity(TANK_CAPACITY);
         this.fluidTile = ModFluids.food;
 
+        this.checkForRecipes = false;
+
         DF_VALID_SIDE = new boolean[][]{
                 {true, true, true, true, true, true},
                 {true, true, true, true, true, true},
@@ -67,7 +66,6 @@ public class TileWirelessFeeder extends TileFluidTank {
                 {true, true, true, true, true, true},
         };
 
-        inputType = -1;
     }
 
     @Override
@@ -108,7 +106,46 @@ public class TileWirelessFeeder extends TileFluidTank {
                     }
                 }
             }
+
+            if (!isTankFull() && checkTick(20)) {
+                ItemStack itemStack = inventory[input];
+                if (itemStack != null) {
+                    if (FluidHelper.isFluidContainerItem(itemStack)) {
+
+                        IFluidContainerItem fluidContainer = (IFluidContainerItem) itemStack.getItem();
+                        if (FluidHelper.isFluidEqual(ModFluids.food, fluidContainer.getFluid(itemStack))) {
+                            if (inventory[output] == null || (inventory[output].isItemEqual(itemStack) && inventory[output].stackSize < itemStack.getMaxStackSize())) {
+
+                                FluidStack drain = fluidContainer.drain(itemStack, Math.min(MAX_TRANSFER, getTankFreeSpace()), true);
+                                modifyFluidAmount(drain.getFluid(), drain.amount);
+
+                                FluidStack fluid = fluidContainer.getFluid(itemStack);
+
+                                if (fluid == null || fluid.amount == 0) {
+                                    ItemStack stackOutput = inventory[input].copy();
+                                    stackOutput.stackSize = 1;
+                                    decrStackSize(input, 1);
+                                    increaseStackSize(output, stackOutput);
+                                }
+                            }
+                        }
+                    } else if (FluidHelper.hasFluidTag(itemStack)) {
+                        if (FluidHelper.isFluidTagEquals(itemStack, ModFluids.food) && hasTankEnoughSpace(FluidContainerRegistry.BUCKET_VOLUME)) {
+                            modifyFluidAmount(ModFluids.food, FluidContainerRegistry.BUCKET_VOLUME);
+                            decrStackSize(input, 1);
+                        }
+                    } else if (itemStack.getItem() == ModItems.foodBucket && hasTankEnoughSpace(FluidContainerRegistry.BUCKET_VOLUME)) {
+                        if (inventory[output] == null || (inventory[output].getItem() == Items.bucket && inventory[output].stackSize < BUCKET_MAX_STACKSIZE)) {
+                            modifyFluidAmount(ModFluids.food, FluidContainerRegistry.BUCKET_VOLUME);
+                            decrStackSize(input, 1);
+                            increaseStackSize(output, new ItemStack(Items.bucket));
+                        }
+                    }
+                }
+            }
         }
+
+
     }
 
     private boolean enoughResourceToOperate() {
@@ -149,62 +186,16 @@ public class TileWirelessFeeder extends TileFluidTank {
 
     @Override
     protected IRecipe getRecipeIfCanStart() {
-        ItemStack itemStack = inventory[input];
-        if (itemStack != null) {
-            if (FluidHelper.isFluidContainerItem(itemStack)) {
-                IFluidContainerItem iFluidContainerItem = (IFluidContainerItem) itemStack.getItem();
-                FluidStack fluidstack = iFluidContainerItem.getFluid(itemStack);
-                if (fluidstack != null && fluidstack.getFluid() != null && fluidstack.getFluid() == ModFluids.food && hasTankEnoughSpace(fluidstack.amount)) {
-                    inputType = 0;
-                    return new FakeRecipe(50, -2);
-                }
-            } else if (itemStack.hasTagCompound()) {
-                if (itemStack.getTagCompound().hasKey("Fluid")) {
-                    if (itemStack.getTagCompound().getString("Fluid").equals(ModFluids.food.getName()) && hasTankEnoughSpace(FluidContainerRegistry.BUCKET_VOLUME)) {
-                        inputType = 1;
-                        return new FakeRecipe(50, -2);
-                    }
-                }
-            } else if (itemStack.getItem() == ModItems.foodBucket && hasTankEnoughSpace(FluidContainerRegistry.BUCKET_VOLUME)) {
-                if (inventory[output] == null || (inventory[output].getItem() == Items.bucket && inventory[output].stackSize < BUCKET_MAX_STACKSIZE)) {
-                    inputType = 2;
-                    return new FakeRecipe(50, -2);
-                }
-            }
-        }
         return null;
     }
 
     @Override
     protected boolean canStillProcess(int recipeCode) {
-        return getRecipeIfCanStart() != null;
+        return false;
     }
 
     @Override
     protected void finishProcess() {
-//        IFluidContainerItem fluidContainer = (IFluidContainerItem) inventory[input].getItem();
-//        FluidStack drain = fluidContainer.drain(inventory[input], 1000, true);
-        ItemStack itemStack = inventory[input];
-        if (itemStack != null) {
-            switch (inputType) {
-                case 0:
-                    break;
-                case 1:
-                    modifyFluidAmount(ModFluids.food,FluidContainerRegistry.BUCKET_VOLUME);
-                    decrStackSize(input, 1);
-                    break;
-                case 2:
-                    modifyFluidAmount(ModFluids.food,FluidContainerRegistry.BUCKET_VOLUME);
-                    decrStackSize(input, 1);
-                    increaseStackSize(output,new ItemStack(Items.bucket));
-                    break;
-            }
-        }
-    }
-
-    @Override
-    protected void operationStopped() {
-        inputType = -1;
     }
 
     ///
@@ -221,35 +212,22 @@ public class TileWirelessFeeder extends TileFluidTank {
 
     @Override
     public boolean isItemValidForSlot(int slot, ItemStack itemStack) {
-        return FluidHelper.isFluidContainerItem(itemStack) ||
+        return invHelper.isInput(slot) && FluidHelper.isFluidContainerItem(itemStack) ||
                 (itemStack.hasTagCompound() && itemStack.getTagCompound().hasKey("Fluid")) ||
                 itemStack.getItem() == ModItems.foodBucket;
     }
 
-    @Override
-    public void setInventorySlotContents(int slot, ItemStack contents) {
-        if (isActive) {
-            if (contents == null) {
-                stopOperation();
-            } else if (inventory[input] != null && !contents.isItemEqual(inventory[input])) {
-                stopOperation();
-            }
-        }
-        super.setInventorySlotContents(slot, contents);
-    }
 
     @Override
     public void writeToNBT(NBTTagCompound nbtTagCompound) {
         super.writeToNBT(nbtTagCompound);
         nbtTagCompound.setByte("mode", (byte) this.mode.ordinal());
-        nbtTagCompound.setInteger("type", inputType);
     }
 
     @Override
     public void readFromNBT(NBTTagCompound nbtTagCompound) {
         super.readFromNBT(nbtTagCompound);
         this.mode = Mode.values()[nbtTagCompound.getByte("mode")];
-        this.inputType = nbtTagCompound.getInteger("type");
     }
 
     @Override

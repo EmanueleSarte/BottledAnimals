@@ -63,18 +63,28 @@ public abstract class BlockTile extends BlockBase implements IGuiHandler, ITileE
 
 
     @Override
-    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer entityPlayer, int p_149727_6_, float p_149727_7_, float p_149727_8_, float p_149727_9_) {
-        if (entityPlayer.isSneaking()) {
+    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int metadata, float xClicked, float yClicked, float zClicked) {
+        if (player.isSneaking()) {
             return false;
         }
+
         if (!world.isRemote) {
+            ItemStack equipped = player.getCurrentEquippedItem();
             TileEntity tileEntity = world.getTileEntity(x, y, z);
             if (tileEntity != null) {
-                openGui(world, x, y, z, entityPlayer);
+                if (equipped == null) {
+                    return openGui(world, x, y, z, player);
+                } else {
+                    if (tileEntity instanceof TileBase) {
+                        return ((TileBase) tileEntity).handleRightClick(player, metadata, xClicked, yClicked, zClicked) || openGui(world, x, y, z, player);
+                    }
+                }
+
             }
         }
-        return true;
+        return false;
     }
+
 
     @Override
     public void breakBlock(World worldIn, int x, int y, int z, Block block, int par6) {
@@ -157,11 +167,11 @@ public abstract class BlockTile extends BlockBase implements IGuiHandler, ITileE
     public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
         TileEntity te = world.getTileEntity(x, y, z);
 
-        if (te instanceof TileBottledAnimals){
+        if (te instanceof TileBottledAnimals) {
             int iconIndex = sideAndFacingToSpriteOffset[side][((TileBottledAnimals) te).getFacing()];
-            if (te instanceof IEnergyInfoBA){
+            if (te instanceof IEnergyInfoBA) {
                 return iconBuffer[((IEnergyInfoBA) te).isActive() ? 1 : 0][iconIndex];
-            }else{
+            } else {
                 return iconBuffer[0][iconIndex];
             }
         }
@@ -203,7 +213,7 @@ public abstract class BlockTile extends BlockBase implements IGuiHandler, ITileE
     @Override
     public boolean onBlockEventReceived(World world, int x, int y, int z, int event, int value) {
         TileEntity tile = world.getTileEntity(x, y, z);
-        if (tile != null){
+        if (tile != null) {
             return tile.receiveClientEvent(event, value);
         }
         return super.onBlockEventReceived(world, x, y, z, event, value);

@@ -42,4 +42,10 @@ public abstract class TileBase extends TileEntity {
     protected boolean checkTick(int tick){
         return worldObj.getTotalWorldTime() % tick == 0;
     }
+
+
+
+    public boolean handleRightClick(EntityPlayer player, int metadata, float xClicked, float yClicked, float zClicked){
+        return false;
+    }
 }

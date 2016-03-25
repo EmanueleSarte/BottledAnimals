@@ -12,5 +12,6 @@ public class ContainerRancher extends ContainerTile {
         addSlotToContainer(new SlotAcceptValid(entity, 0, 79, 19));
         addSlotToContainer(new SlotAcceptValid(entity, 1, 44, 45));
         addSlotToContainer(new SlotRemoveOnly(entity, 2, 114, 45));
+
     }
 }
