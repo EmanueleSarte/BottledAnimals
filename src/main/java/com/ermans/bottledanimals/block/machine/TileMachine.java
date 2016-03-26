@@ -1,6 +1,6 @@
 package com.ermans.bottledanimals.block.machine;
 
-import com.ermans.bottledanimals.block.IEnergyInfoReceiver;
+import com.ermans.api.IMachineInfo;
 import com.ermans.bottledanimals.helper.TargetPointHelper;
 import com.ermans.bottledanimals.network.PacketHandler;
 import com.ermans.bottledanimals.network.message.MessageTile;
@@ -9,7 +9,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
-public abstract class TileMachine extends TileInventory implements IEnergyInfoReceiver {
+public abstract class TileMachine extends TilePowered implements IMachineInfo {
 
 
     protected byte powerMult;
@@ -21,9 +21,7 @@ public abstract class TileMachine extends TileInventory implements IEnergyInfoRe
     public int recipeCode;
 
     public boolean isActive;
-    public boolean updateEntity;
-
-    public boolean needSyncText;
+    public boolean checkForRecipes;
 
 
     @Override
@@ -31,14 +29,14 @@ public abstract class TileMachine extends TileInventory implements IEnergyInfoRe
         super.initTile();
         this.powerMult = 1;
         this.timeMult = 1;
-        this.updateEntity = true;
+        this.checkForRecipes = true;
     }
 
     @Override
     public void updateEntity() {
         super.updateEntity();
 
-        if (updateEntity) {
+        if (checkForRecipes) {
             if (worldObj.isRemote) {
                 return;
             }
@@ -134,11 +132,6 @@ public abstract class TileMachine extends TileInventory implements IEnergyInfoRe
     }
 
     @Override
-    public int getSizeInventory() {
-        return getNumInput() + getNumOutput();
-    }
-
-    @Override
     public ItemStack decrStackSize(int slot, int amount) {
         ItemStack stack = super.decrStackSize(slot, amount);
         if (!worldObj.isRemote && remaining > 0 && isActive && shouldStopIfChangeSlot(slot, 0) && !canStillProcess(this.recipeCode)) {
@@ -192,14 +185,14 @@ public abstract class TileMachine extends TileInventory implements IEnergyInfoRe
     }
 
     @Override
-    public int getInfoMaxReceiveEnergyPerTick() {
-        return getMaxReceiveEnergy();
-    }
-
-    @Override
     public int getInfoTimePercentage() {
         if (!isActive) return 0;
         return (operationTime - remaining) * 100 / operationTime;
+    }
+
+    @Override
+    public boolean isActive() {
+        return isActive;
     }
 
     @Override

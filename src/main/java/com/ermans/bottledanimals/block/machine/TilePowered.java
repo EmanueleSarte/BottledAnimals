@@ -3,7 +3,7 @@ package com.ermans.bottledanimals.block.machine;
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyReceiver;
 import cofh.api.energy.IEnergyStorage;
-import com.ermans.bottledanimals.block.TileBottledAnimals;
+import com.ermans.api.IEnergyBA;
 import com.ermans.bottledanimals.helper.TargetPointHelper;
 import com.ermans.bottledanimals.network.PacketHandler;
 import com.ermans.bottledanimals.network.message.MessageEnergy;
@@ -12,7 +12,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
 
-public abstract class TilePowered extends TileBottledAnimals implements IEnergyReceiver {
+public abstract class TilePowered extends TileInventory implements IEnergyReceiver, IEnergyBA {
 
     public static final int DF_ENERGY_CAPACITY = 32000;
     public static final int DF_ENERGY_MAX_RCV = 32;
@@ -60,6 +60,7 @@ public abstract class TilePowered extends TileBottledAnimals implements IEnergyR
         doSync = true;
     }
 
+    @Override
     public void setEnergyStored(int amount) {
         this.storage.setEnergyStored(amount);
     }

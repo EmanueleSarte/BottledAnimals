@@ -4,16 +4,12 @@ import com.ermans.bottledanimals.client.gui.GuiBaseAdv;
 import com.ermans.bottledanimals.client.gui.button.ElementButtonOptionWF;
 import com.ermans.bottledanimals.client.gui.tab.TabInfo;
 import com.ermans.bottledanimals.reference.Textures;
-import com.ermans.repackage.cofh.lib.gui.element.ElementButtonOption;
-import com.ermans.repackage.cofh.lib.gui.element.ElementEnergyStored;
-import com.ermans.repackage.cofh.lib.gui.element.ElementFluidTank;
-import com.ermans.repackage.cofh.lib.gui.element.TabBase;
+import com.ermans.repackage.cofh.lib.gui.element.*;
 import net.minecraft.entity.player.InventoryPlayer;
 
 public class GuiWirelessFeeder extends GuiBaseAdv {
 
     private final TileWirelessFeeder tile;
-    private ElementButtonOption buttonHeal;
 
     public GuiWirelessFeeder(InventoryPlayer invPlayer, TileWirelessFeeder entity) {
         super(new ContainerWirelessFeeder(invPlayer, entity), Textures.Gui.WIRELESS_FEEDER, entity);
@@ -30,8 +26,9 @@ public class GuiWirelessFeeder extends GuiBaseAdv {
         addElement(new ElementEnergyStored(this, tile.getEnergyStorage()));
         addElement(new ElementFluidTank(this, tile.getFluidTank()).setGauge(1));
 
-        buttonHeal = (ElementButtonOption) addElement(new ElementButtonOptionWF(this, 131, 54, 16, 16).setTexture(Textures.WIDGET_TEXTURE_STRING, 256, 256));
+        ElementButtonOption buttonHeal = (ElementButtonOption) addElement(new ElementButtonOptionWF(this, 30, 18, 16, 16).setTexture(Textures.WIDGET_TEXTURE_STRING, 256, 256));
         buttonHeal.setDefaultValue(tile.getMode().ordinal());
+
     }
 
 

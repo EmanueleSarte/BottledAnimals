@@ -18,9 +18,10 @@ public class TileFoodCrusher extends TileFluidTank {
 
     private static final int TANK_CAPACITY = 10 * FluidContainerRegistry.BUCKET_VOLUME;
 
-    private static final int RECIPE_TIME = 100;
     private static final int input = 0;
-    private static final int foodContainer = 1;
+    private static final int fluidInput = 1;
+    private static final int foodContainer = 2;
+    private static final int fluidOutput = 3;
 
 
     @Override
@@ -32,16 +33,20 @@ public class TileFoodCrusher extends TileFluidTank {
 
         this.tank.setCapacity(TANK_CAPACITY);
         this.fluidTile = ModFluids.food;
+
+        this.transferFluid = true;
+        this.drainSlotInput = fluidInput;
+        this.drainSlotOutput = fluidOutput;
     }
 
     @Override
     protected int getNumInput() {
-        return 1;
+        return 2;
     }
 
     @Override
     protected int getNumOutput() {
-        return 1;
+        return 2;
     }
 
 

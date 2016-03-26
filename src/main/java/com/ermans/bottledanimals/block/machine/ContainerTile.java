@@ -6,17 +6,17 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 
-public abstract class ContainerMachine extends ContainerBase {
+public abstract class ContainerTile extends ContainerBase {
 
     public TileInventory baseTile;
     protected boolean hasPlayerInvSlots = true;
 
 
-    public ContainerMachine(InventoryPlayer player, TileInventory entity) {
+    public ContainerTile(InventoryPlayer player, TileInventory entity) {
         this(player, entity, true);
     }
 
-    public ContainerMachine(InventoryPlayer player, TileInventory entity, boolean setInvPlayer) {
+    public ContainerTile(InventoryPlayer player, TileInventory entity, boolean setInvPlayer) {
         this.baseTile = entity;
 
         this.hasPlayerInvSlots = setInvPlayer;
@@ -44,7 +44,7 @@ public abstract class ContainerMachine extends ContainerBase {
 
     @Override
     protected int getSizeInventory() {
-        return (this.baseTile).getSizeInventory();
+        return this.baseTile.getSizeInventory();
     }
 
     @Override

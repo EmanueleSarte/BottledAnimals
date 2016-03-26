@@ -12,11 +12,6 @@ public class BlockBreeder extends BlockMachine {
         super(Names.Machines.BREEDER);
     }
 
-    @Override
-    protected String getMachineTextureName() {
-        return Names.Machines.BREEDER;
-    }
-
 
     @Override
     public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {

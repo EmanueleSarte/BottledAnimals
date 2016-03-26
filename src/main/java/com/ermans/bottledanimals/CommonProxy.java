@@ -10,4 +10,5 @@ public class CommonProxy {
     @SideOnly(Side.CLIENT)
     @SubscribeEvent
     public void registerIcons(TextureStitchEvent.Pre paramPre) {}
+
 }

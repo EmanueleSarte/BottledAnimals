@@ -2,8 +2,10 @@ package com.ermans.bottledanimals.client.gui;
 
 import com.ermans.bottledanimals.IconRegistry;
 import com.ermans.bottledanimals.block.TileBottledAnimals;
+import com.ermans.bottledanimals.block.generator.TileGenerator;
 import com.ermans.bottledanimals.block.machine.TileMachine;
-import com.ermans.bottledanimals.client.gui.tab.TabEnergy;
+import com.ermans.bottledanimals.client.gui.tab.TabEnergyProvider;
+import com.ermans.bottledanimals.client.gui.tab.TabEnergyReceiver;
 import com.ermans.bottledanimals.client.gui.tab.TabRedstone;
 import com.ermans.repackage.cofh.lib.gui.GuiBase;
 import com.ermans.repackage.cofh.lib.gui.element.TabBase;
@@ -29,7 +31,9 @@ public class GuiBaseAdv extends GuiBase {
         super.initGui();
         addTab(new TabRedstone(this, tileBA, TabBase.RIGHT));
         if (tileBA instanceof TileMachine) {
-            addTab(new TabEnergy(this, (TileMachine) tileBA, TabBase.LEFT));
+            addTab(new TabEnergyReceiver(this, (TileMachine) tileBA, TabBase.LEFT));
+        }else if (tileBA instanceof TileGenerator){
+            addTab(new TabEnergyProvider(this, (TileGenerator) tileBA, TabBase.LEFT));
         }
     }
 

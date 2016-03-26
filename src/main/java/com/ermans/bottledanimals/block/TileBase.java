@@ -1,6 +1,7 @@
 package com.ermans.bottledanimals.block;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
@@ -41,5 +42,11 @@ public abstract class TileBase extends TileEntity {
 
     protected boolean checkTick(int tick){
         return worldObj.getTotalWorldTime() % tick == 0;
+    }
+
+
+
+    public boolean handleRightClick(EntityPlayer player, ItemStack itemStack, float xClicked, float yClicked, float zClicked){
+        return false;
     }
 }

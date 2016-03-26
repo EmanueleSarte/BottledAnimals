@@ -1,11 +1,11 @@
 package com.ermans.bottledanimals.block.machine.breeder;
 
-import com.ermans.bottledanimals.block.machine.ContainerMachine;
+import com.ermans.bottledanimals.block.machine.ContainerTile;
 import com.ermans.repackage.cofh.lib.gui.slot.SlotAcceptValid;
 import com.ermans.repackage.cofh.lib.gui.slot.SlotRemoveOnly;
 import net.minecraft.entity.player.InventoryPlayer;
 
-public class ContainerBreeder extends ContainerMachine {
+public class ContainerBreeder extends ContainerTile {
 
 
     private TileBreeder tileBreeder;

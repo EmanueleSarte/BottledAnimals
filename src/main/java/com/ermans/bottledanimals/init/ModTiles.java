@@ -1,6 +1,8 @@
 package com.ermans.bottledanimals.init;
 
+import com.ermans.bottledanimals.block.generator.basicgenerator.TileBasicGenerator;
 import com.ermans.bottledanimals.block.machine.animaldigitizer.TileAnimalDigitizer;
+import com.ermans.bottledanimals.block.machine.animalmaterializer.TileAnimalMaterializer;
 import com.ermans.bottledanimals.block.machine.breeder.TileBreeder;
 import com.ermans.bottledanimals.block.machine.dropextractor.TileDropExtractor;
 import com.ermans.bottledanimals.block.machine.foodcrusher.TileFoodCrusher;
@@ -19,5 +21,8 @@ public class ModTiles {
         GameRegistry.registerTileEntity(TileRancher.class, Names.Machines.RANCHER);
         GameRegistry.registerTileEntity(TileFoodCrusher.class, Names.Machines.FOOD_CRUSHER);
         GameRegistry.registerTileEntity(TileWirelessFeeder.class, Names.Machines.WIRELESS_FEEDER);
+        GameRegistry.registerTileEntity(TileAnimalMaterializer.class, Names.Machines.ANIMAL_MATERIALIZER);
+        GameRegistry.registerTileEntity(TileBasicGenerator.class, Names.Machines.BASIC_GENERATOR);
+
     }
 }

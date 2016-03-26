@@ -27,6 +27,8 @@ public class TileWirelessFeeder extends TileFluidTank {
     private static final int RF_FOR_FOOD = (int) (160 * MULT);
     private static final int RF_FOR_HEAL = (int) (80 * MULT);
 
+    private static final int input = 0;
+
     protected Mode mode = Mode.BOTH;
 
     public enum Mode {
@@ -43,7 +45,10 @@ public class TileWirelessFeeder extends TileFluidTank {
         this.tank.setCapacity(TANK_CAPACITY);
         this.fluidTile = ModFluids.food;
 
-        this.updateEntity = false;
+        this.checkForRecipes = false;
+        this.transferFluid = true;
+        this.fillSlot = input;
+
         DF_VALID_SIDE = new boolean[][]{
                 {true, true, true, true, true, true},
                 {true, true, true, true, true, true},
@@ -52,51 +57,98 @@ public class TileWirelessFeeder extends TileFluidTank {
                 {true, true, true, true, true, true},
                 {true, true, true, true, true, true},
         };
+
     }
 
     @Override
     public void updateEntity() {
         super.updateEntity();
 
-        if (!this.worldObj.isRemote && mode != Mode.DISABLED && hasPassedRedstoneTest()) {
-            if ((checkTick(40)) && (enoughResourceToOperate())) {
+        if (!this.worldObj.isRemote && hasPassedRedstoneTest()) {
+            if (mode != Mode.DISABLED) {
+                if ((checkTick(40)) && (enoughResourceToOperate())) {
 
-                AxisAlignedBB axisalignedbb = AxisAlignedBB.getBoundingBox(this.xCoord, this.yCoord, this.zCoord, this.xCoord + 1, this.yCoord + 1, this.zCoord + 1).expand(5.0D, 5.0D, 5.0D);
-                List list = this.worldObj.getEntitiesWithinAABB(EntityPlayer.class, axisalignedbb);
-                Iterator iterator = list.iterator();
+                    AxisAlignedBB axisalignedbb = AxisAlignedBB.getBoundingBox(this.xCoord, this.yCoord, this.zCoord, this.xCoord + 1, this.yCoord + 1, this.zCoord + 1).expand(5.0D, 5.0D, 5.0D);
+                    List list = this.worldObj.getEntitiesWithinAABB(EntityPlayer.class, axisalignedbb);
+                    Iterator iterator = list.iterator();
 
-                while ((iterator.hasNext()) && (enoughResourceToOperate())) {
-                    EntityPlayer entityplayer = (EntityPlayer) iterator.next();
+                    while ((iterator.hasNext()) && (enoughResourceToOperate())) {
+                        EntityPlayer entityplayer = (EntityPlayer) iterator.next();
 
-                    boolean fed = false;
-                    for (int i = 0; (mode != Mode.HEAL) && (i < 4) && (entityplayer.getFoodStats().getFoodLevel() < 20); i++) {
-                        if ((this.tank.getFluidAmount() < COST_FOR_FOOD) || (getEnergyStored(null) < RF_FOR_FOOD)) {
-                            break;
-                        }
-                        entityplayer.getFoodStats().addStats(1, 0.8F);
-                        modifyFluidAmount(fluidTile, -1 * COST_FOR_FOOD);
-                        this.modifyEnergyStored(-1 * RF_FOR_FOOD);
-                        fed = true;
-                    }
-                    if (!fed && (mode != Mode.FEED)) {
-                        boolean doHeal = mode != Mode.BOTH || entityplayer.getFoodStats().getFoodLevel() == 20;
-
-                        for (int i = 0; doHeal && (i < 4) && (entityplayer.getHealth() < 20); i++) {
-                            if ((this.tank.getFluidAmount() < COST_FOR_HEAL) || (getEnergyStored(null) < RF_FOR_HEAL)) {
+                        boolean fed = false;
+                        for (int i = 0; (mode != Mode.HEAL) && (i < 4) && (entityplayer.getFoodStats().getFoodLevel() < 20); i++) {
+                            if ((this.tank.getFluidAmount() < COST_FOR_FOOD) || (getEnergyStored(null) < RF_FOR_FOOD)) {
                                 break;
                             }
-                            entityplayer.setHealth(entityplayer.getHealth() + 1);
-                            modifyFluidAmount(fluidTile, -1 * COST_FOR_HEAL);
-                            this.modifyEnergyStored(-1 * RF_FOR_HEAL);
+                            entityplayer.getFoodStats().addStats(1, 0.8F);
+                            modifyFluidAmount(fluidTile, -1 * COST_FOR_FOOD);
+                            this.modifyEnergyStored(-1 * RF_FOR_FOOD);
+                            fed = true;
+                        }
+                        if (!fed && (mode != Mode.FEED)) {
+                            boolean doHeal = mode != Mode.BOTH || entityplayer.getFoodStats().getFoodLevel() == 20;
+
+                            for (int i = 0; doHeal && (i < 4) && (entityplayer.getHealth() < 20); i++) {
+                                if ((this.tank.getFluidAmount() < COST_FOR_HEAL) || (getEnergyStored(null) < RF_FOR_HEAL)) {
+                                    break;
+                                }
+                                entityplayer.setHealth(entityplayer.getHealth() + 1);
+                                modifyFluidAmount(fluidTile, -1 * COST_FOR_HEAL);
+                                this.modifyEnergyStored(-1 * RF_FOR_HEAL);
+                            }
                         }
                     }
                 }
             }
+
         }
     }
 
+
     private boolean enoughResourceToOperate() {
         return !(this.tank.getFluidAmount() < COST_FOR_HEAL || getEnergyStored(null) < COST_FOR_HEAL);
+    }
+
+    @Override
+    public boolean handleRightClick(EntityPlayer player, ItemStack itemStack, float xClicked, float yClicked, float zClicked) {
+//
+//        if (!isTankFull()) {
+//            if (itemStack != null) {
+//                if (FluidHelper.isFluidContainerItem(itemStack)) {
+//
+//                    IFluidContainerItem fluidContainer = (IFluidContainerItem) itemStack.getItem();
+//                    if (FluidHelper.isFluidEqual(ModFluids.food, fluidContainer.getFluid(itemStack))) {
+//
+//                        FluidStack drain = fluidContainer.drain(itemStack, Math.min(MAX_TRANSFER, getTankFreeSpace()), true);
+//                        modifyFluidAmount(drain.getFluid(), drain.amount);
+//                        player.inventoryContainer.detectAndSendChanges();
+//
+//                        return true;
+//                    }
+//                } else if (hasTankEnoughSpace(FluidContainerRegistry.BUCKET_VOLUME)) {
+//                    if (FluidHelper.hasFluidTag(itemStack)) {
+//                        if (FluidHelper.isFluidTagEquals(itemStack, ModFluids.food)) {
+//                            modifyFluidAmount(ModFluids.food, FluidContainerRegistry.BUCKET_VOLUME);
+//
+//                            ItemHelper.decreaseStackSize(itemStack, 1);
+//                            player.inventoryContainer.detectAndSendChanges();
+//
+//                            return true;
+//                        }
+//                    } else if (itemStack.getItem() == ModItems.foodBucket) {
+//                        modifyFluidAmount(ModFluids.food, FluidContainerRegistry.BUCKET_VOLUME);
+//                        ItemHelper.decreaseStackSize(itemStack, 1);
+//
+//                        ItemStack itemBucket = new ItemStack(Items.bucket);
+//                        ItemHelper.addItemStackToPlayer(player, itemBucket, true);
+//                        player.inventoryContainer.detectAndSendChanges();
+//
+//                        return true;
+//                    }
+//                }
+//            }
+//        }
+        return false;
     }
 
 
@@ -115,10 +167,6 @@ public class TileWirelessFeeder extends TileFluidTank {
         }
     }
 
-    @Override
-    public String getFluidName() {
-        return ModFluids.food.getName();
-    }
 
     @Override
     public boolean canFill(ForgeDirection from, Fluid fluid) {
@@ -131,7 +179,6 @@ public class TileWirelessFeeder extends TileFluidTank {
     }
 
 
-    //We don't need these methods
     @Override
     protected IRecipe getRecipeIfCanStart() {
         return null;
@@ -146,9 +193,11 @@ public class TileWirelessFeeder extends TileFluidTank {
     protected void finishProcess() {
     }
 
+    ///
+
     @Override
     protected int getNumInput() {
-        return 0;
+        return 1;
     }
 
     @Override
@@ -157,10 +206,10 @@ public class TileWirelessFeeder extends TileFluidTank {
     }
 
     @Override
-    public boolean isItemValidForSlot(int p_94041_1_, ItemStack p_94041_2_) {
+    public boolean isItemValidForSlot(int slot, ItemStack itemStack) {
         return false;
     }
-    ////
+
 
     @Override
     public void writeToNBT(NBTTagCompound nbtTagCompound) {

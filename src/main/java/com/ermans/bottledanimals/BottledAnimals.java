@@ -18,7 +18,7 @@ import net.minecraftforge.common.MinecraftForge;
 @Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.VERSION)
 public class BottledAnimals {
     @Mod.Instance(Reference.MOD_ID)
-    public static BottledAnimals instance;
+    public static BottledAnimals INSTANCE;
     @SidedProxy(clientSide = Reference.CLIENT_PROXY_CLASS, serverSide = Reference.SERVER_PROXY_CLASS)
     public static CommonProxy proxy;
     public static final GuiHandler guiHandler = new GuiHandler();

@@ -12,11 +12,6 @@ public class BlockGrowthAccelerator extends BlockMachine {
         super(Names.Machines.GROWTH_ACCELERATOR);
     }
 
-    @Override
-    protected String getMachineTextureName() {
-        return Names.Machines.GROWTH_ACCELERATOR;
-    }
-
 
     @Override
     public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {

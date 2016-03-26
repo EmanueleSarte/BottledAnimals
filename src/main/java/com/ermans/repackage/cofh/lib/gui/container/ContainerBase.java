@@ -1,6 +1,8 @@
 package com.ermans.repackage.cofh.lib.gui.container;
 
 import com.ermans.repackage.cofh.lib.util.helpers.ItemHelper;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -93,13 +95,13 @@ public abstract class ContainerBase extends Container {
         return stack;
     }
 
-//    @SideOnly(Side.CLIENT)
-//    @Override
-//    public void putStacksInSlots(ItemStack[] stacks) {
-//        for (int i = 0; i < stacks.length; ++i) {
-//            putStackInSlot(i, stacks[i]);
-//        }
-//    }
+    @SideOnly(Side.CLIENT)
+    @Override
+    public void putStacksInSlots(ItemStack[] stacks) {
+        for (int i = 0; i < stacks.length; ++i) {
+            putStackInSlot(i, stacks[i]);
+        }
+    }
 
 
     @SuppressWarnings("unchecked")

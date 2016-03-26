@@ -13,11 +13,6 @@ public class BlockAnimalDigitizer extends BlockMachine {
     }
 
     @Override
-    protected String getMachineTextureName() {
-        return Names.Machines.ANIMAL_DIGITIZER;
-    }
-
-    @Override
     public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
         TileEntity te = world.getTileEntity(x, y, z);
         if ((te instanceof TileAnimalDigitizer)) {

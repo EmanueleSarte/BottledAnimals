@@ -29,8 +29,8 @@ public class GuiRancher extends GuiBaseAdv {
         addElement(new ElementEnergyStored(this, tile.getEnergyStorage()));
         addElement(new ElementFluidTank(this, tile.getFluidTank()).setGauge(1));
 
-        this.speedShears = ((ElementDualScaled) addElement(new ElementDualScaled(this, 79, 40).setMode(0).setSize(16, 12).setTexture(Textures.Gui.Element.PROGRESS_SHEARS, 32, 16)));
-        this.speedBucket = ((ElementDualScaled) addElement(new ElementDualScaled(this, 79, 40).setMode(0).setSize(16, 13).setTexture(Textures.Gui.Element.PROGRESS_MILK, 32, 16)));
+        this.speedShears = ((ElementDualScaled) addElement(new ElementDualScaled(this, 69, 40).setMode(0).setSize(16, 12).setTexture(Textures.Gui.Element.PROGRESS_SHEARS, 32, 16)));
+        this.speedBucket = ((ElementDualScaled) addElement(new ElementDualScaled(this, 69, 40).setMode(0).setSize(16, 13).setTexture(Textures.Gui.Element.PROGRESS_MILK, 32, 16)));
         this.speedBucket.setVisible(false);
     }
 

@@ -1,6 +1,6 @@
 package com.ermans.bottledanimals.network.message;
 
-import com.ermans.bottledanimals.block.machine.TilePowered;
+import com.ermans.api.IEnergyBA;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
@@ -44,8 +44,8 @@ public class MessageEnergy implements IMessage {
         @Override
         public IMessage onMessage(MessageEnergy message, MessageContext ctx) {
             TileEntity entity = Minecraft.getMinecraft().thePlayer.worldObj.getTileEntity(message.x, message.y, message.z);
-            if ((entity instanceof TilePowered)) {
-                ((TilePowered) entity).setEnergyStored(message.energy);
+            if (entity instanceof IEnergyBA) {
+                ((IEnergyBA) entity).setEnergyStored(message.energy);
             }
             return null;
         }

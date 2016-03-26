@@ -11,10 +11,6 @@ public class BlockRancher extends BlockMachine {
         super(Names.Machines.RANCHER);
     }
 
-    @Override
-    protected String getMachineTextureName() {
-        return Names.Machines.RANCHER;
-    }
 
     @Override
     public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
