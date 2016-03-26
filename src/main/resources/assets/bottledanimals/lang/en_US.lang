@@ -11,6 +11,7 @@ item.bottledanimals:squidFood.name=Squid Food
 item.bottledanimals:bamilkBucket.name=Milk Bucket
 item.bottledanimals:foodBucket.name=Food Bucket
 item.bottledanimals:rancherGear.name=Gear
+item.bottledanimals:spawnEggFrame.name=Spawn Egg Frame
 
 
     #Bottled Animals
@@ -55,6 +56,7 @@ tile.bottledanimals:dropExtractor.name=Drop Extractor
 tile.bottledanimals:rancher.name=Animal Rancher
 tile.bottledanimals:wirelessFeeder.name=Wireless Feeder
 tile.bottledanimals:foodCrusher.name=Food Crusher
+tile.bottledanimals:animalMaterializer.name=Animal Materializer
 tile.bottledanimals:basicGenerator.name=Basic Generator
 
 #Block
@@ -64,6 +66,8 @@ block.bottledanimals:machineFrame.name=Machine Frame
 #Fluid
 fluid.bottledanimals.food=Liquid Food
 fluid.bottledanimals.BAmilk=Milk
+tile.food.name=Liquid Food
+tile.bamilk.name=Milk
 
 
 
@@ -75,3 +79,4 @@ bottledanimals.nei.growthAccelerator=Growth Accelerator
 bottledanimals.nei.wirelessFeeder=Wireless Feeder
 bottledanimals.nei.rancher=Rancher
 bottledanimals.nei.foodCrusher=Food Crusher
+bottledanimals.nei.animalMaterializer=Animal Materializer

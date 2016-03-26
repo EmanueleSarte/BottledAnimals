@@ -31,6 +31,10 @@ public class NEIBottledAnimalsConfig implements IConfigureNEI {
         API.registerRecipeHandler(new FoodCrusherRecipeHandler());
         API.registerUsageHandler(new FoodCrusherRecipeHandler());
 
+        API.registerRecipeHandler(new AnimalMaterializerRecipeHandler());
+        API.registerUsageHandler(new AnimalMaterializerRecipeHandler());
+
+
         API.hideItem(new ItemStack(ModItems.itemModIcon));
     }
 

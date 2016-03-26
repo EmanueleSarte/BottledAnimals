@@ -2,6 +2,7 @@ package com.ermans.bottledanimals.init;
 
 import com.ermans.bottledanimals.block.generator.basicgenerator.BlockBasicGenerator;
 import com.ermans.bottledanimals.block.machine.animaldigitizer.BlockAnimalDigitizer;
+import com.ermans.bottledanimals.block.machine.animalmaterializer.BlockAnimalMaterializer;
 import com.ermans.bottledanimals.block.machine.breeder.BlockBreeder;
 import com.ermans.bottledanimals.block.machine.dropextractor.BlockDropExtractor;
 import com.ermans.bottledanimals.block.machine.foodcrusher.BlockFoodCrusher;
@@ -26,6 +27,7 @@ public class ModBlocks {
     public static BlockWirelessFeeder blockWirelessFeeder;
     public static BlockRancher blockRancher;
     public static BlockFoodCrusher blockFoodCrusher;
+    public static BlockAnimalMaterializer blockAnimalMaterializer;
 
     public static BlockMachineFrame blockMachineFrame;
 
@@ -42,6 +44,7 @@ public class ModBlocks {
         blockWirelessFeeder = new BlockWirelessFeeder();
         blockRancher = new BlockRancher();
         blockFoodCrusher = new BlockFoodCrusher();
+        blockAnimalMaterializer = new BlockAnimalMaterializer();
 
         blockMachineFrame = new BlockMachineFrame();
 
@@ -57,6 +60,7 @@ public class ModBlocks {
         GameRegistry.registerBlock(blockWirelessFeeder, Names.Machines.WIRELESS_FEEDER);
         GameRegistry.registerBlock(blockRancher, Names.Machines.RANCHER);
         GameRegistry.registerBlock(blockFoodCrusher, Names.Machines.FOOD_CRUSHER);
+        GameRegistry.registerBlock(blockAnimalMaterializer, Names.Machines.ANIMAL_MATERIALIZER);
 
         GameRegistry.registerBlock(blockMachineFrame, Names.Blocks.MACHINE_FRAME);
 

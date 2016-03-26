@@ -24,6 +24,7 @@ public final class Textures {
         public static final ResourceLocation WIRELESS_FEEDER = getResourceLocation("wirelessFeeder.png");
         public static final ResourceLocation RANCHER = getResourceLocation("rancher.png");
         public static final ResourceLocation FOOD_CRUSHER = getResourceLocation("foodCrusher.png");
+        public static final ResourceLocation ANIMAL_MATERIALIZER = getResourceLocation("animalMaterializer.png");
         public static final ResourceLocation BASIC_GENERATOR = getResourceLocation("basicGenerator.png");
 
         public static final ResourceLocation NEI_GUI = getResourceLocation("nei.png");

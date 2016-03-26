@@ -7,7 +7,6 @@ import com.ermans.bottledanimals.init.ModItems;
 import com.ermans.bottledanimals.network.PacketHandler;
 import com.ermans.bottledanimals.network.message.MessageFluid;
 import com.ermans.repackage.cofh.lib.util.helpers.FluidHelper;
-import com.ermans.repackage.cofh.lib.util.helpers.ItemHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -48,7 +47,7 @@ public abstract class TileFluidTank extends TileMachine implements IFluidHandler
                 doSync = false;
                 PacketHandler.INSTANCE.sendToAllAround(new MessageFluid(this, getFluidName()), TargetPointHelper.getTargetPoint(this));
             }
-            if (transferFluid && hasPassedRedstoneTest() && checkTick(20)) {
+            if (transferFluid && checkTick(20)) {
                 if (!isTankEmpty() && drainSlotInput != -1 && drainSlotOutput != -1) {
                     drainFluidIntoItems(drainSlotInput, drainSlotOutput);
                 }
@@ -108,7 +107,7 @@ public abstract class TileFluidTank extends TileMachine implements IFluidHandler
                     FluidStack drain = fluidContainer.drain(itemStack, Math.min(MAX_TRANSFER_RATE, getTankFreeSpace()), true);
                     modifyFluidAmount(drain.getFluid(), drain.amount);
                 }
-            } else if (hasTankEnoughSpace(FluidContainerRegistry.BUCKET_VOLUME)) {
+            } else if (hasTankEnoughSpace(MAX_TRANSFER_RATE)) {
                 if (FluidHelper.hasFluidTag(itemStack)) {
                     if (FluidHelper.isFluidTagEquals(itemStack, ModFluids.food)) {
                         modifyFluidAmount(ModFluids.food, MAX_TRANSFER_RATE);
@@ -160,17 +159,17 @@ public abstract class TileFluidTank extends TileMachine implements IFluidHandler
 
     @Override
     public boolean handleRightClick(EntityPlayer player, ItemStack itemStack, float xClicked, float yClicked, float zClicked) {
-        if (transferFluid && !isTankEmpty() && drainSlotInput != -1) {
-            if (itemStack != null && itemStack.getItem() == Items.bucket && tank.getFluidAmount() >= FluidContainerRegistry.BUCKET_VOLUME) {
-                ItemStack filledContainer = FluidHelper.getFluidContainerData(fluidTile, itemStack).filledContainer;
-                filledContainer.stackSize = 1;
-                ItemHelper.decreaseStackSize(itemStack, 1);
-                ItemHelper.addItemStackToPlayer(player, filledContainer, true);
-                modifyFluidAmount(fluidTile, -1 * FluidContainerRegistry.BUCKET_VOLUME);
-                player.inventoryContainer.detectAndSendChanges();
-                return true;
-            }
-        }
+//        if (transferFluid && !isTankEmpty() && drainSlotInput != -1) {
+//            if (itemStack != null && itemStack.getItem() == Items.bucket && tank.getFluidAmount() >= FluidContainerRegistry.BUCKET_VOLUME) {
+//                ItemStack filledContainer = FluidHelper.getFluidContainerData(fluidTile, itemStack).filledContainer;
+//                filledContainer.stackSize = 1;
+//                ItemHelper.decreaseStackSize(itemStack, 1);
+//                ItemHelper.addItemStackToPlayer(player, filledContainer, true);
+//                modifyFluidAmount(fluidTile, -1 * FluidContainerRegistry.BUCKET_VOLUME);
+//                player.inventoryContainer.detectAndSendChanges();
+//                return true;
+//            }
+//        }
         return false;
     }
 

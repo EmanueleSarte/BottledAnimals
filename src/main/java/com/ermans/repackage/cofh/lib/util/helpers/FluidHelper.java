@@ -108,12 +108,24 @@ public class FluidHelper {
         return null;
     }
 
-    public static boolean isContainerData(ItemStack container){
+    public static boolean isEmptyContainer(ItemStack container){
         if (container == null){
             return false;
         }
         for (FluidContainerRegistry.FluidContainerData fluidContainerData : FluidContainerRegistry.getRegisteredFluidContainerData()) {
             if ( fluidContainerData.emptyContainer.isItemEqual(container)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean isFilledContainer(ItemStack container){
+        if (container == null){
+            return false;
+        }
+        for (FluidContainerRegistry.FluidContainerData fluidContainerData : FluidContainerRegistry.getRegisteredFluidContainerData()) {
+            if ( fluidContainerData.filledContainer.isItemEqual(container)){
                 return true;
             }
         }

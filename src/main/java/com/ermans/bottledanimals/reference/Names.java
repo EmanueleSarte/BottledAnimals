@@ -18,6 +18,7 @@ public class Names {
         public static final String ANIMAL_CIRCUIT = "animalCircuit";
         public static final String SQUID_FOOD = "squidFood";
         public static final String RANCHER_GEAR = "rancherGear";
+        public static final String SPAWN_EGG_FRAME = "spawnEggFrame";
     }
 
     public static final class Machines {
@@ -28,6 +29,7 @@ public class Names {
         public static final String WIRELESS_FEEDER = "wirelessFeeder";
         public static final String RANCHER = "rancher";
         public static final String FOOD_CRUSHER = "foodCrusher";
+        public static final String ANIMAL_MATERIALIZER = "animalMaterializer";
 
         public static final String BASIC_GENERATOR = "basicGenerator";
     }
@@ -36,3 +38,5 @@ public class Names {
         public static final String MACHINE_FRAME = "machineFrame";
     }
 }
+
+

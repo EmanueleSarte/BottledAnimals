@@ -89,6 +89,7 @@ public final class ItemHelper {
 
         itemStack.stackSize -= amount;
         if (itemStack.stackSize <= 0){
+            itemStack = null;
             return null;
         }
         return itemStack;
