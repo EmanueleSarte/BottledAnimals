@@ -34,6 +34,8 @@ public class ModRecipes {
         GameRegistry.addRecipe(new ShapedOreRecipe(ModBlocks.blockRancher, " S ", "BMB", "GCG", 'S', Items.shears, 'B', Items.bucket, 'M', ModBlocks.blockMachineFrame, 'G', Items.gold_ingot, 'C', ModItems.itemAnimalCircuit));
         GameRegistry.addRecipe(new ShapedOreRecipe(ModBlocks.blockWirelessFeeder, " E ", "GMG", " C ", 'E', Items.ender_pearl, 'M', ModBlocks.blockMachineFrame, 'G', Items.gold_ingot, 'C', ModItems.itemAnimalCircuit));
         GameRegistry.addRecipe(new ShapedOreRecipe(ModBlocks.blockAnimalMaterializer, " E ", "PMP", "GCG", 'E', ModItems.itemSpawnEggFrame, 'P', ModItems.itemBrokenPattern, 'M', ModBlocks.blockMachineFrame, 'G', Items.gold_ingot, 'C', ModItems.itemAnimalCircuit));
+        GameRegistry.addRecipe(new ShapedOreRecipe(ModBlocks.blockFoodCrusher, " B ", "NMN", "GCG", 'B', Items.bucket, 'N', ModItems.itemRancherGear, 'M', ModBlocks.blockMachineFrame, 'G', Items.gold_ingot, 'C', ModItems.itemAnimalCircuit));
+        GameRegistry.addRecipe(new ShapedOreRecipe(ModBlocks.blockBasicGenerator, " P ", "FMF", "GCG", 'P', Blocks.piston, 'F', Blocks.furnace, 'M', ModBlocks.blockMachineFrame, 'G', Items.gold_ingot, 'C', ModItems.itemAnimalCircuit));
 
         GameRegistry.addRecipe(new ShapelessOreRecipe(Items.milk_bucket, ModItems.milkBucket, Items.bucket));
         GameRegistry.addRecipe(new ShapelessOreRecipe(ModItems.milkBucket, Items.milk_bucket, Items.bucket));

@@ -43,7 +43,7 @@ public class TabEnergyReceiver extends TabEnergy {
         getFontRenderer().drawString("%", posXOffset() + 47, posY + 55, this.textColor);
 
         drawString("" + machineInfo.getInfoEnergyPerTick(), posXOffset() + 20, this.posY + 27);
-        drawString("" + machineInfo.getInfoMaxEnergyPerTick(), posXOffset() + 20, this.posY + 41);
+        drawString("" + machineInfo.getInfoMaxEnergyInput(), posXOffset() + 20, this.posY + 41);
         drawString(machineInfo.getInfoTimePercentage() + "", posXOffset() + 20, this.posY + 55);
 
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);

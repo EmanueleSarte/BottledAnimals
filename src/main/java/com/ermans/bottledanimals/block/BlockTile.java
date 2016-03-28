@@ -24,7 +24,7 @@ public abstract class BlockTile extends BlockBase implements IGuiHandler, ITileE
 
 
     @SideOnly(Side.CLIENT)
-    protected IIcon[][] iconBuffer = new IIcon[2][6];
+    protected IIcon[][] iconBuffer;
 
     protected int guiId;
 
@@ -133,6 +133,8 @@ public abstract class BlockTile extends BlockBase implements IGuiHandler, ITileE
 
         this.blockIcon = iIconRegister.registerIcon(getTileSideTexture());
 
+        this.iconBuffer = new IIcon[2][6];
+
         iconBuffer[0][0] = iIconRegister.registerIcon(getTileBottomTexture());
         iconBuffer[0][1] = iIconRegister.registerIcon(getTileTopTexture());
         iconBuffer[0][2] = iIconRegister.registerIcon(getTileSideTexture());
@@ -163,6 +165,16 @@ public abstract class BlockTile extends BlockBase implements IGuiHandler, ITileE
         return iconBuffer[0][side];
     }
 
+
+    private static final int[][] sideAndFacingToSpriteOffset = {
+            {3, 2, 0, 0, 0, 0},
+            {2, 3, 1, 1, 1, 1},
+            {1, 1, 3, 2, 5, 4},
+            {0, 0, 2, 3, 4, 5},
+            {4, 5, 4, 5, 3, 2},
+            {5, 4, 5, 4, 2, 3}
+    };
+
     @Override
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
@@ -179,15 +191,7 @@ public abstract class BlockTile extends BlockBase implements IGuiHandler, ITileE
         return null;
     }
 
-    @SideOnly(Side.CLIENT)
-    private static final int[][] sideAndFacingToSpriteOffset = {
-            {3, 2, 0, 0, 0, 0},
-            {2, 3, 1, 1, 1, 1},
-            {1, 1, 3, 2, 5, 4},
-            {0, 0, 2, 3, 4, 5},
-            {4, 5, 4, 5, 3, 2},
-            {5, 4, 5, 4, 2, 3}
-    };
+
 
     @Override
     public String getUnlocalizedName() {

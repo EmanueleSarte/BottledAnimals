@@ -5,6 +5,8 @@ import com.ermans.bottledanimals.helper.TargetPointHelper;
 import com.ermans.bottledanimals.network.PacketHandler;
 import com.ermans.bottledanimals.network.message.MessageTile;
 import com.ermans.bottledanimals.recipe.IRecipe;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -126,8 +128,9 @@ public abstract class TileMachine extends TilePowered implements IMachineInfo {
         return RFTick * powerMult;
     }
 
+    @SideOnly(Side.CLIENT)
     public int getProgressScaled(int scale) {
-        if (!isActive) return 0;
+        if (!isActive || operationTime == 0) return 0;
         return scale * (operationTime - remaining) / operationTime;
     }
 
@@ -188,6 +191,11 @@ public abstract class TileMachine extends TilePowered implements IMachineInfo {
     public int getInfoTimePercentage() {
         if (!isActive) return 0;
         return (operationTime - remaining) * 100 / operationTime;
+    }
+
+    @Override
+    public int getInfoMaxEnergyInput() {
+        return storage.getMaxReceive();
     }
 
     @Override

@@ -192,7 +192,7 @@ public abstract class TileGenerator extends TileEnergyProvider implements IEnerg
 
     @Override
     public int getInfoFuelPercentage() {
-        if (!isActive || remaining == 0) return 0;
+        if (!isActive || remaining == 0 || totalFuel == 0) return 0;
         return remaining * 100 / totalFuel;
     }
 
@@ -223,7 +223,7 @@ public abstract class TileGenerator extends TileEnergyProvider implements IEnerg
 
     @SideOnly(Side.CLIENT)
     public int getFuelScaled(int scale) {
-        if (!isActive || remaining == 0) return 0;
+        if (!isActive || remaining == 0 || totalFuel == 0) return 0;
         return remaining * scale / totalFuel;
     }
 
