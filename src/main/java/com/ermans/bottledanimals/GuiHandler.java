@@ -1,11 +1,13 @@
 package com.ermans.bottledanimals;
 
-import cpw.mods.fml.common.network.IGuiHandler;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.network.IGuiHandler;
 
 import java.util.HashMap;
 import java.util.Map;
+
 
 public class GuiHandler implements IGuiHandler {
 

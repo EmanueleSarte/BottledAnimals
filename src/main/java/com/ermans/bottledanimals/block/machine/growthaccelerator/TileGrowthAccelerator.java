@@ -6,11 +6,11 @@ import com.ermans.bottledanimals.recipe.GrowthAcceleratorManager;
 import com.ermans.bottledanimals.recipe.IRecipe;
 import com.ermans.bottledanimals.reference.Animals;
 import com.ermans.repackage.cofh.lib.util.helpers.MathHelper;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class TileGrowthAccelerator extends TileMachine {
 

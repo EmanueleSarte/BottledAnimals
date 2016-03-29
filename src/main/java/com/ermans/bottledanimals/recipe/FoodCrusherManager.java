@@ -2,11 +2,11 @@ package com.ermans.bottledanimals.recipe;
 
 
 import com.ermans.bottledanimals.helper.FoodHelper;
-import cpw.mods.fml.common.registry.GameData;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.common.registry.GameData;
 
 import java.util.Collection;
 import java.util.HashMap;

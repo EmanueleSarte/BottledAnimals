@@ -1,14 +1,38 @@
 package com.ermans.bottledanimals;
 
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraftforge.client.event.TextureStitchEvent;
+
+import com.ermans.bottledanimals.block.machine.animaldigitizer.BlockAnimalDigitizer;
+import com.ermans.bottledanimals.block.machine.animaldigitizer.TileAnimalDigitizer;
+import com.ermans.bottledanimals.reference.Names;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class CommonProxy {
 
-    @SideOnly(Side.CLIENT)
-    @SubscribeEvent
-    public void registerIcons(TextureStitchEvent.Pre paramPre) {}
+    public static BlockAnimalDigitizer blockAnimalDigitizer;
+
+
+    public void preInit(FMLPreInitializationEvent event){
+
+        blockAnimalDigitizer = new BlockAnimalDigitizer();
+
+
+
+
+
+        GameRegistry.registerBlock(blockAnimalDigitizer, Names.Machines.ANIMAL_DIGITIZER);
+        GameRegistry.registerTileEntity(TileAnimalDigitizer.class, Names.Machines.ANIMAL_DIGITIZER);
+
+
+    }
+
+    public void init(FMLInitializationEvent event){
+    }
+
+
+    public void postInit(FMLPostInitializationEvent event){
+    }
 
 }

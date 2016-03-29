@@ -1,12 +1,14 @@
 package com.ermans.repackage.cofh.lib.util.helpers;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTSizeTracker;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.*;
 
@@ -70,19 +72,19 @@ public class FluidHelper {
         return !(itemStack == null || !itemStack.hasTagCompound()) && itemStack.getTagCompound().hasKey("Fluid") && itemStack.getTagCompound().getString("Fluid") != null;
     }
 
-    public static FluidStack getFluidStackFromFluidTag(ItemStack itemStack){
+    public static FluidStack getFluidStackFromFluidTag(ItemStack itemStack) {
         Fluid fluid = FluidRegistry.getFluid(itemStack.getTagCompound().getString("Fluid"));
-        if (fluid == null){
+        if (fluid == null) {
             return null;
         }
         return new FluidStack(fluid, FluidContainerRegistry.BUCKET_VOLUME);
     }
 
-    public static boolean isFluidTagEquals(ItemStack itemStack, Fluid fluid){
+    public static boolean isFluidTagEquals(ItemStack itemStack, Fluid fluid) {
         return itemStack.getTagCompound().getString("Fluid").equals(fluid.getName());
     }
 
-    public static boolean canGetFluidStack(ItemStack itemStack){
+    public static boolean canGetFluidStack(ItemStack itemStack) {
         return hasFluidTag(itemStack) || isFluidContainerItem(itemStack);
     }
 
@@ -90,48 +92,47 @@ public class FluidHelper {
 
         container.setTagCompound(new NBTTagCompound());
         NBTTagCompound fluidTag = resource.writeToNBT(new NBTTagCompound());
-        container.stackTagCompound.setTag("Fluid", fluidTag);
+        container.getTagCompound().setTag("Fluid", fluidTag);
 
         return container;
     }
 
 
-    public static FluidContainerRegistry.FluidContainerData getFluidContainerData(Fluid fluid, ItemStack container){
-        if (fluid == null || container == null){
+    public static FluidContainerRegistry.FluidContainerData getFluidContainerData(Fluid fluid, ItemStack container) {
+        if (fluid == null || container == null) {
             return null;
         }
         for (FluidContainerRegistry.FluidContainerData fluidContainerData : FluidContainerRegistry.getRegisteredFluidContainerData()) {
-            if (fluidContainerData.fluid.getFluid() == fluid && fluidContainerData.emptyContainer.isItemEqual(container)){
-               return fluidContainerData;
+            if (fluidContainerData.fluid.getFluid() == fluid && fluidContainerData.emptyContainer.isItemEqual(container)) {
+                return fluidContainerData;
             }
         }
         return null;
     }
 
-    public static boolean isEmptyContainer(ItemStack container){
-        if (container == null){
+    public static boolean isEmptyContainer(ItemStack container) {
+        if (container == null) {
             return false;
         }
         for (FluidContainerRegistry.FluidContainerData fluidContainerData : FluidContainerRegistry.getRegisteredFluidContainerData()) {
-            if ( fluidContainerData.emptyContainer.isItemEqual(container)){
+            if (fluidContainerData.emptyContainer.isItemEqual(container)) {
                 return true;
             }
         }
         return false;
     }
 
-    public static boolean isFilledContainer(ItemStack container){
-        if (container == null){
+    public static boolean isFilledContainer(ItemStack container) {
+        if (container == null) {
             return false;
         }
         for (FluidContainerRegistry.FluidContainerData fluidContainerData : FluidContainerRegistry.getRegisteredFluidContainerData()) {
-            if ( fluidContainerData.filledContainer.isItemEqual(container)){
+            if (fluidContainerData.filledContainer.isItemEqual(container)) {
                 return true;
             }
         }
         return false;
     }
-
 
 
     /* PACKETS */
@@ -140,9 +141,7 @@ public class FluidHelper {
         if (!isValidFluidStack(fluid)) {
             data.writeShort(-1);
         } else {
-            byte[] abyte = CompressedStreamTools.compress(fluid.writeToNBT(new NBTTagCompound()));
-            data.writeShort((short) abyte.length);
-            data.write(abyte);
+            CompressedStreamTools.write(fluid.writeToNBT(new NBTTagCompound()), data);
         }
     }
 
@@ -153,9 +152,7 @@ public class FluidHelper {
         if (length < 0) {
             return null;
         } else {
-            byte[] abyte = new byte[length];
-            data.readFully(abyte);
-            return FluidStack.loadFluidStackFromNBT(CompressedStreamTools.func_152457_a(abyte, new NBTSizeTracker(2097152L)));
+            return FluidStack.loadFluidStackFromNBT(CompressedStreamTools.read(data, new NBTSizeTracker(2097152L)));
         }
     }
 
@@ -177,24 +174,25 @@ public class FluidHelper {
 
     public static FluidStack getFluidFromWorld(World world, int x, int y, int z, boolean doDrain) {
 
-        Block bId = world.getBlock(x, y, z);
-        int bMeta = world.getBlockMetadata(x, y, z);
+        IBlockState bS = world.getBlockState(new BlockPos(x, y, z));
+        Block block = bS.getBlock();
+        int bMeta = block.getMetaFromState(bS);
 
-        if (Block.isEqualTo(bId, Blocks.water)) {
+        if (Block.isEqualTo(block, Blocks.water)) {
             if (bMeta == 0) {
                 return WATER.copy();
             } else {
                 return null;
             }
-        } else if (Block.isEqualTo(bId, Blocks.lava)) {
+        } else if (Block.isEqualTo(block, Blocks.lava)) {
             if (bMeta == 0) {
                 return LAVA.copy();
             } else {
                 return null;
             }
-        } else if (bId instanceof IFluidBlock) {
-            IFluidBlock block = (IFluidBlock) bId;
-            return block.drain(world, x, y, z, doDrain);
+        } else if (block instanceof IFluidBlock) {
+            IFluidBlock fluidBlockblock = (IFluidBlock) block;
+            return fluidBlockblock.drain(world, new BlockPos(x, y, z), doDrain);
         }
         return null;
     }

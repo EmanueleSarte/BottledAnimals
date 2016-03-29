@@ -1,14 +1,15 @@
 package com.ermans.bottledanimals.network.message;
 
 import com.ermans.bottledanimals.block.TileBottledAnimals;
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
-import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
+import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
-public class MessageTile implements IMessage{
+public class MessageTile implements IMessage {
 
     private TileBottledAnimals tile;
     private int x;
@@ -21,9 +22,9 @@ public class MessageTile implements IMessage{
 
     public MessageTile(TileBottledAnimals tile, boolean updateTexture) {
         this.tile = tile;
-        this.x = tile.xCoord;
-        this.y = tile.yCoord;
-        this.z = tile.zCoord;
+        this.x = tile.getPos().getX();
+        this.y = tile.getPos().getY();
+        this.z = tile.getPos().getZ();
         this.updateTexture = updateTexture;
     }
 
@@ -34,8 +35,8 @@ public class MessageTile implements IMessage{
         this.y = buf.readInt();
         this.z = buf.readInt();
         this.updateTexture = buf.readBoolean();
-        TileEntity entity = Minecraft.getMinecraft().thePlayer.worldObj.getTileEntity(this.x, this.y, this.z);
-        if (entity instanceof TileBottledAnimals){
+        TileEntity entity = Minecraft.getMinecraft().thePlayer.worldObj.getTileEntity(new BlockPos(this.x, this.y, this.z));
+        if (entity instanceof TileBottledAnimals) {
             ((TileBottledAnimals) entity).fromBytes(buf);
         }
     }
@@ -52,8 +53,9 @@ public class MessageTile implements IMessage{
     public static class Handler implements IMessageHandler<MessageTile, IMessage> {
         @Override
         public IMessage onMessage(MessageTile message, MessageContext ctx) {
-            if (message.updateTexture){
-                Minecraft.getMinecraft().renderGlobal.markBlockForRenderUpdate(message.x, message.y, message.z);
+            if (message.updateTexture) {
+                // TODO: 26/03/2016 check if this works
+                Minecraft.getMinecraft().renderGlobal.markBlockRangeForRenderUpdate(message.x, message.y, message.z, message.x, message.y, message.z);
             }
             return null;
         }

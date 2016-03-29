@@ -33,8 +33,8 @@ public abstract class TileMachine extends TilePowered implements IMachineInfo {
     }
 
     @Override
-    public void updateEntity() {
-        super.updateEntity();
+    public void update() {
+        super.update();
 
         if (checkForRecipes) {
             if (worldObj.isRemote) {
@@ -92,7 +92,7 @@ public abstract class TileMachine extends TilePowered implements IMachineInfo {
         markDirty();
         //This is called server side to update light
         if (updateTexture) {
-            worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+            worldObj.markBlockForUpdate(getPos());
         }
     }
 

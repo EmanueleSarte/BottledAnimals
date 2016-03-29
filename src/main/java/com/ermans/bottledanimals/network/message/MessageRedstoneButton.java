@@ -3,13 +3,14 @@ package com.ermans.bottledanimals.network.message;
 
 import cofh.api.tileentity.IRedstoneControl;
 import com.ermans.bottledanimals.block.TileBottledAnimals;
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
-import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
+import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
-public class MessageRedstoneButton implements IMessage{
+public class MessageRedstoneButton implements IMessage {
     private int x;
     private int y;
     private int z;
@@ -19,9 +20,9 @@ public class MessageRedstoneButton implements IMessage{
     }
 
     public MessageRedstoneButton(TileBottledAnimals entity) {
-        this.x = entity.xCoord;
-        this.y = entity.yCoord;
-        this.z = entity.zCoord;
+        this.x = entity.getPos().getX();
+        this.y = entity.getPos().getY();
+        this.z = entity.getPos().getZ();
         this.state = (byte) entity.getControl().ordinal();
     }
 
@@ -44,7 +45,7 @@ public class MessageRedstoneButton implements IMessage{
     public static class Handler implements IMessageHandler<MessageRedstoneButton, IMessage> {
         @Override
         public IMessage onMessage(MessageRedstoneButton message, MessageContext ctx) {
-            TileEntity entity = ctx.getServerHandler().playerEntity.worldObj.getTileEntity(message.x, message.y, message.z);
+            TileEntity entity = ctx.getServerHandler().playerEntity.worldObj.getTileEntity(new BlockPos(message.x, message.y, message.z));
             if (entity == null || !(entity instanceof TileBottledAnimals)) {
                 return null;
             }

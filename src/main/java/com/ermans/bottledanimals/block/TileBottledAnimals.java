@@ -6,13 +6,12 @@ import com.ermans.bottledanimals.network.PacketHandler;
 import com.ermans.bottledanimals.network.message.MessageRedstoneButton;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.MathHelper;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 
 public abstract class TileBottledAnimals extends TileBase implements IRedstoneControl {
 
     protected String tileName;
-    protected byte facing;
+    protected EnumFacing facing;
 
     protected ControlMode rsControlMode = ControlMode.DISABLED;
     protected boolean isRedstonePowered;
@@ -24,21 +23,8 @@ public abstract class TileBottledAnimals extends TileBase implements IRedstoneCo
     }
 
 
-    public void setFacing(float playerRotationYaw) {
-        switch (MathHelper.floor_double(playerRotationYaw * 4.0F / 360.0F + 0.5D) & 0x3) {
-            case 0:
-                this.facing = (byte) ForgeDirection.NORTH.ordinal();
-                break;
-            case 1:
-                this.facing = (byte) ForgeDirection.EAST.ordinal();
-                break;
-            case 2:
-                this.facing = (byte) ForgeDirection.SOUTH.ordinal();
-                break;
-            case 3:
-                this.facing = (byte) ForgeDirection.WEST.ordinal();
-                break;
-        }
+    public void setFacing(EnumFacing facing) {
+        this.facing = facing;
     }
 
 
@@ -47,11 +33,11 @@ public abstract class TileBottledAnimals extends TileBase implements IRedstoneCo
     }
 
     public void onNeighborChange() {
-        boolean wasPowered = this.isRedstonePowered;
-        this.isRedstonePowered = worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
-        if (wasPowered != this.isRedstonePowered && !rsControlMode.isDisabled()) {
-            // TODO: 22/01/2016 SYNC CLIENT?
-        }
+//        boolean wasPowered = this.isRedstonePowered;
+        this.isRedstonePowered = worldObj.isBlockIndirectlyGettingPowered(getPos()) > 0;
+//        if (wasPowered != this.isRedstonePowered && !rsControlMode.isDisabled()) {
+//            // TODO: 22/01/2016 SYNC CLIENT?
+//        }
     }
 
     //RSControl Interface
@@ -69,6 +55,7 @@ public abstract class TileBottledAnimals extends TileBase implements IRedstoneCo
 
     }
 
+
     @Override
     public ControlMode getControl() {
         return this.rsControlMode;
@@ -84,22 +71,15 @@ public abstract class TileBottledAnimals extends TileBase implements IRedstoneCo
         this.isRedstonePowered = isPowered;
     }
 
-    public void setFacing(byte facing) {
-        this.facing = facing;
-    }
-
     public String getTileName() {
         return this.tileName;
     }
 
-    public byte getFacing() {
-        return this.facing;
-    }
 
     @Override
     public void readFromNBT(NBTTagCompound nbtTagCompound) {
         super.readFromNBT(nbtTagCompound);
-        this.facing = nbtTagCompound.getByte("facing");
+        this.facing = EnumFacing.values()[nbtTagCompound.getByte("facing")];
         this.tileName = nbtTagCompound.getString("tileName");
         this.rsControlMode = ControlMode.values()[nbtTagCompound.getByte("rsControlMode")];
         this.isRedstonePowered = nbtTagCompound.getBoolean("isRedstonePowered");
@@ -108,7 +88,7 @@ public abstract class TileBottledAnimals extends TileBase implements IRedstoneCo
     @Override
     public void writeToNBT(NBTTagCompound nbtTagCompound) {
         super.writeToNBT(nbtTagCompound);
-        nbtTagCompound.setByte("facing", this.facing);
+        nbtTagCompound.setByte("facing", (byte) this.facing.ordinal());
         nbtTagCompound.setString("tileName", this.tileName);
         nbtTagCompound.setByte("rsControlMode", (byte) this.rsControlMode.ordinal());
         nbtTagCompound.setBoolean("isRedstonePowered", this.isRedstonePowered);

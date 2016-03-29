@@ -31,6 +31,7 @@ public class TileAnimalDigitizer extends TileMachine {
         return 1;
     }
 
+
     @Override
     protected IRecipe getRecipeIfCanStart() {
         if (inventory[bottle] == null || inventory[pattern] == null) {

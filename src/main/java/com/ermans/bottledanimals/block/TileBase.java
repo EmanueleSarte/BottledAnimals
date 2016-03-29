@@ -7,8 +7,9 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ITickable;
 
-public abstract class TileBase extends TileEntity {
+public abstract class TileBase extends TileEntity implements ITickable {
 
 
     public TileBase() {
@@ -23,13 +24,13 @@ public abstract class TileBase extends TileEntity {
     public Packet getDescriptionPacket() {
         NBTTagCompound nbtTagCompound = new NBTTagCompound();
         writeToNBT(nbtTagCompound);
-        return new S35PacketUpdateTileEntity(this.xCoord, this.yCoord, this.zCoord, 0, nbtTagCompound);
+        return new S35PacketUpdateTileEntity(getPos(), 0, nbtTagCompound);
     }
 
     //Who call this want to restore this TE giving us the data to do that, so we call readFromNBT to restore all information
     @Override
     public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
-        readFromNBT(pkt.func_148857_g());
+        readFromNBT(pkt.getNbtCompound());
     }
 
 
@@ -49,4 +50,6 @@ public abstract class TileBase extends TileEntity {
     public boolean handleRightClick(EntityPlayer player, ItemStack itemStack, float xClicked, float yClicked, float zClicked){
         return false;
     }
+
+
 }

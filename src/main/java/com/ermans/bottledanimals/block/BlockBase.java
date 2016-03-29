@@ -2,12 +2,9 @@ package com.ermans.bottledanimals.block;
 
 import com.ermans.bottledanimals.BottledAnimalsTab;
 import com.ermans.bottledanimals.reference.Reference;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
 
 public abstract class BlockBase extends Block {
 
@@ -26,20 +23,19 @@ public abstract class BlockBase extends Block {
         super(new Material(MapColor.ironColor));
         this.blockName = blockName;
         setHardness(0.5F);
-        setBlockName(blockName);
+        setUnlocalizedName(blockName);
         setStepSound(Block.soundTypeMetal);
         setHarvestLevel("pickaxe", 0);
-        setBlockName(blockName);
         setCreativeTab(BottledAnimalsTab.tabBottledAnimals);
     }
 
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerBlockIcons(IIconRegister iconRegister) {
-        this.blockIcon = iconRegister.registerIcon(String.format("%s", getUnwrappedUnlocalizedName(getUnlocalizedName())));
-    }
-
+//
+//    @Override
+//    @SideOnly(Side.CLIENT)
+//    public void registerBlockIcons(TextureUtils.IIconRegister iconRegister) {
+//        this.blockIcon = iconRegister.registerIcon(String.format("%s", getUnwrappedUnlocalizedName(getUnlocalizedName())));
+//    }
 
 
     @Override
@@ -55,39 +51,39 @@ public abstract class BlockBase extends Block {
         return this.blockName;
     }
 
-    public static class SoundType extends Block.SoundType {
-
-        public SoundType(String soundName, float volume, float frequency) {
-            super(soundName, volume, frequency);
-        }
-
-        public SoundType(String soundName) {
-            this(soundName, 1.0F, 1.0F);
-        }
-
-        @Override
-        public float getVolume() {
-            return this.volume;
-        }
-
-        @Override
-        public float getPitch() {
-            return this.frequency;
-        }
-
-        @Override
-        public String getBreakSound() {
-            return "dig." + this.soundName;
-        }
-
-        @Override
-        public String getStepResourcePath() {
-            return "step." + this.soundName;
-        }
-
-        @Override
-        public String func_150496_b() {
-            return getBreakSound();
-        }
-    }
+//    public static class SoundType extends Block.SoundType {
+//
+//        public SoundType(String soundName, float volume, float frequency) {
+//            super(soundName, volume, frequency);
+//        }
+//
+//        public SoundType(String soundName) {
+//            this(soundName, 1.0F, 1.0F);
+//        }
+//
+//        @Override
+//        public float getVolume() {
+//            return this.volume;
+//        }
+//
+//        @Override
+//        public float getPitch() {
+//            return this.frequency;
+//        }
+//
+//        @Override
+//        public String getBreakSound() {
+//            return "dig." + this.soundName;
+//        }
+//
+//        @Override
+//        public String getStepResourcePath() {
+//            return "step." + this.soundName;
+//        }
+//
+//        @Override
+//        public String func_150496_b() {
+//            return getBreakSound();
+//        }
+//    }
 }

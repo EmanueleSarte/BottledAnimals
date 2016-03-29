@@ -1,9 +1,9 @@
 package com.ermans.bottledanimals.init;
 
-import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
@@ -35,8 +35,8 @@ public class ModRecipes {
         GameRegistry.addRecipe(new ShapedOreRecipe(ModBlocks.blockWirelessFeeder, " E ", "GMG", " C ", 'E', Items.ender_pearl, 'M', ModBlocks.blockMachineFrame, 'G', Items.gold_ingot, 'C', ModItems.itemAnimalCircuit));
         GameRegistry.addRecipe(new ShapedOreRecipe(ModBlocks.blockAnimalMaterializer, " E ", "PMP", "GCG", 'E', ModItems.itemSpawnEggFrame, 'P', ModItems.itemBrokenPattern, 'M', ModBlocks.blockMachineFrame, 'G', Items.gold_ingot, 'C', ModItems.itemAnimalCircuit));
 
-        GameRegistry.addRecipe(new ShapelessOreRecipe(Items.milk_bucket, ModItems.milkBucket, Items.bucket));
-        GameRegistry.addRecipe(new ShapelessOreRecipe(ModItems.milkBucket, Items.milk_bucket, Items.bucket));
+//        GameRegistry.addRecipe(new ShapelessOreRecipe(Items.milk_bucket, ModItems.milkBucket, Items.bucket));
+//        GameRegistry.addRecipe(new ShapelessOreRecipe(ModItems.milkBucket, Items.milk_bucket, Items.bucket));
 
         GameRegistry.addRecipe(new ShapedOreRecipe(Items.cake, "BBB", "SES", "WWW", 'B', "bucketMilk", 'S', Items.sugar, 'E', Items.egg, 'W', Items.wheat));
     }

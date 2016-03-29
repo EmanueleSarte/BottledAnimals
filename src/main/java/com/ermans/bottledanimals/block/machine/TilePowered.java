@@ -7,10 +7,10 @@ import com.ermans.api.IEnergyBA;
 import com.ermans.bottledanimals.helper.TargetPointHelper;
 import com.ermans.bottledanimals.network.PacketHandler;
 import com.ermans.bottledanimals.network.message.MessageEnergy;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public abstract class TilePowered extends TileInventory implements IEnergyReceiver, IEnergyBA {
 
@@ -47,12 +47,13 @@ public abstract class TilePowered extends TileInventory implements IEnergyReceiv
         this.RFTick = DF_ENERGY_CAPACITY / 3200; //default: 10RF/t
     }
 
+
+
     @Override
-    public void updateEntity() {
-        super.updateEntity();
+    public void update() {
         if (!worldObj.isRemote && doSync) {
             doSync = false;
-            PacketHandler.INSTANCE.sendToAllAround(new MessageEnergy(this.xCoord, this.yCoord, this.zCoord, this.storage.getEnergyStored()), TargetPointHelper.getTargetPoint(this));
+            PacketHandler.INSTANCE.sendToAllAround(new MessageEnergy(getPos().getX(), getPos().getY(), getPos().getZ(), this.storage.getEnergyStored()), TargetPointHelper.getTargetPoint(this));
         }
     }
 
@@ -66,6 +67,7 @@ public abstract class TilePowered extends TileInventory implements IEnergyReceiv
     }
 
 
+    @Override
     public IEnergyStorage getEnergyStorage() {
         return this.storage;
     }
@@ -90,7 +92,7 @@ public abstract class TilePowered extends TileInventory implements IEnergyReceiv
 
     ////IEnergyReceiver///
     @Override
-    public int receiveEnergy(ForgeDirection from, int maxReceive, boolean simulate) {
+    public int receiveEnergy(EnumFacing from, int maxReceive, boolean simulate) {
         int energy = storage.receiveEnergy(maxReceive, simulate);
         if (!worldObj.isRemote && energy > 0 && !simulate) {
             markDirtyEnergy();
@@ -99,17 +101,17 @@ public abstract class TilePowered extends TileInventory implements IEnergyReceiv
     }
 
     @Override
-    public boolean canConnectEnergy(ForgeDirection from) {
-        return activeEnergyStorage && DF_VALID_SIDE[from.ordinal()][facing];
+    public boolean canConnectEnergy(EnumFacing from) {
+        return activeEnergyStorage && DF_VALID_SIDE[from.ordinal()][facing.ordinal()];
     }
 
     @Override
-    public int getEnergyStored(ForgeDirection from) {
+    public int getEnergyStored(EnumFacing from) {
         return storage.getEnergyStored();
     }
 
     @Override
-    public int getMaxEnergyStored(ForgeDirection from) {
+    public int getMaxEnergyStored(EnumFacing from) {
         return storage.getMaxEnergyStored();
     }
 

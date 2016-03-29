@@ -1,32 +1,45 @@
 package com.ermans.bottledanimals;
 
+import com.ermans.bottledanimals.reference.Names;
 import com.ermans.bottledanimals.reference.Reference;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.Side;
 
 public class ClientProxy extends CommonProxy {
 
+
+
     @Override
-    @SideOnly(Side.CLIENT)
-    @SubscribeEvent
-    public void registerIcons(TextureStitchEvent.Pre paramPre) {
-        if (paramPre.map.getTextureType() != 0) {
-            if (paramPre.map.getTextureType() == 1) {
-                IconRegistry.addIcon("EnergyNow", Reference.MOD_ID_LOWERCASE + ":icons/Energy_Now", paramPre.map);
-                IconRegistry.addIcon("EnergyMax", Reference.MOD_ID_LOWERCASE + ":icons/Energy_Max", paramPre.map);
-                IconRegistry.addIcon("EnergyOut", Reference.MOD_ID_LOWERCASE + ":icons/Energy_Out", paramPre.map);
-                IconRegistry.addIcon("EnergyTime", Reference.MOD_ID_LOWERCASE + ":icons/Energy_Time", paramPre.map);
-                IconRegistry.addIcon("IconEnergy", Reference.MOD_ID_LOWERCASE + ":icons/Icon_Energy", paramPre.map);
-                IconRegistry.addIcon("IconEnergyOn", Reference.MOD_ID_LOWERCASE + ":icons/Icon_Energy_On", paramPre.map);
-                IconRegistry.addIcon("IconMachineInfo", Reference.MOD_ID_LOWERCASE + ":icons/Icon_Machine_Info", paramPre.map);
-                IconRegistry.addIcon("IconRedstone", Reference.MOD_ID_LOWERCASE + ":icons/Icon_Redstone", paramPre.map);
-                IconRegistry.addIcon("GeneratorOff", Reference.MOD_ID_LOWERCASE + ":icons/Generator_Off", paramPre.map);
-                IconRegistry.addIcon("GeneratorBalance", Reference.MOD_ID_LOWERCASE + ":icons/Generator_Balance", paramPre.map);
-                IconRegistry.addIcon("GeneratorLowGen", Reference.MOD_ID_LOWERCASE + ":icons/Generator_LowGen", paramPre.map);
-                IconRegistry.addIcon("GeneratorRigGen", Reference.MOD_ID_LOWERCASE + ":icons/Generator_RigGen", paramPre.map);
-            }
+    public void preInit(FMLPreInitializationEvent event) {
+        super.preInit(event);
+
+        if (event.getSide() == Side.CLIENT) {
+            registerBlockModel(Names.Machines.ANIMAL_DIGITIZER);
         }
+    }
+
+    @Override
+    public void init(FMLInitializationEvent event) {
+        super.init(event);
+    }
+
+    @Override
+    public void postInit(FMLPostInitializationEvent event) {
+        super.postInit(event);
+    }
+
+
+    private void registerBlockModel(String blockName) {
+        final int DEFAULT_ITEM_SUBTYPE = 0;
+
+        ModelLoader.setCustomModelResourceLocation(
+                GameRegistry.findItem(Reference.MOD_ID, blockName),
+                DEFAULT_ITEM_SUBTYPE,
+                new ModelResourceLocation(Reference.MOD_ID_LOWERCASE + ":" + blockName, "inventory"));
     }
 }

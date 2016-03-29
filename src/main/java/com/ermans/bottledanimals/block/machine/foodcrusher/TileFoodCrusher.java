@@ -8,7 +8,7 @@ import com.ermans.bottledanimals.recipe.IRecipe;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 
@@ -120,12 +120,12 @@ public class TileFoodCrusher extends TileFluidTank {
     }
 
     @Override
-    public boolean canFill(ForgeDirection from, Fluid fluid) {
+    public boolean canFill(EnumFacing from, Fluid fluid) {
         return false;
     }
 
     @Override
-    public boolean canDrain(ForgeDirection from, Fluid fluid) {
-        return DF_VALID_SIDE[from.ordinal()][facing] && tank.getFluid() != null;
+    public boolean canDrain(EnumFacing from, Fluid fluid) {
+        return DF_VALID_SIDE[from.ordinal()][facing.ordinal()] && tank.getFluid() != null;
     }
 }

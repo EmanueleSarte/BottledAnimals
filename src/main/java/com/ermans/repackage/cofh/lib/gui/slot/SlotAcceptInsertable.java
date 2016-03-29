@@ -3,6 +3,7 @@ package com.ermans.repackage.cofh.lib.gui.slot;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
 
 /**
  * Slot that will only accept ItemStacks when the IInventory returns true from isItemValidForSlot.
@@ -29,7 +30,7 @@ public class SlotAcceptInsertable extends SlotAcceptValid {
 
 		boolean valid = super.isItemValid(stack);
 
-		return valid && sidedInv != null ? sidedInv.canInsertItem(slotNumber, stack, 6) : valid;
+		return valid && sidedInv != null ? sidedInv.canInsertItem(slotNumber, stack, EnumFacing.byName("slot")) : valid;
 	}
 
 }

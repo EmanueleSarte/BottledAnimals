@@ -5,5 +5,5 @@
 @API(apiVersion = CoFHLibProps.VERSION, owner = "CoFHCore", provides = "CoFHLib")
 package com.ermans.repackage.cofh.lib;
 
-import cpw.mods.fml.common.API;
 
+import net.minecraftforge.fml.common.API;

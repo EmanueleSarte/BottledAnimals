@@ -5,10 +5,10 @@ import com.ermans.bottledanimals.block.generator.BlockGenerator;
 import com.ermans.bottledanimals.reference.Names;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 public class BlockBasicGenerator extends BlockGenerator {
-
 
 
     public BlockBasicGenerator() {
@@ -17,7 +17,7 @@ public class BlockBasicGenerator extends BlockGenerator {
 
     @Override
     public Object getServerGuiElement(int i, EntityPlayer player, World world, int x, int y, int z) {
-        TileEntity te = world.getTileEntity(x, y, z);
+        TileEntity te = world.getTileEntity(new BlockPos(x, y, z));
         if (te instanceof TileBasicGenerator) {
             return new ContainerBasicGenerator(player.inventory, (TileBasicGenerator) te);
         }
@@ -25,8 +25,8 @@ public class BlockBasicGenerator extends BlockGenerator {
     }
 
     @Override
-    public Object getClientGuiElement(int i,  EntityPlayer player, World world, int x, int y, int z) {
-        TileEntity te = world.getTileEntity(x, y, z);
+    public Object getClientGuiElement(int i, EntityPlayer player, World world, int x, int y, int z) {
+        TileEntity te = world.getTileEntity(new BlockPos(x, y, z));
         return new GuiBasicGenerator(player.inventory, (TileBasicGenerator) te);
     }
 

@@ -2,17 +2,17 @@ package com.ermans.bottledanimals.block.generator;
 
 import cofh.api.energy.IEnergyReceiver;
 import com.ermans.api.IEnergyInfoProvider;
-import com.ermans.bottledanimals.helper.BlockPos;
 import com.ermans.bottledanimals.helper.BlockPosHelper;
 import com.ermans.bottledanimals.helper.TargetPointHelper;
 import com.ermans.bottledanimals.network.PacketHandler;
 import com.ermans.bottledanimals.network.message.MessageTile;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public abstract class TileGenerator extends TileEnergyProvider implements IEnergyInfoProvider {
 
@@ -42,8 +42,8 @@ public abstract class TileGenerator extends TileEnergyProvider implements IEnerg
     }
 
     @Override
-    public void updateEntity() {
-        super.updateEntity();
+    public void update() {
+        super.update();
 
         boolean sendUpdate = false;
         boolean hasChanged = isActive;
@@ -122,15 +122,15 @@ public abstract class TileGenerator extends TileEnergyProvider implements IEnerg
             lastEnergyOut = 0;
             if (hasPassedRedstoneTest() && !isStorageEmpty()) {
 
-                for (int i = 0; !isStorageEmpty() && lastEnergyOut < maxRF && i < ForgeDirection.VALID_DIRECTIONS.length; i++) {
-                    ForgeDirection fd = ForgeDirection.VALID_DIRECTIONS[i];
-                    if (canConnectEnergy(fd)) {
-                        BlockPos bp = BlockPosHelper.getBlockAdjacent(xCoord, yCoord, zCoord, fd);
+                for (int i = 0; !isStorageEmpty() && lastEnergyOut < maxRF && i < EnumFacing.values().length; i++) {
+                    EnumFacing ef = EnumFacing.values()[i];
+                    if (canConnectEnergy(ef)) {
+                        BlockPos bp = BlockPosHelper.getBlockAdjacent(getPos(), ef);
                         if (bp != null) {
-                            TileEntity tile = worldObj.getTileEntity(bp.x, bp.y, bp.z);
+                            TileEntity tile = worldObj.getTileEntity(bp);
                             if (tile instanceof IEnergyReceiver) {
-                                int energy = ((IEnergyReceiver) tile).receiveEnergy(fd, extractEnergy(fd, Math.min(maxRF, maxRF - lastEnergyOut), true), false);
-                                lastEnergyOut += extractEnergy(fd, energy, false);
+                                int energy = ((IEnergyReceiver) tile).receiveEnergy(ef, extractEnergy(ef, Math.min(maxRF, maxRF - lastEnergyOut), true), false);
+                                lastEnergyOut += extractEnergy(ef, energy, false);
                             }
                         }
                     }
@@ -139,15 +139,15 @@ public abstract class TileGenerator extends TileEnergyProvider implements IEnerg
         }
 
         if (isActive && checkTick(4) || actualRateVar != actualRate || stateChanged != state || lastEnergyOut != lastEnergyOutVar) {
-            this.worldObj.addBlockEvent(xCoord, yCoord, zCoord, getBlockType(), 1, actualRate);
-            this.worldObj.addBlockEvent(xCoord, yCoord, zCoord, getBlockType(), 2, state.ordinal());
-            this.worldObj.addBlockEvent(xCoord, yCoord, zCoord, getBlockType(), 3, lastEnergyOut);
-            this.worldObj.addBlockEvent(xCoord, yCoord, zCoord, getBlockType(), 4, remaining);
+            this.worldObj.addBlockEvent(pos, getBlockType(), 1, actualRate);
+            this.worldObj.addBlockEvent(pos, getBlockType(), 2, state.ordinal());
+            this.worldObj.addBlockEvent(pos, getBlockType(), 3, lastEnergyOut);
+            this.worldObj.addBlockEvent(pos, getBlockType(), 4, remaining);
         }
 
         if (sendUpdate) {
             syncMachine(hasChanged != isActive);
-            this.worldObj.addBlockEvent(xCoord, yCoord, zCoord, getBlockType(), 5, totalFuel);
+            this.worldObj.addBlockEvent(pos, getBlockType(), 5, totalFuel);
         }
     }
 
@@ -158,7 +158,7 @@ public abstract class TileGenerator extends TileEnergyProvider implements IEnerg
         markDirty();
 
         if (updateTexture) {
-            worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+            worldObj.markBlockForUpdate(pos);
         }
     }
 

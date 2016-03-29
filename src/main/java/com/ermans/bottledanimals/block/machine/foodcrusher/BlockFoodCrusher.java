@@ -4,6 +4,7 @@ import com.ermans.bottledanimals.block.machine.BlockMachine;
 import com.ermans.bottledanimals.reference.Names;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 public class BlockFoodCrusher extends BlockMachine {
@@ -15,7 +16,7 @@ public class BlockFoodCrusher extends BlockMachine {
 
     @Override
     public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
-        TileEntity te = world.getTileEntity(x, y, z);
+        TileEntity te = world.getTileEntity(new BlockPos(x,y,z));
         if ((te instanceof TileFoodCrusher)) {
             return new ContainerFoodCrusher(player.inventory, (TileFoodCrusher) te);
         }
@@ -24,7 +25,7 @@ public class BlockFoodCrusher extends BlockMachine {
 
     @Override
     public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
-        TileEntity te = world.getTileEntity(x, y, z);
+        TileEntity te = world.getTileEntity(new BlockPos(x,y,z));
         return new GuiFoodCrusher(player.inventory, (TileFoodCrusher) te);
     }
 

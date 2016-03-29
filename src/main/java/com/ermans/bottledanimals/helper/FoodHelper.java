@@ -1,18 +1,21 @@
 package com.ermans.bottledanimals.helper;
 
-import cpw.mods.fml.common.registry.GameData;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemFishFood;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
+import net.minecraftforge.fml.common.registry.GameData;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
 public class FoodHelper {
+
+    // TODO: 26/03/2016 STILL I NEED REFLECTION?
+
     private static Map<Integer, Double> foodValues = new HashMap<Integer, Double>();
 
     public static void initItemValue() {
@@ -42,8 +45,8 @@ public class FoodHelper {
         if ((itemStack.getItem() instanceof ItemFood)) {
 
             ItemFood food = (ItemFood) itemStack.getItem();
-            if (((food instanceof ItemFishFood)) &&
-                    (ItemFishFood.FishType.func_150974_a(itemStack.getItemDamage()) == ItemFishFood.FishType.PUFFERFISH)) {
+            if ((food instanceof ItemFishFood) &&
+                    (ItemFishFood.FishType.byItemStack(itemStack) == ItemFishFood.FishType.PUFFERFISH)) {
                 return 0.01;
             }
 
@@ -52,8 +55,8 @@ public class FoodHelper {
             int potionAmplifier = getIntFromField(getFieldInClassUpTo("potionAmplifier", food.getClass(), Item.class), food);
             float potionEffectProbability = getFloatFromField(getFieldInClassUpTo("potionEffectProbability", food.getClass(), Item.class), food);
 
-            double saturation = food.func_150906_h(itemStack);
-            double heal = food.func_150905_g(itemStack);
+            double saturation = food.getSaturationModifier(itemStack);
+            double heal = food.getHealAmount(itemStack);
             if ((potionID > 0) && (potionID < Potion.potionTypes.length)) {
                 Potion potion = Potion.potionTypes[potionID];
                 if (potion.isBadEffect()) {

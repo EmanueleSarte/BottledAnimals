@@ -7,11 +7,12 @@ import com.ermans.bottledanimals.init.ModItems;
 import com.ermans.bottledanimals.network.PacketHandler;
 import com.ermans.bottledanimals.network.message.MessageFluid;
 import com.ermans.repackage.cofh.lib.util.helpers.FluidHelper;
+import com.ermans.repackage.cofh.lib.util.helpers.ItemHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.*;
 
 public abstract class TileFluidTank extends TileMachine implements IFluidHandler {
@@ -40,8 +41,8 @@ public abstract class TileFluidTank extends TileMachine implements IFluidHandler
     }
 
     @Override
-    public void updateEntity() {
-        super.updateEntity();
+    public void update() {
+        super.update();
         if (!worldObj.isRemote) {
             if (doSync) {
                 doSync = false;
@@ -159,22 +160,22 @@ public abstract class TileFluidTank extends TileMachine implements IFluidHandler
 
     @Override
     public boolean handleRightClick(EntityPlayer player, ItemStack itemStack, float xClicked, float yClicked, float zClicked) {
-//        if (transferFluid && !isTankEmpty() && drainSlotInput != -1) {
-//            if (itemStack != null && itemStack.getItem() == Items.bucket && tank.getFluidAmount() >= FluidContainerRegistry.BUCKET_VOLUME) {
-//                ItemStack filledContainer = FluidHelper.getFluidContainerData(fluidTile, itemStack).filledContainer;
-//                filledContainer.stackSize = 1;
-//                ItemHelper.decreaseStackSize(itemStack, 1);
-//                ItemHelper.addItemStackToPlayer(player, filledContainer, true);
-//                modifyFluidAmount(fluidTile, -1 * FluidContainerRegistry.BUCKET_VOLUME);
-//                player.inventoryContainer.detectAndSendChanges();
-//                return true;
-//            }
-//        }
+        if (transferFluid && !isTankEmpty() && drainSlotInput != -1) {
+            if (itemStack != null && itemStack.getItem() == Items.bucket && tank.getFluidAmount() >= FluidContainerRegistry.BUCKET_VOLUME) {
+                ItemStack filledContainer = FluidHelper.getFluidContainerData(fluidTile, itemStack).filledContainer.copy();
+                filledContainer.stackSize = 1;
+                ItemHelper.decreaseStackSize(itemStack, 1);
+                ItemHelper.addItemStackToPlayer(player, filledContainer, true);
+                modifyFluidAmount(fluidTile, -1 * FluidContainerRegistry.BUCKET_VOLUME);
+                player.inventoryContainer.detectAndSendChanges();
+                return true;
+            }
+        }
         return false;
     }
 
     @Override
-    public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
+    public int fill(EnumFacing from, FluidStack resource, boolean doFill) {
 
         if (resource == null || !canFill(from, resource.getFluid())) {
             return 0;
@@ -190,7 +191,7 @@ public abstract class TileFluidTank extends TileMachine implements IFluidHandler
     }
 
     @Override
-    public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
+    public FluidStack drain(EnumFacing from, FluidStack resource, boolean doDrain) {
         if (tank.getFluid() == null || resource == null || !canDrain(from, resource.getFluid()) || !resource.isFluidEqual(tank.getFluid())) {
             return null;
         }
@@ -203,7 +204,7 @@ public abstract class TileFluidTank extends TileMachine implements IFluidHandler
     }
 
     @Override
-    public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
+    public FluidStack drain(EnumFacing from, int maxDrain, boolean doDrain) {
 
         if (tank.getFluid() == null || !canDrain(from, this.fluidTile)) {
             return null;
@@ -224,7 +225,7 @@ public abstract class TileFluidTank extends TileMachine implements IFluidHandler
     }
 
     @Override
-    public FluidTankInfo[] getTankInfo(ForgeDirection from) {
+    public FluidTankInfo[] getTankInfo(EnumFacing from) {
         return new FluidTankInfo[]{tank.getInfo()};
     }
 

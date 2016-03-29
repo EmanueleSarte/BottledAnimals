@@ -10,7 +10,7 @@ import com.ermans.bottledanimals.block.machine.growthaccelerator.TileGrowthAccel
 import com.ermans.bottledanimals.block.machine.rancher.TileRancher;
 import com.ermans.bottledanimals.block.machine.wirelessfeeder.TileWirelessFeeder;
 import com.ermans.bottledanimals.reference.Names;
-import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class ModTiles {
     public static void init() {

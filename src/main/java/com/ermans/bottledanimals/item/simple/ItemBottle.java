@@ -31,7 +31,7 @@ public class ItemBottle extends ItemBottledAnimals {
         if (entity instanceof EntityAnimal && ((EntityAnimal) entity).getGrowingAge() < 0) {
             return false;
         }
-        Animals entityAnimals = Animals.getAnimalsFromEntityName(EntityList.classToStringMapping.get(entity.getClass()).toString());
+        Animals entityAnimals = Animals.getAnimalsFromEntityName(EntityList.classToStringMapping.get(entity.getClass()));
         if (entityAnimals == null) {
             return false;
         }

@@ -1,12 +1,13 @@
 package com.ermans.bottledanimals.network.message;
 
 import com.ermans.api.IEnergyBA;
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
-import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
+import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 public class MessageEnergy implements IMessage {
     private int x;
@@ -43,7 +44,7 @@ public class MessageEnergy implements IMessage {
     public static class Handler implements IMessageHandler<MessageEnergy, IMessage> {
         @Override
         public IMessage onMessage(MessageEnergy message, MessageContext ctx) {
-            TileEntity entity = Minecraft.getMinecraft().thePlayer.worldObj.getTileEntity(message.x, message.y, message.z);
+            TileEntity entity = Minecraft.getMinecraft().thePlayer.worldObj.getTileEntity(new BlockPos(message.x, message.y, message.z));
             if (entity instanceof IEnergyBA) {
                 ((IEnergyBA) entity).setEnergyStored(message.energy);
             }

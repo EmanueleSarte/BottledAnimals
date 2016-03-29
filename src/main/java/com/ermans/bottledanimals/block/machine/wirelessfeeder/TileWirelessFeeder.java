@@ -10,7 +10,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 
@@ -61,14 +61,14 @@ public class TileWirelessFeeder extends TileFluidTank {
     }
 
     @Override
-    public void updateEntity() {
-        super.updateEntity();
+    public void update() {
+        super.update();
 
         if (!this.worldObj.isRemote && hasPassedRedstoneTest()) {
             if (mode != Mode.DISABLED) {
                 if ((checkTick(40)) && (enoughResourceToOperate())) {
 
-                    AxisAlignedBB axisalignedbb = AxisAlignedBB.getBoundingBox(this.xCoord, this.yCoord, this.zCoord, this.xCoord + 1, this.yCoord + 1, this.zCoord + 1).expand(5.0D, 5.0D, 5.0D);
+                    AxisAlignedBB axisalignedbb = AxisAlignedBB.fromBounds(getPos().getX(), getPos().getY(), getPos().getZ(), getPos().getX() + 1, getPos().getY() + 1, getPos().getZ() + 1).expand(5.0D, 5.0D, 5.0D);
                     List list = this.worldObj.getEntitiesWithinAABB(EntityPlayer.class, axisalignedbb);
                     Iterator iterator = list.iterator();
 
@@ -169,12 +169,12 @@ public class TileWirelessFeeder extends TileFluidTank {
 
 
     @Override
-    public boolean canFill(ForgeDirection from, Fluid fluid) {
-        return DF_VALID_SIDE[from.ordinal()][facing] && fluid != null;
+    public boolean canFill(EnumFacing from, Fluid fluid) {
+        return DF_VALID_SIDE[from.ordinal()][facing.ordinal()] && fluid != null;
     }
 
     @Override
-    public boolean canDrain(ForgeDirection from, Fluid fluid) {
+    public boolean canDrain(EnumFacing from, Fluid fluid) {
         return false;
     }
 

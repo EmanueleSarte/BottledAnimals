@@ -1,7 +1,5 @@
 package com.ermans.repackage.cofh.lib.gui.slot;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -49,10 +47,15 @@ public class SlotInvisible extends Slot {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public boolean func_111238_b() {
-
+	public boolean canBeHovered() {
 		return false;
 	}
+
+//	@Override
+//	@SideOnly(Side.CLIENT)
+//	public boolean func_111238_b() {
+//
+//		return false;
+//	}
 
 }

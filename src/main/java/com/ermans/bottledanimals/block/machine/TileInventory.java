@@ -5,7 +5,9 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IChatComponent;
 
 public abstract class TileInventory extends TileReconfigurable implements ISidedInventory {
 
@@ -26,6 +28,123 @@ public abstract class TileInventory extends TileReconfigurable implements ISided
         }
     }
 
+    abstract protected int getNumInput();
+
+    abstract protected int getNumOutput();
+
+
+    @Override
+    public boolean isUseableByPlayer(EntityPlayer player) {
+        if (canPlayerAccess(player)) {
+            if (this.worldObj.getTileEntity(getPos()) != this) {
+                return false;
+            }
+            return player.getDistanceSq(getPos().getX() + 0.5D, getPos().getY() + 0.5D, getPos().getZ() + 0.5D) <= 64.0D;
+        }
+        return false;
+    }
+
+
+    @Override
+    public String getName() {
+        return tileName;
+    }
+
+    @Override
+    public boolean hasCustomName() {
+        return false;
+    }
+
+    @Override
+    public IChatComponent getDisplayName() {
+        return new ChatComponentText(tileName);
+    }
+
+    @Override
+    public void clear() {
+        for (int i = 0; i < this.inventory.length; ++i)        {
+            this.inventory[i] = null;
+        }
+    }
+
+    @Override
+    public int[] getSlotsForFace(EnumFacing side) {
+        if (side == this.facing)
+            return new int[]{};
+        return allSlot;
+    }
+
+
+    @Override
+    public ItemStack getStackInSlot(int slot) {
+        if (slot < 0 || slot >= this.inventory.length) {
+            return null;
+        }
+        return this.inventory[slot];
+    }
+
+    @Override
+    public ItemStack removeStackFromSlot(int slotIndex) {
+        ItemStack itemStack = inventory[slotIndex];
+        this.inventory[slotIndex] = null;
+        return itemStack;
+    }
+
+    @Override
+    public void setInventorySlotContents(int slot, ItemStack contents) {
+        this.inventory[slot] = contents;
+    }
+
+
+    @Override
+    public int getInventoryStackLimit() {
+        return 64;
+    }
+
+
+    @Override
+    public void openInventory(EntityPlayer player) {
+    }
+
+    @Override
+    public void closeInventory(EntityPlayer player) {
+    }
+
+
+    @Override
+    public boolean canInsertItem(int slot, ItemStack itemStack, EnumFacing direction) {
+        return direction != facing && invHelper.isInput(slot) && this.isItemValidForSlot(slot, itemStack);
+    }
+
+    @Override
+    public boolean canExtractItem(int slot, ItemStack stack, EnumFacing direction) {
+        return direction != facing && invHelper.isOutput(slot);
+    }
+
+
+    @Override
+    public int getSizeInventory() {
+        return getNumInput() + getNumOutput();
+    }
+
+    @Override
+    public ItemStack decrStackSize(int slot, int amount) {
+        ItemStack fromStack = this.inventory[slot];
+        if (fromStack == null) {
+            return null;
+        }
+        if (fromStack.stackSize <= amount) {
+            this.inventory[slot] = null;
+            return fromStack;
+        }
+        ItemStack result = fromStack.copy();
+        result.stackSize = amount;
+        fromStack.stackSize -= amount;
+        return result;
+    }
+
+
+
     public void increaseStackSize(int slot, ItemStack stack) {
         ItemStack fromStack = this.inventory[slot];
         if (fromStack == null) {
@@ -45,81 +164,6 @@ public abstract class TileInventory extends TileReconfigurable implements ISided
         inventory[slot].stackSize += stack.stackSize;
     }
 
-    @Override
-    public int[] getAccessibleSlotsFromSide(int side) {
-        if (ForgeDirection.getOrientation(side).ordinal() == this.facing)
-            return new int[]{};
-        return allSlot;
-    }
-
-
-    @Override
-    public ItemStack getStackInSlot(int slot) {
-        if ((slot < 0) || (slot >= this.inventory.length)) {
-            return null;
-        }
-        return this.inventory[slot];
-    }
-
-    @Override
-    public ItemStack decrStackSize(int slot, int amount) {
-        ItemStack fromStack = this.inventory[slot];
-        if (fromStack == null) {
-            return null;
-        }
-        if (fromStack.stackSize <= amount) {
-            this.inventory[slot] = null;
-            return fromStack;
-        }
-        ItemStack result = fromStack.copy();
-        result.stackSize = amount;
-        fromStack.stackSize -= amount;
-        return result;
-    }
-
-    @Override
-    public ItemStack getStackInSlotOnClosing(int p_70304_1_) {
-        return null;
-    }
-
-    @Override
-    public void setInventorySlotContents(int slot, ItemStack contents) {
-        this.inventory[slot] = contents;
-    }
-
-    @Override
-    public String getInventoryName() {
-        return tileName;
-    }
-
-    @Override
-    public boolean hasCustomInventoryName() {
-        return true;
-    }
-
-    @Override
-    public int getInventoryStackLimit() {
-        return 64;
-    }
-
-    @Override
-    public boolean isUseableByPlayer(EntityPlayer player) {
-        if (canPlayerAccess(player)) {
-            if (this.worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord) != this) {
-                return false;
-            }
-            return player.getDistanceSq(this.xCoord + 0.5D, this.yCoord + 0.5D, this.zCoord + 0.5D) <= 64.0D;
-        }
-        return false;
-    }
-
-    @Override
-    public void openInventory() {
-    }
-
-    @Override
-    public void closeInventory() {
-    }
 
     @Override
     public void readFromNBT(NBTTagCompound nbtTagCompound) {
@@ -153,24 +197,21 @@ public abstract class TileInventory extends TileReconfigurable implements ISided
         }
     }
 
+
     @Override
-    public boolean canInsertItem(int slot, ItemStack itemStack, int side) {
-        return side != facing && invHelper.isInput(slot) && this.isItemValidForSlot(slot, itemStack);
+    public int getField(int id) {
+        return 0;
     }
 
     @Override
-    public boolean canExtractItem(int slot, ItemStack itemStack, int side) {
-        return side != facing && invHelper.isOutput(slot);
+    public void setField(int id, int value) {
     }
-
-    abstract protected int getNumInput();
-
-    abstract protected int getNumOutput();
 
     @Override
-    public int getSizeInventory() {
-        return getNumInput() + getNumOutput();
+    public int getFieldCount() {
+        return 0;
     }
+
 
     //Don't mess with inventory or Itemstack here
     public class InventoryHelper {

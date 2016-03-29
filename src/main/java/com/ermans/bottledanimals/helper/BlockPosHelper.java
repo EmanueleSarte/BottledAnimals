@@ -1,65 +1,34 @@
 package com.ermans.bottledanimals.helper;
 
 
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 
 public class BlockPosHelper {
 
-
-    public static BlockPos getBlockAdjacent(BlockPos blockPos, ForgeDirection direction) {
+    public static BlockPos getBlockAdjacent(BlockPos blockPos, EnumFacing direction) {
 
         BlockPos pos = new BlockPos(blockPos);
 
         switch (direction) {
             case DOWN:
-                pos.y -= 1;
+                pos.down();
                 break;
             case UP:
-                pos.y += 1;
+                pos.up();
                 break;
             case NORTH:
-                pos.z -= 1;
+                pos.north();
                 break;
             case SOUTH:
-                pos.z += 1;
+                pos.south();
                 break;
             case WEST:
-                pos.x -= 1;
+                pos.west();
                 break;
             case EAST:
-                pos.x += 1;
+                pos.east();
                 break;
-            default:
-                pos = null;
-        }
-        return pos;
-    }
-
-    public static BlockPos getBlockAdjacent(int x, int y, int z, ForgeDirection direction) {
-
-        BlockPos pos = new BlockPos(x, y, z);
-
-        switch (direction) {
-            case DOWN:
-                pos.y -= 1;
-                break;
-            case UP:
-                pos.y += 1;
-                break;
-            case NORTH:
-                pos.z -= 1;
-                break;
-            case SOUTH:
-                pos.z += 1;
-                break;
-            case WEST:
-                pos.x -= 1;
-                break;
-            case EAST:
-                pos.x += 1;
-                break;
-            default:
-                pos = null;
         }
         return pos;
     }

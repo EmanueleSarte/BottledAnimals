@@ -9,7 +9,7 @@ import com.ermans.bottledanimals.helper.TargetPointHelper;
 import com.ermans.bottledanimals.network.PacketHandler;
 import com.ermans.bottledanimals.network.message.MessageEnergy;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 
 public abstract class TileEnergyProvider extends TileInventory implements IEnergyProvider, IEnergyBA {
 
@@ -43,11 +43,11 @@ public abstract class TileEnergyProvider extends TileInventory implements IEnerg
 
 
     @Override
-    public void updateEntity() {
+    public void update() {
         if (!worldObj.isRemote) {
             if (doSync) {
                 doSync = false;
-                PacketHandler.INSTANCE.sendToAllAround(new MessageEnergy(this.xCoord, this.yCoord, this.zCoord, this.storage.getEnergyStored()), TargetPointHelper.getTargetPoint(this));
+                PacketHandler.INSTANCE.sendToAllAround(new MessageEnergy(pos.getX(), pos.getY(), pos.getZ(),this.storage.getEnergyStored()), TargetPointHelper.getTargetPoint(this));
             }
         }
     }
@@ -67,12 +67,12 @@ public abstract class TileEnergyProvider extends TileInventory implements IEnerg
     }
 
     @Override
-    public boolean canConnectEnergy(ForgeDirection from) {
-        return DF_VALID_SIDE[from.ordinal()][facing];
+    public boolean canConnectEnergy(EnumFacing from) {
+        return DF_VALID_SIDE[from.ordinal()][facing.ordinal()];
     }
 
     @Override
-    public int extractEnergy(ForgeDirection from, int maxExtract, boolean simulate) {
+    public int extractEnergy(EnumFacing from, int maxExtract, boolean simulate) {
         if (!worldObj.isRemote && maxExtract > 0 && !simulate) {
             doSync = true;
         }
@@ -80,12 +80,12 @@ public abstract class TileEnergyProvider extends TileInventory implements IEnerg
     }
 
     @Override
-    public int getEnergyStored(ForgeDirection from) {
+    public int getEnergyStored(EnumFacing from) {
         return storage.getEnergyStored();
     }
 
     @Override
-    public int getMaxEnergyStored(ForgeDirection from) {
+    public int getMaxEnergyStored(EnumFacing from) {
         return storage.getMaxEnergyStored();
     }
 

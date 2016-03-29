@@ -203,10 +203,10 @@ public abstract class TabBase extends ElementBase {
 		}
 	}
 
-	protected void drawTabIcon(String iconName) {
-
-		gui.drawIcon(iconName, posXOffset(), posY + 3, 1);
-	}
+//	protected void drawTabIcon(String iconName) {
+//
+//		gui.drawIcon(iconName, posXOffset(), posY + 3, 1);
+//	}
 
 	/**
 	 * Shortcut to correct for the proper X position.

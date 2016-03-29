@@ -2,30 +2,31 @@ package com.ermans.repackage.cofh.lib.gui.element;
 
 import com.ermans.repackage.cofh.lib.gui.GuiBase;
 import com.ermans.repackage.cofh.lib.gui.GuiColor;
-import com.ermans.repackage.cofh.lib.render.RenderHelper;
-import net.minecraft.util.IIcon;
-import org.lwjgl.opengl.GL11;
 
 import java.util.List;
 
 public class ElementIcon extends ElementBase {
 
-	protected IIcon icon;
+//	protected IIcon icon;
 	protected int spriteSheet;
 	protected GuiColor color = new GuiColor(-1);
 	protected List<String> tooltipText;
 
-	public ElementIcon(GuiBase gui, int posX, int posY, IIcon icon) {
-
-		this(gui, posX, posY, icon, 0);
-	}
-
-	public ElementIcon(GuiBase gui, int posX, int posY, IIcon icon, int spriteSheet) {
-
+	public ElementIcon(GuiBase gui, int posX, int posY) {
 		super(gui, posX, posY);
-		this.icon = icon;
-		this.spriteSheet = spriteSheet;
 	}
+
+//	public ElementIcon(GuiBase gui, int posX, int posY, IIcon icon) {
+//
+//		this(gui, posX, posY, icon, 0);
+//	}
+//
+//	public ElementIcon(GuiBase gui, int posX, int posY, IIcon icon, int spriteSheet) {
+//
+//		super(gui, posX, posY);
+//		this.icon = icon;
+//		this.spriteSheet = spriteSheet;
+//	}
 
 	public ElementIcon setColor(Number color) {
 
@@ -33,11 +34,11 @@ public class ElementIcon extends ElementBase {
 		return this;
 	}
 
-	public ElementIcon setIcon(IIcon icon) {
-
-		this.icon = icon;
-		return this;
-	}
+//	public ElementIcon setIcon(IIcon icon) {
+//
+//		this.icon = icon;
+//		return this;
+//	}
 
 	public ElementIcon setSpriteSheet(int spriteSheet) {
 
@@ -64,9 +65,9 @@ public class ElementIcon extends ElementBase {
 //			gui.drawColorIcon(icon, posX, posY, spriteSheet);
 //			GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0F);
 //		}
-		RenderHelper.setItemTextureSheet();
-		GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0F);
-		gui.drawTexturedModelRectFromIcon(posX, posY, icon, 16, 16);
+//		RenderHelper.setItemTextureSheet();
+//		GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0F);
+//		gui.drawTexturedModelRectFromIcon(posX, posY, icon, 16, 16);
 	}
 
 	@Override

@@ -2,12 +2,8 @@ package com.ermans.bottledanimals.client.gui.tab;
 
 
 import com.ermans.api.IMachineInfo;
-import com.ermans.bottledanimals.IconRegistry;
 import com.ermans.repackage.cofh.lib.gui.GuiBase;
-import com.ermans.repackage.cofh.lib.gui.element.ElementIcon;
 import org.lwjgl.opengl.GL11;
-
-import java.util.Arrays;
 
 public class TabEnergyReceiver extends TabEnergy {
 
@@ -16,9 +12,9 @@ public class TabEnergyReceiver extends TabEnergy {
     public TabEnergyReceiver(GuiBase gui, IMachineInfo tileEnergy, int side) {
         super(gui, side);
 
-        addElement(new ElementIcon(gui, posXOffset() + 24, posY + 22, IconRegistry.getIcon("EnergyNow")).setTooltipText(Arrays.asList("Energy currently in use")).setSize(16, 16));
-        addElement(new ElementIcon(gui, posXOffset() + 25, posY + 36, IconRegistry.getIcon("EnergyMax")).setTooltipText(Arrays.asList("Maximum energy input")).setSize(16, 16));
-        addElement(new ElementIcon(gui, posXOffset() + 25, posY + 50, IconRegistry.getIcon("EnergyTime")).setTooltipText(Arrays.asList("Operation time")).setSize(16, 16));
+//        addElement(new ElementIcon(gui, posXOffset() + 24, posY + 22, IconRegistry.getIcon("EnergyNow")).setTooltipText(Arrays.asList("Energy currently in use")).setSize(16, 16));
+//        addElement(new ElementIcon(gui, posXOffset() + 25, posY + 36, IconRegistry.getIcon("EnergyMax")).setTooltipText(Arrays.asList("Maximum energy input")).setSize(16, 16));
+//        addElement(new ElementIcon(gui, posXOffset() + 25, posY + 50, IconRegistry.getIcon("EnergyTime")).setTooltipText(Arrays.asList("Operation time")).setSize(16, 16));
 
         machineInfo = tileEnergy;
     }

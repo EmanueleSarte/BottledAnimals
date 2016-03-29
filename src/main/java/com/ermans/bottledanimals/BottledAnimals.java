@@ -1,19 +1,16 @@
 package com.ermans.bottledanimals;
 
-import com.ermans.bottledanimals.fluid.BucketHandler;
 import com.ermans.bottledanimals.helper.FoodHelper;
-import com.ermans.bottledanimals.hooks.TextureIconHook;
-import com.ermans.bottledanimals.init.*;
 import com.ermans.bottledanimals.network.PacketHandler;
 import com.ermans.bottledanimals.recipe.FoodCrusherManager;
 import com.ermans.bottledanimals.reference.Reference;
-import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.SidedProxy;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.network.NetworkRegistry;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
 
 @Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.VERSION)
 public class BottledAnimals {
@@ -26,7 +23,12 @@ public class BottledAnimals {
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         Log.info("Starting Pre Initialization");
+
         MinecraftForge.EVENT_BUS.register(proxy);
+        //Register Blocks
+
+        proxy.preInit(event);
+
         PacketHandler.init();
 
         Log.info("Pre Initialization Complete");
@@ -37,21 +39,27 @@ public class BottledAnimals {
         Log.info("Starting Initialization");
         NetworkRegistry.INSTANCE.registerGuiHandler(this, guiHandler);
 
-        ModFluids.init();
-        ModBlocks.init();
-        ModItems.init();
-        ModTiles.init();
-        ModRecipes.init();
+        proxy.init(event);
 
-        BucketHandler.init();
-        MinecraftForge.EVENT_BUS.register(BucketHandler.INSTANCE);
+//        ModFluids.init();
+//        ModBlocks.init();
+//
+//        ModItems.init();
+//        ModTiles.init();
+//        ModRecipes.init();
 
-        MinecraftForge.EVENT_BUS.register(TextureIconHook.INSTANCE);
+
+//        MinecraftForge.EVENT_BUS.register(BucketHandler.INSTANCE);
+//        BucketHandler.init();
+
+//        MinecraftForge.EVENT_BUS.register(TextureIconHook.INSTANCE);
         Log.info("Initialization Complete");
     }
 
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event) {
+        proxy.postInit(event);
+
         FoodHelper.initItemValue();
         FoodCrusherManager.init();
         Log.info("Starting Post Initialization");

@@ -6,12 +6,12 @@ import com.ermans.bottledanimals.init.ModItems;
 import com.ermans.bottledanimals.recipe.IRecipe;
 import com.ermans.bottledanimals.recipe.RancherManager;
 import com.ermans.repackage.cofh.lib.util.helpers.ItemHelper;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class TileRancher extends TileFluidTank {
 
@@ -44,13 +44,13 @@ public class TileRancher extends TileFluidTank {
 
 
     @Override
-    public boolean canFill(ForgeDirection from, Fluid fluid) {
+    public boolean canFill(EnumFacing from, Fluid fluid) {
         return false;
     }
 
     @Override
-    public boolean canDrain(ForgeDirection from, Fluid fluid) {
-        return DF_VALID_SIDE[from.ordinal()][facing] && tank.getFluid() != null;
+    public boolean canDrain(EnumFacing from, Fluid fluid) {
+        return DF_VALID_SIDE[from.ordinal()][facing.ordinal()] && tank.getFluid() != null;
     }
 
     @Override

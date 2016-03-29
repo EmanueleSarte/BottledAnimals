@@ -6,5 +6,6 @@
 package com.ermans.repackage.cofh.lib.gui.element;
 
 import com.ermans.repackage.cofh.lib.CoFHLibProps;
-import cpw.mods.fml.common.API;
+import net.minecraftforge.fml.common.API;
+
 

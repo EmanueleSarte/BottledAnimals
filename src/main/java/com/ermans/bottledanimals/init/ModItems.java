@@ -5,8 +5,8 @@ import com.ermans.bottledanimals.item.ItemModIcon;
 import com.ermans.bottledanimals.item.simple.*;
 import com.ermans.bottledanimals.reference.Names;
 import com.ermans.bottledanimals.reference.Reference;
-import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.item.Item;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 @GameRegistry.ObjectHolder(Reference.MOD_ID)
 public class ModItems {
@@ -37,8 +37,8 @@ public class ModItems {
         itemSpawnEggFrame = new ItemSpawnEggFrame();
 
         itemModIcon = new ItemModIcon();
-        milkBucket = ItemBucketBA.create(ModBlocks.milkBlock, ModFluids.milk.getName() + "Bucket");
-        foodBucket = ItemBucketBA.create(ModBlocks.foodBlock, ModFluids.food.getName() + "Bucket");
+//        milkBucket = ItemBucketBA.create(ModBlocks.milkBlock, ModFluids.milk.getName() + "Bucket");
+//        foodBucket = ItemBucketBA.create(ModBlocks.foodBlock, ModFluids.food.getName() + "Bucket");
 
         GameRegistry.registerItem(itemBottle, Names.Items.BOTTLE);
         GameRegistry.registerItem(itemAnimalInABottle, Names.Items.ANIMAL_IN_A_BOTTLE);
@@ -52,8 +52,8 @@ public class ModItems {
         GameRegistry.registerItem(itemSpawnEggFrame, Names.Items.SPAWN_EGG_FRAME);
 
         GameRegistry.registerItem(itemModIcon, "ModIcon");
-        GameRegistry.registerItem(milkBucket, ModFluids.milk.getName() + "Bucket");
-        GameRegistry.registerItem(foodBucket, ModFluids.food.getName() + "Bucket");
+//        GameRegistry.registerItem(milkBucket, ModFluids.milk.getName() + "Bucket");
+//        GameRegistry.registerItem(foodBucket, ModFluids.food.getName() + "Bucket");
 
         //OreDictionary.registerOre("bucketMilk", milkBucket);
     }

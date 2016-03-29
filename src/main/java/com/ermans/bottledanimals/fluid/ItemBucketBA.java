@@ -2,9 +2,6 @@ package com.ermans.bottledanimals.fluid;
 
 import com.ermans.bottledanimals.BottledAnimalsTab;
 import com.ermans.bottledanimals.reference.Reference;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemBucket;
 import net.minecraft.item.ItemStack;
@@ -23,11 +20,11 @@ public class ItemBucketBA extends ItemBucket {
         return new ItemBucketBA(fluidBlock, bucketName);
     }
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegister iconRegister) {
-        this.itemIcon = iconRegister.registerIcon(getUnlocalizedName().substring(getUnlocalizedName().indexOf(".") + 1));
-    }
+//    @Override
+//    @SideOnly(Side.CLIENT)
+//    public void registerIcons(IIconRegister iconRegister) {
+//        this.itemIcon = iconRegister.registerIcon(getUnlocalizedName().substring(getUnlocalizedName().indexOf(".") + 1));
+//    }
 
     @Override
     public String getUnlocalizedName(ItemStack itemStack) {

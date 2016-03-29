@@ -22,7 +22,7 @@ public class Names {
     }
 
     public static final class Machines {
-        public static final String ANIMAL_DIGITIZER = "animalDigitizer";
+        public static final String ANIMAL_DIGITIZER = "digitizer";
         public static final String BREEDER = "breeder";
         public static final String GROWTH_ACCELERATOR = "growthAccelerator";
         public static final String DROP_EXTRACTOR = "dropExtractor";

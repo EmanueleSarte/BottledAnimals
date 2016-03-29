@@ -16,7 +16,7 @@ public class AnimalDigitizerManager {
 
     public AnimalDigitizerManager() {
         this.mapRecipes = new HashMap<String, AnimalDigitizerRecipe>();
-        initRecipes();
+//        initRecipes();
     }
 
     public AnimalDigitizerRecipe addRecipe(AnimalDigitizerRecipe recipe) {

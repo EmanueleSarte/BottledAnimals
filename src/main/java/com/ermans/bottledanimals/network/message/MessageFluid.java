@@ -1,15 +1,16 @@
 package com.ermans.bottledanimals.network.message;
 
 import com.ermans.bottledanimals.block.machine.TileFluidTank;
-import cpw.mods.fml.common.network.ByteBufUtils;
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
-import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
+import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 public class MessageFluid implements IMessage {
     private int x;
@@ -22,9 +23,9 @@ public class MessageFluid implements IMessage {
     }
 
     public MessageFluid(TileFluidTank tile, String fluidName) {
-        this.x = tile.xCoord;
-        this.y = tile.yCoord;
-        this.z = tile.zCoord;
+        this.x = tile.getPos().getX();
+        this.y = tile.getPos().getY();
+        this.z = tile.getPos().getZ();
         this.liquidAmount = tile.tank.getFluidAmount();
         this.fluidName = fluidName;
     }
@@ -50,7 +51,7 @@ public class MessageFluid implements IMessage {
     public static class Handler implements IMessageHandler<MessageFluid, IMessage> {
         @Override
         public IMessage onMessage(MessageFluid message, MessageContext ctx) {
-            TileEntity entity = Minecraft.getMinecraft().thePlayer.worldObj.getTileEntity(message.x, message.y, message.z);
+            TileEntity entity = Minecraft.getMinecraft().thePlayer.worldObj.getTileEntity(new BlockPos(message.x, message.y, message.z));
             if ((entity instanceof TileFluidTank)) {
                 TileFluidTank tileFluidTank = (TileFluidTank) entity;
                 if (tileFluidTank.tank.getFluid() != null) {

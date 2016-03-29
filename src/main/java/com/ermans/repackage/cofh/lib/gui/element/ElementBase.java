@@ -2,7 +2,7 @@ package com.ermans.repackage.cofh.lib.gui.element;
 
 import com.ermans.repackage.cofh.lib.gui.GuiBase;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.util.ResourceLocation;
 
 import java.util.List;
@@ -137,12 +137,12 @@ public abstract class ElementBase {
         glClearStencil(0);
         glClear(GL_STENCIL_BUFFER_BIT);
 
-        Tessellator.instance.startDrawingQuads();
-        Tessellator.instance.addVertex(xStart, yEnd, 0);
-        Tessellator.instance.addVertex(xEnd, yEnd, 0);
-        Tessellator.instance.addVertex(xEnd, yStart, 0);
-        Tessellator.instance.addVertex(xStart, yStart, 0);
-        Tessellator.instance.draw();
+//        Tessellator.instance.startDrawingQuads();
+//        Tessellator.instance.addVertex(xStart, yEnd, 0);
+//        Tessellator.instance.addVertex(xEnd, yEnd, 0);
+//        Tessellator.instance.addVertex(xEnd, yStart, 0);
+//        Tessellator.instance.addVertex(xStart, yStart, 0);
+//        Tessellator.instance.draw();
 
         glEnable(GL_TEXTURE_2D);
         glStencilFunc(GL_EQUAL, flag, flag);
@@ -152,8 +152,7 @@ public abstract class ElementBase {
     }
 
     public void drawTexturedModalRect(int x, int y, int u, int v, int width, int height) {
-
-        gui.drawSizedTexturedModalRect(x, y, u, v, width, height, texW, texH);
+        Gui.drawModalRectWithCustomSizedTexture(x, y, u, v, width, height, texW, texH);
     }
 
     public void drawCenteredString(FontRenderer fontRenderer, String text, int x, int y, int color) {
