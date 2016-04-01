@@ -1,13 +1,13 @@
 package com.ermans.bottledanimals.block.machine.animaldigitizer;
 
-import com.ermans.bottledanimals.block.machine.BlockMachine;
+import com.ermans.bottledanimals.block.BlockTile;
 import com.ermans.bottledanimals.reference.Names;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
-public class BlockAnimalDigitizer extends BlockMachine {
+public class BlockAnimalDigitizer extends BlockTile {
 
     public BlockAnimalDigitizer() {
         super(Names.Machines.ANIMAL_DIGITIZER);

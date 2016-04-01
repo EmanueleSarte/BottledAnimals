@@ -1,0 +1,15 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "forge:fluid",
+    "transform": "forge:default-item"
+  },
+  "variants": {
+    "bamilk": [{
+      "custom": { "fluid": "bamilk" }
+    }],
+    "food": [{
+      "custom": { "fluid": "food" }
+    }]
+  }
+}

@@ -1,5 +1,6 @@
 package com.ermans.bottledanimals;
 
+import com.ermans.bottledanimals.fluid.BucketHandler;
 import com.ermans.bottledanimals.helper.FoodHelper;
 import com.ermans.bottledanimals.network.PacketHandler;
 import com.ermans.bottledanimals.recipe.FoodCrusherManager;
@@ -25,10 +26,7 @@ public class BottledAnimals {
         Log.info("Starting Pre Initialization");
 
         MinecraftForge.EVENT_BUS.register(proxy);
-        //Register Blocks
-
         proxy.preInit(event);
-
         PacketHandler.init();
 
         Log.info("Pre Initialization Complete");
@@ -37,20 +35,10 @@ public class BottledAnimals {
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
         Log.info("Starting Initialization");
-        NetworkRegistry.INSTANCE.registerGuiHandler(this, guiHandler);
 
         proxy.init(event);
-
-//        ModFluids.init();
-//        ModBlocks.init();
-//
-//        ModItems.init();
-//        ModTiles.init();
-//        ModRecipes.init();
-
-
-//        MinecraftForge.EVENT_BUS.register(BucketHandler.INSTANCE);
-//        BucketHandler.init();
+        NetworkRegistry.INSTANCE.registerGuiHandler(this, guiHandler);
+        MinecraftForge.EVENT_BUS.register(BucketHandler.INSTANCE);
 
 //        MinecraftForge.EVENT_BUS.register(TextureIconHook.INSTANCE);
         Log.info("Initialization Complete");

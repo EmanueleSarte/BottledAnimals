@@ -23,28 +23,9 @@ public abstract class BlockBase extends Block {
         super(new Material(MapColor.ironColor));
         this.blockName = blockName;
         setHardness(0.5F);
-        setUnlocalizedName(blockName);
-        setStepSound(Block.soundTypeMetal);
+        setUnlocalizedName(getUnlocalizedNameFromBlock(blockName));
         setHarvestLevel("pickaxe", 0);
         setCreativeTab(BottledAnimalsTab.tabBottledAnimals);
-    }
-
-
-//
-//    @Override
-//    @SideOnly(Side.CLIENT)
-//    public void registerBlockIcons(TextureUtils.IIconRegister iconRegister) {
-//        this.blockIcon = iconRegister.registerIcon(String.format("%s", getUnwrappedUnlocalizedName(getUnlocalizedName())));
-//    }
-
-
-    @Override
-    public String getUnlocalizedName() {
-        return String.format("block.%s%s", Reference.MOD_ID_LOWERCASE + ":", getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
-    }
-
-    private String getUnwrappedUnlocalizedName(String unlocalizedName) {
-        return unlocalizedName.substring(unlocalizedName.indexOf(".") + 1);
     }
 
     protected String getBlockName() {
@@ -86,4 +67,10 @@ public abstract class BlockBase extends Block {
 //            return getBreakSound();
 //        }
 //    }
+
+
+    public static String getUnlocalizedNameFromBlock(String blockName) {
+        return  Reference.MOD_ID_LOWERCASE + ":" + blockName;
+    }
+
 }

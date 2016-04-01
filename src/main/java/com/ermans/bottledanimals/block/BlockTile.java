@@ -1,8 +1,6 @@
 package com.ermans.bottledanimals.block;
 
 import com.ermans.bottledanimals.BottledAnimals;
-import com.ermans.bottledanimals.BottledAnimalsTab;
-import com.ermans.bottledanimals.reference.Reference;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.properties.PropertyBool;
@@ -32,12 +30,11 @@ public abstract class BlockTile extends BlockBase implements IGuiHandler, ITileE
         setHardness(3.0F);
         setStepSound(soundTypeMetal);
         setHarvestLevel("pickaxe", 1);
-        setUnlocalizedName(machineName);
-        setCreativeTab(BottledAnimalsTab.tabBottledAnimals);
         this.guiId = BottledAnimals.guiHandler.addGuiHandler(this);
 
     }
 
+    //Called when a neighboring block changes.
     @Override
     public void onNeighborBlockChange(World world, BlockPos pos, IBlockState state, Block neighborBlock) {
         TileEntity te = world.getTileEntity(pos);
@@ -46,6 +43,7 @@ public abstract class BlockTile extends BlockBase implements IGuiHandler, ITileE
         }
     }
 
+    //Called when a tile entity on a side of this block changes is created or is destroyed.
     @Override
     public void onNeighborChange(IBlockAccess world, BlockPos pos, BlockPos neighbor) {
         TileEntity te = world.getTileEntity(pos);
@@ -152,16 +150,6 @@ public abstract class BlockTile extends BlockBase implements IGuiHandler, ITileE
             return tile.receiveClientEvent(eventID, eventParam);
         }
         return super.onBlockEventReceived(world, pos, state, eventID, eventParam);
-    }
-
-
-    @Override
-    public String getUnlocalizedName() {
-        return String.format("tile.%s%s", Reference.MOD_ID_LOWERCASE + ":", getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
-    }
-
-    private String getUnwrappedUnlocalizedName(String unlocalizedName) {
-        return unlocalizedName.substring(unlocalizedName.indexOf(":") + 1);
     }
 
 

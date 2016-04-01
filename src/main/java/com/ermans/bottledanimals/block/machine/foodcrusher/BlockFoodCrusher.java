@@ -1,13 +1,13 @@
 package com.ermans.bottledanimals.block.machine.foodcrusher;
 
-import com.ermans.bottledanimals.block.machine.BlockMachine;
+import com.ermans.bottledanimals.block.BlockTile;
 import com.ermans.bottledanimals.reference.Names;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
-public class BlockFoodCrusher extends BlockMachine {
+public class BlockFoodCrusher extends BlockTile {
 
     public BlockFoodCrusher() {
         super(Names.Machines.FOOD_CRUSHER);

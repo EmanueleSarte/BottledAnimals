@@ -51,8 +51,8 @@ public abstract class TabBase extends ElementBase {
 
 	protected ArrayList<ElementBase> elements = new ArrayList<ElementBase>();
 
-	public static final ResourceLocation DEFAULT_TEXTURE_LEFT = new ResourceLocation(Textures.PATH_ELEMENTS + "Tab_Left.png");
-	public static final ResourceLocation DEFAULT_TEXTURE_RIGHT = new ResourceLocation(Textures.PATH_ELEMENTS + "Tab_Right.png");
+	public static final ResourceLocation DEFAULT_TEXTURE_LEFT = new ResourceLocation(Textures.ELEMENT_LOCATION_PREFIX + "Tab_Left.png");
+	public static final ResourceLocation DEFAULT_TEXTURE_RIGHT = new ResourceLocation(Textures.ELEMENT_LOCATION_PREFIX + "Tab_Right.png");
 
 	public TabBase(GuiBase gui) {
 

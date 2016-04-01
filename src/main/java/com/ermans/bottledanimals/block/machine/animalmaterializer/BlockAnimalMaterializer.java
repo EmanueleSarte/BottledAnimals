@@ -1,6 +1,6 @@
 package com.ermans.bottledanimals.block.machine.animalmaterializer;
 
-import com.ermans.bottledanimals.block.machine.BlockMachine;
+import com.ermans.bottledanimals.block.BlockTile;
 import com.ermans.bottledanimals.reference.Names;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
@@ -8,7 +8,7 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 
-public class BlockAnimalMaterializer extends BlockMachine {
+public class BlockAnimalMaterializer extends BlockTile {
 
     public BlockAnimalMaterializer() {
         super(Names.Machines.ANIMAL_MATERIALIZER);

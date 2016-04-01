@@ -11,10 +11,13 @@ import com.ermans.bottledanimals.block.machine.rancher.BlockRancher;
 import com.ermans.bottledanimals.block.machine.wirelessfeeder.BlockWirelessFeeder;
 import com.ermans.bottledanimals.block.simple.BlockMachineFrame;
 import com.ermans.bottledanimals.fluid.FluidBlockBA;
-import com.ermans.bottledanimals.reference.Reference;
+import com.ermans.bottledanimals.reference.Names;
+import net.minecraft.block.Block;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
-@GameRegistry.ObjectHolder(Reference.MOD_ID)
+import java.util.HashMap;
+import java.util.Map;
+
 public class ModBlocks {
 
     public static BlockAnimalDigitizer blockAnimalDigitizer;
@@ -33,19 +36,34 @@ public class ModBlocks {
     public static FluidBlockBA milkBlock;
     public static FluidBlockBA foodBlock;
 
-    public static void init() {
-        blockAnimalDigitizer = new BlockAnimalDigitizer();
-        blockBreeder = new BlockBreeder();
-        blockGrowthAccelerator = new BlockGrowthAccelerator();
-        blockDropExtractor = new BlockDropExtractor();
-        blockWirelessFeeder = new BlockWirelessFeeder();
-        blockRancher = new BlockRancher();
-        blockFoodCrusher = new BlockFoodCrusher();
-        blockAnimalMaterializer = new BlockAnimalMaterializer();
+    public static Map<String, Block> blocks = new HashMap<String, Block>();
+    public static Map<String, FluidBlockBA> fluidBlocks = new HashMap<String, FluidBlockBA>();
 
-        blockMachineFrame = new BlockMachineFrame();
 
-        blockBasicGenerator = new BlockBasicGenerator();
+    public static void registerBlocks() {
+
+        ////MACHINES
+        blockAnimalDigitizer = (BlockAnimalDigitizer) registerBlock(new BlockAnimalDigitizer(), Names.Machines.ANIMAL_DIGITIZER);
+
+
+
+
+        ////FLUID BLOCKS
+        milkBlock = registerFluidBlock(FluidBlockBA.create(ModFluids.milk));
+        foodBlock = registerFluidBlock(FluidBlockBA.create(ModFluids.food));
+
+
+//        blockBreeder = new BlockBreeder();
+//        blockGrowthAccelerator = new BlockGrowthAccelerator();
+//        blockDropExtractor = new BlockDropExtractor();
+//        blockWirelessFeeder = new BlockWirelessFeeder();
+//        blockRancher = new BlockRancher();
+//        blockFoodCrusher = new BlockFoodCrusher();
+//        blockAnimalMaterializer = new BlockAnimalMaterializer();
+//
+//        blockMachineFrame = new BlockMachineFrame();
+//
+//        blockBasicGenerator = new BlockBasicGenerator();
 
 //        milkBlock = FluidBlockBA.create(ModFluids.milk, Material.water);
 //        foodBlock = FluidBlockBA.create(ModFluids.food, Material.water);
@@ -65,5 +83,15 @@ public class ModBlocks {
 //
 //        GameRegistry.registerBlock(milkBlock, "block" + StringUtils.capitalize(ModFluids.milk.getName()));
 //        GameRegistry.registerBlock(foodBlock, "block" + StringUtils.capitalize(ModFluids.food.getName()));
+    }
+
+    private static Block registerBlock(Block block, String blockName) {
+        blocks.put(blockName, block);
+        return GameRegistry.registerBlock(block, blockName);
+    }
+
+    private static FluidBlockBA registerFluidBlock(FluidBlockBA block) {
+        fluidBlocks.put(block.getRegistryName(), block);
+        return (FluidBlockBA) GameRegistry.registerBlock(block);
     }
 }

@@ -7,9 +7,9 @@ import net.minecraft.util.ResourceLocation;
 
 public abstract class ElementButtonBase extends ElementBase {
 
-	public static final ResourceLocation HOVER = new ResourceLocation(Textures.PATH_ELEMENTS + "Button_Hover.png");
-	public static final ResourceLocation ENABLED = new ResourceLocation(Textures.PATH_ELEMENTS + "Button_Enabled.png");
-	public static final ResourceLocation DISABLED = new ResourceLocation(Textures.PATH_ELEMENTS + "Button_Disabled.png");
+	public static final ResourceLocation HOVER = new ResourceLocation(Textures.ELEMENT_LOCATION_PREFIX + "Button_Hover.png");
+	public static final ResourceLocation ENABLED = new ResourceLocation(Textures.ELEMENT_LOCATION_PREFIX + "Button_Enabled.png");
+	public static final ResourceLocation DISABLED = new ResourceLocation(Textures.ELEMENT_LOCATION_PREFIX + "Button_Disabled.png");
 
 	public ElementButtonBase(GuiBase containerScreen, int posX, int posY, int sizeX, int sizeY) {
 

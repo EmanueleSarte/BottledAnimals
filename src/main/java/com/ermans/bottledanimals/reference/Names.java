@@ -3,7 +3,7 @@ package com.ermans.bottledanimals.reference;
 public class Names {
 
     public static final class Fluid {
-        public static final String MILK = "BAmilk";
+        public static final String MILK = "bamilk";
         public static final String FOOD = "food";
     }
 
@@ -13,7 +13,6 @@ public class Names {
         public static final String DIGITALIZED_ANIMAL = "digitalizedAnimal";
         public static final String BLANK_PATTERN = "blankPattern";
         public static final String DIGITALIZED_BABY_ANIMAL = "digitalizedBabyAnimal";
-        public static final String ANIMAL_REMAINS = "animalRemains";
         public static final String BROKEN_PATTERN = "brokenPattern";
         public static final String ANIMAL_CIRCUIT = "animalCircuit";
         public static final String SQUID_FOOD = "squidFood";
