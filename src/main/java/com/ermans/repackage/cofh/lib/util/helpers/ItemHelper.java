@@ -57,8 +57,8 @@ public final class ItemHelper {
         return retStack;
     }
 
-    public static ItemStack damageStack(ItemStack stack, int damage){
-        if (stack == null){
+    public static ItemStack damageStack(ItemStack stack, int damage) {
+        if (stack == null) {
             return null;
         }
         stack.setItemDamage(stack.getItemDamage() + damage);
@@ -71,35 +71,35 @@ public final class ItemHelper {
         return stack;
     }
 
-    public static boolean canPutOn(ItemStack thisStack, ItemStack onThisStack){
-        if (thisStack == null || onThisStack == null){
+    public static boolean canPutOn(ItemStack thisStack, ItemStack onThisStack) {
+        if (thisStack == null || onThisStack == null) {
             return true;
         }
 
-        if (!onThisStack.isStackable() || !thisStack.isStackable()){
+        if (!onThisStack.isStackable() || !thisStack.isStackable()) {
             return false;
         }
         return thisStack.isItemEqual(onThisStack) && onThisStack.stackSize + thisStack.stackSize <= onThisStack.getMaxStackSize();
     }
 
-    public static ItemStack decreaseStackSize(ItemStack itemStack, int amount){
-        if (itemStack == null || amount == 0){
+    public static ItemStack decreaseStackSize(ItemStack itemStack, int amount) {
+        if (itemStack == null || amount == 0) {
             return itemStack;
         }
 
         itemStack.stackSize -= amount;
-        if (itemStack.stackSize <= 0){
+        if (itemStack.stackSize <= 0) {
             itemStack = null;
             return null;
         }
         return itemStack;
     }
 
-    public static boolean addItemStackToPlayer(EntityPlayer player, ItemStack itemStack, boolean dropIfFull){
+    public static boolean addItemStackToPlayer(EntityPlayer player, ItemStack itemStack, boolean dropIfFull) {
         if (player == null) {
             return false;
         }
-        if (itemStack == null){
+        if (itemStack == null) {
             return true;
         }
 
@@ -110,5 +110,14 @@ public final class ItemHelper {
             return false;
         }
         return true;
+    }
+
+    public static String getUnwrappedName(ItemStack stack) {
+        return stack.getUnlocalizedName().substring(stack.getUnlocalizedName().lastIndexOf(':') + 1);
+    }
+
+    public static String getResourceName(ItemStack stack, boolean replaceDot) {
+        String unwrappedName = getUnwrappedName(stack);
+        return replaceDot ? unwrappedName.replace('.', '_') : unwrappedName;
     }
 }

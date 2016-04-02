@@ -1,0 +1,6 @@
+{
+  "parent": "bottledanimals:item/item",
+  "textures": {
+    "layer0": "bottledanimals:items/digitalizedBabyAnimal_pig"
+  }
+}

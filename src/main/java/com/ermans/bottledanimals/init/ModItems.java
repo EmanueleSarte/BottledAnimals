@@ -27,45 +27,28 @@ public class ModItems {
     public static ItemSpawnEggFrame itemSpawnEggFrame;
     public static ItemBucketBA foodBucket;
 
-    public static final Map<String, Item> items = new HashMap<String, Item>();
+    public static Map<String, Item> items = new HashMap<String, Item>();
 
     public static void registerItems() {
+
         itemBottle = (ItemBottle) registerItem(new ItemBottle(), Names.Items.BOTTLE);
+        itemAnimalInABottle = (ItemAnimalInABottle) registerItem(new ItemAnimalInABottle(), Names.Items.ANIMAL_IN_A_BOTTLE);
+        itemDigitalizedAnimal = (ItemDigitalizedAnimal) registerItem(new ItemDigitalizedAnimal(), Names.Items.DIGITALIZED_ANIMAL);
+        itemDigitalizedBabyAnimal = (ItemDigitalizedBabyAnimal) registerItem(new ItemDigitalizedBabyAnimal(), Names.Items.DIGITALIZED_BABY_ANIMAL);
+
+//        itemBlankPattern = (ItemBlankPattern) registerItem(new ItemBlankPattern(), Names.Items.BLANK_PATTERN);
+//        itemBrokenPattern = (ItemBrokenPattern) registerItem(new ItemBrokenPattern(), Names.Items.BROKEN_PATTERN);
+//        itemAnimalCircuit = (ItemAnimalCircuit) registerItem(new ItemAnimalCircuit(), Names.Items.ANIMAL_CIRCUIT);
+//        itemSquidFood = (ItemSquidFood) registerItem(new ItemSquidFood(), Names.Items.SQUID_FOOD);
+//        itemRancherGear = (ItemRancherGear) registerItem(new ItemRancherGear(), Names.Items.RANCHER_GEAR);
+//        itemSpawnEggFrame = (ItemSpawnEggFrame) registerItem(new ItemSpawnEggFrame(), Names.Items.SPAWN_EGG_FRAME);
+//
+//        itemModIcon = (ItemModIcon) registerItem(new ItemModIcon(), "modIcon");
 
 
         milkBucket = registerBucket(ModBlocks.milkBlock, ModFluids.milk);
         foodBucket = registerBucket(ModBlocks.foodBlock, ModFluids.food);
 
-
-//        itemAnimalInABottle = new ItemAnimalInABottle();
-//        itemDigitalizedAnimal = new ItemDigitalizedAnimal();
-//        itemDigitalizedBabyAnimal = new ItemDigitalizedBabyAnimal();
-//        itemBlankPattern = new ItemBlankPattern();
-//        itemBrokenPattern = new ItemBrokenPattern();
-//        itemAnimalCircuit = new ItemAnimalCircuit();
-//        itemSquidFood = new ItemSquidFood();
-//        itemRancherGear = new ItemRancherGear();
-//        itemSpawnEggFrame = new ItemSpawnEggFrame();
-//
-//        itemModIcon = new ItemModIcon();
-
-
-//        GameRegistry.registerItem(itemBottle, Names.Items.BOTTLE);
-//        GameRegistry.registerItem(itemAnimalInABottle, Names.Items.ANIMAL_IN_A_BOTTLE);
-//        GameRegistry.registerItem(itemDigitalizedAnimal, Names.Items.DIGITALIZED_ANIMAL);
-//        GameRegistry.registerItem(itemBlankPattern, Names.Items.BLANK_PATTERN);
-//        GameRegistry.registerItem(itemDigitalizedBabyAnimal, Names.Items.DIGITALIZED_BABY_ANIMAL);
-//        GameRegistry.registerItem(itemBrokenPattern, Names.Items.BROKEN_PATTERN);
-//        GameRegistry.registerItem(itemAnimalCircuit, Names.Items.ANIMAL_CIRCUIT);
-//        GameRegistry.registerItem(itemSquidFood, Names.Items.SQUID_FOOD);
-//        GameRegistry.registerItem(itemRancherGear, Names.Items.RANCHER_GEAR);
-//        GameRegistry.registerItem(itemSpawnEggFrame, Names.Items.SPAWN_EGG_FRAME);
-//
-//        GameRegistry.registerItem(itemModIcon, "ModIcon");
-//        GameRegistry.registerItem(milkBucket, ModFluids.milk.getName() + "Bucket");
-//        GameRegistry.registerItem(foodBucket, ModFluids.food.getName() + "Bucket");
-
-        //OreDictionary.registerOre("bucketMilk", milkBucket);
     }
 
     private static Item registerItem(Item item, String itemName) {
@@ -74,7 +57,7 @@ public class ModItems {
         return item;
     }
 
-    private static ItemBucketBA registerBucket(FluidBlockBA fluidBlock, Fluid fluid){
+    private static ItemBucketBA registerBucket(FluidBlockBA fluidBlock, Fluid fluid) {
         ItemBucketBA bucket = ItemBucketBA.create(fluidBlock, fluid.getName() + Names.Items.BUCKET_SUFFIX);
         items.put(fluid.getName() + Names.Items.BUCKET_SUFFIX, bucket);
         GameRegistry.registerItem(bucket, fluid.getName() + Names.Items.BUCKET_SUFFIX);

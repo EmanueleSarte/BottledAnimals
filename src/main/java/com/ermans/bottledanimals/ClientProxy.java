@@ -5,6 +5,7 @@ import com.ermans.bottledanimals.init.ModBlocks;
 import com.ermans.bottledanimals.init.ModItems;
 import com.ermans.bottledanimals.reference.Reference;
 import com.ermans.bottledanimals.reference.Textures;
+import com.ermans.repackage.cofh.lib.util.helpers.ItemHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.ItemMeshDefinition;
@@ -21,6 +22,9 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ClientProxy extends CommonProxy {
 
 
@@ -30,15 +34,15 @@ public class ClientProxy extends CommonProxy {
 
         if (event.getSide() == Side.CLIENT) {
 
-            for (String blockName: ModBlocks.blocks.keySet()){
+            for (String blockName : ModBlocks.blocks.keySet()) {
                 registerBlockModel(blockName);
             }
 
-            for (FluidBlockBA fluidBlock: ModBlocks.fluidBlocks.values()){
+            for (FluidBlockBA fluidBlock : ModBlocks.fluidBlocks.values()) {
                 registerFluidModel(fluidBlock);
             }
 
-            for (String itemName : ModItems.items.keySet()){
+            for (String itemName : ModItems.items.keySet()) {
                 registerItemModel(itemName);
             }
         }
@@ -55,7 +59,6 @@ public class ClientProxy extends CommonProxy {
     }
 
 
-
     private void registerBlockModel(String blockName) {
         final int DEFAULT_ITEM_SUBTYPE = 0;
 
@@ -65,13 +68,24 @@ public class ClientProxy extends CommonProxy {
                 new ModelResourceLocation(Textures.RESOURCE_PREFIX + blockName, "inventory"));
     }
 
-    private void registerItemModel(String itemName){
+    private void registerItemModel(String itemName) {
         final int DEFAULT_ITEM_SUBTYPE = 0;
+        Item item = GameRegistry.findItem(Reference.MOD_ID, itemName);
 
-        ModelLoader.setCustomModelResourceLocation(
-                GameRegistry.findItem(Reference.MOD_ID, itemName),
-                DEFAULT_ITEM_SUBTYPE,
-                new ModelResourceLocation(Textures.RESOURCE_PREFIX + itemName, "inventory"));
+        if (item.getHasSubtypes()) {
+            List<ItemStack> stacks = new ArrayList<ItemStack>();
+
+            item.getSubItems(item, null, stacks);
+            for (ItemStack stack : stacks) {
+                ModelLoader.setCustomModelResourceLocation(item, stack.getMetadata(),
+                        new ModelResourceLocation(Textures.RESOURCE_PREFIX + ItemHelper.getResourceName(stack, true), "inventory"));
+            }
+
+        } else {
+
+            ModelLoader.setCustomModelResourceLocation(item, DEFAULT_ITEM_SUBTYPE,
+                    new ModelResourceLocation(Textures.RESOURCE_PREFIX + itemName, "inventory"));
+        }
     }
 
 

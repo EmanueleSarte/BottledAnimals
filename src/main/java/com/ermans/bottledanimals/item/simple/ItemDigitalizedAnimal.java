@@ -13,9 +13,6 @@ import java.util.List;
 
 public class ItemDigitalizedAnimal extends ItemBottledAnimals {
     private static final String[] DIGITIALIZED_ANIMAL_NAME = {"pig", "sheep", "cow", "chicken", "squid", "wolf", "moosh", "ocelot", "horse"};
-    private static final String[] DIGITIALIZED_ANIMAL_FILE_NAME = {"digitalizedPig", "digitalizedSheep", "digitalizedCow", "digitalizedChicken", "digitalizedSquid", "digitalizedWolf", "digitalizedMoosh", "digitalizedOcelot", "digitalizedHorse"};
-//    @SideOnly(Side.CLIENT)
-//    private IIcon[] icons;
 
     public ItemDigitalizedAnimal() {
         super(Names.Items.DIGITALIZED_ANIMAL);
@@ -23,11 +20,6 @@ public class ItemDigitalizedAnimal extends ItemBottledAnimals {
         setMaxDamage(0);
     }
 
-//    @Override
-//    @SideOnly(Side.CLIENT)
-//    public boolean requiresMultipleRenderPasses() {
-//        return true;
-//    }
 
     @Override
     public String getUnlocalizedName(ItemStack stack) {
@@ -35,22 +27,6 @@ public class ItemDigitalizedAnimal extends ItemBottledAnimals {
         return super.getUnlocalizedName() + "." + DIGITIALIZED_ANIMAL_NAME[i];
     }
 
-//    @Override
-//    @SideOnly(Side.CLIENT)
-//    public void registerIcons(TextureUtils.IIconRegister iconRegister) {
-//        this.icons = new IIcon[DIGITIALIZED_ANIMAL_FILE_NAME.length];
-//        for (int i = 0; i < DIGITIALIZED_ANIMAL_FILE_NAME.length; i++) {
-//            this.icons[i] = iconRegister.registerIcon(Textures.RESOURCE_PREFIX + DIGITIALIZED_ANIMAL_FILE_NAME[i]);
-//        }
-//    }
-//
-//    @Override
-//    public IIcon getIcon(ItemStack itemStack, int renderPass) {
-//        if ((itemStack.getItemDamage() >= 0) && (itemStack.getItemDamage() < DIGITIALIZED_ANIMAL_NAME.length)) {
-//            return this.icons[itemStack.getItemDamage()];
-//        }
-//        return null;
-//    }
 
     @SuppressWarnings("unchecked")
     @Override

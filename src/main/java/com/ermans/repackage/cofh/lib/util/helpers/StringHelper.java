@@ -339,4 +339,12 @@ public final class StringHelper {
         return c;
     }
 
+    public static String getResourceString(String unlocalizedName, boolean subtypesItem) {
+        String itemName = unlocalizedName.substring(unlocalizedName.lastIndexOf(':') + 1);
+        if (subtypesItem) {
+            return itemName.replace('.', '_');
+        }
+        return itemName;
+    }
+
 }

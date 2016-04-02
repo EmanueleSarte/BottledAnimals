@@ -8,8 +8,8 @@ public final class Textures {
     public static final ResourceLocation WIDGET_TEXTURE = new ResourceLocation(WIDGET_TEXTURE_STRING);
 
 
-    public static final String TEXTURE_LOCATION_PREFIX = RESOURCE_PREFIX + "textures/";
-    public static final String GUI_LOCATION_PREFIX = TEXTURE_LOCATION_PREFIX + "gui/";
+    public static final String TEXTURE_PREFIX = RESOURCE_PREFIX + "textures/";
+    public static final String GUI_LOCATION_PREFIX = TEXTURE_PREFIX + "gui/";
     public static final String ELEMENT_LOCATION_PREFIX = GUI_LOCATION_PREFIX + "elements/";
 
     public static final class Gui {
