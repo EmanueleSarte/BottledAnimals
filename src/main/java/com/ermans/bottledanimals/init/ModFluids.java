@@ -22,10 +22,10 @@ public class ModFluids {
     public static void registerFluids() {
 
         milk = registerFluid(Names.Fluid.MILK, Textures.Fluid.MILK_STILL, Textures.Fluid.MILK_FLOW).setDensity(900)
-                .setUnlocalizedName(Textures.RESOURCE_PREFIX + Names.Fluid.MILK).setLuminosity(1);
+                .setUnlocalizedName(Textures.RESOURCE_PREFIX + Names.Fluid.MILK);
 
         food = registerFluid(Names.Fluid.FOOD, Textures.Fluid.FOOD_STILL, Textures.Fluid.FOOD_FLOW).setDensity(2000).setViscosity(2000)
-                .setUnlocalizedName(Textures.RESOURCE_PREFIX + Names.Fluid.FOOD).setLuminosity(1);
+                .setUnlocalizedName(Textures.RESOURCE_PREFIX + Names.Fluid.FOOD);
 
     }
 

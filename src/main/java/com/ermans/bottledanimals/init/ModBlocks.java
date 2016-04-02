@@ -10,7 +10,7 @@ import com.ermans.bottledanimals.block.machine.growthaccelerator.BlockGrowthAcce
 import com.ermans.bottledanimals.block.machine.rancher.BlockRancher;
 import com.ermans.bottledanimals.block.machine.wirelessfeeder.BlockWirelessFeeder;
 import com.ermans.bottledanimals.block.simple.BlockMachineFrame;
-import com.ermans.bottledanimals.fluid.FluidBlockBA;
+import com.ermans.bottledanimals.block.FluidBlockBA;
 import com.ermans.bottledanimals.reference.Names;
 import net.minecraft.block.Block;
 import net.minecraftforge.fml.common.registry.GameRegistry;

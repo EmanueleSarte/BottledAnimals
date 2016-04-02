@@ -18,6 +18,8 @@ public class Names {
         public static final String SQUID_FOOD = "squidFood";
         public static final String RANCHER_GEAR = "rancherGear";
         public static final String SPAWN_EGG_FRAME = "spawnEggFrame";
+
+        public static final String BUCKET_SUFFIX = "Bucket";
     }
 
     public static final class Machines {

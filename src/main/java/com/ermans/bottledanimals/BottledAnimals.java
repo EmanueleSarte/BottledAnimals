@@ -1,6 +1,6 @@
 package com.ermans.bottledanimals;
 
-import com.ermans.bottledanimals.fluid.BucketHandler;
+import com.ermans.bottledanimals.handlers.BucketHandler;
 import com.ermans.bottledanimals.helper.FoodHelper;
 import com.ermans.bottledanimals.network.PacketHandler;
 import com.ermans.bottledanimals.recipe.FoodCrusherManager;

@@ -2,9 +2,9 @@ package com.ermans.bottledanimals;
 
 
 import com.ermans.bottledanimals.block.machine.animaldigitizer.TileAnimalDigitizer;
-import com.ermans.bottledanimals.fluid.BucketHandler;
 import com.ermans.bottledanimals.init.ModBlocks;
 import com.ermans.bottledanimals.init.ModFluids;
+import com.ermans.bottledanimals.init.ModItems;
 import com.ermans.bottledanimals.reference.Names;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -19,12 +19,12 @@ public class CommonProxy {
 
         ModFluids.registerFluids();
         ModBlocks.registerBlocks();
+        ModItems.registerItems();
         registerTileEntity();
 
     }
 
     public void init(FMLInitializationEvent event) {
-        BucketHandler.init();
     }
 
 

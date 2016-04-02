@@ -1,7 +1,8 @@
 package com.ermans.bottledanimals;
 
-import com.ermans.bottledanimals.fluid.FluidBlockBA;
+import com.ermans.bottledanimals.block.FluidBlockBA;
 import com.ermans.bottledanimals.init.ModBlocks;
+import com.ermans.bottledanimals.init.ModItems;
 import com.ermans.bottledanimals.reference.Reference;
 import com.ermans.bottledanimals.reference.Textures;
 import net.minecraft.block.Block;
@@ -36,6 +37,10 @@ public class ClientProxy extends CommonProxy {
             for (FluidBlockBA fluidBlock: ModBlocks.fluidBlocks.values()){
                 registerFluidModel(fluidBlock);
             }
+
+            for (String itemName : ModItems.items.keySet()){
+                registerItemModel(itemName);
+            }
         }
     }
 
@@ -60,6 +65,14 @@ public class ClientProxy extends CommonProxy {
                 new ModelResourceLocation(Textures.RESOURCE_PREFIX + blockName, "inventory"));
     }
 
+    private void registerItemModel(String itemName){
+        final int DEFAULT_ITEM_SUBTYPE = 0;
+
+        ModelLoader.setCustomModelResourceLocation(
+                GameRegistry.findItem(Reference.MOD_ID, itemName),
+                DEFAULT_ITEM_SUBTYPE,
+                new ModelResourceLocation(Textures.RESOURCE_PREFIX + itemName, "inventory"));
+    }
 
 
     private void registerFluidModel(IFluidBlock fluidBlock) {

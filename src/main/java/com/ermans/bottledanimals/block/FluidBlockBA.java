@@ -1,6 +1,5 @@
-package com.ermans.bottledanimals.fluid;
+package com.ermans.bottledanimals.block;
 
-import com.ermans.bottledanimals.block.BlockBase;
 import com.ermans.bottledanimals.reference.Reference;
 import net.minecraft.block.material.Material;
 import net.minecraftforge.fluids.BlockFluidClassic;
