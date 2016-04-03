@@ -40,7 +40,7 @@ public class TabRedstone extends TabBase {
 
     @Override
     protected void drawForeground() {
-//        drawTabIcon("IconRedstone");
+        drawTabIcon("IconRedstone");
         if (!isFullyOpened()) {
             return;
         }

@@ -35,7 +35,7 @@ public class TabInfo extends TabBase {
 
     @Override
     protected void drawForeground() {
-//        drawTabIcon("IconMachineInfo");
+        drawTabIcon("IconMachineInfo");
         if (!isFullyOpened()) {
             return;
         }

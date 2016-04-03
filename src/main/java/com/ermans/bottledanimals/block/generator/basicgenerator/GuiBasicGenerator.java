@@ -1,5 +1,6 @@
 package com.ermans.bottledanimals.block.generator.basicgenerator;
 
+import com.ermans.bottledanimals.IconRegistry;
 import com.ermans.bottledanimals.client.gui.GuiBaseAdv;
 import com.ermans.bottledanimals.client.gui.tab.TabInfo;
 import com.ermans.bottledanimals.reference.Textures;
@@ -36,7 +37,7 @@ public class GuiBasicGenerator extends GuiBaseAdv {
         this.speed = (ElementDualScaled) addElement(new ElementDualScaled(this, 78, 47).setMode(0).setSize(14, 14).setTexture(Textures.Gui.Element.PROGRESS_FIRE, 32, 16));
 
 //        this.icon = (ElementIcon) addElement(new ElementIcon(this, 25, 27, IconRegistry.getIcon("GeneratorOff")));
-        this.icon = (ElementIcon) addElement(new ElementIcon(this, 25, 27));
+        this.icon = (ElementIcon) addElement(new ElementIcon(this, 25, 27, null));
         this.icon.setSize(16, 16);
         lastIcon = -1;
     }
@@ -52,24 +53,24 @@ public class GuiBasicGenerator extends GuiBaseAdv {
         super.updateElementInformation();
         this.speed.setQuantity(this.tile.getFuelScaled(16));
         if (lastIcon != tile.getState().ordinal()) {
-//            switch (tile.getState()) {
-//                case LOW_GEN:
-//                    icon.setIcon(IconRegistry.getIcon("GeneratorLowGen"));
-//                    icon.setTooltipText(iconLowGen);
-//                    break;
-//                case BALANCING:
-//                    icon.setIcon(IconRegistry.getIcon("GeneratorBalance"));
-//                    icon.setTooltipText(iconBalance);
-//                    break;
-//                case RIGHT_GEN:
-//                    icon.setIcon(IconRegistry.getIcon("GeneratorRigGen"));
-//                    icon.setTooltipText(iconRigGen);
-//                    break;
-//                case OFF:
-//                    icon.setIcon(IconRegistry.getIcon("GeneratorOff"));
-//                    icon.setTooltipText(iconOff);
-//                    break;
-//            }
+            switch (tile.getState()) {
+                case LOW_GEN:
+                    icon.setIcon(IconRegistry.getIcon("GeneratorLowGen"));
+                    icon.setTooltipText(iconLowGen);
+                    break;
+                case BALANCING:
+                    icon.setIcon(IconRegistry.getIcon("GeneratorBalance"));
+                    icon.setTooltipText(iconBalance);
+                    break;
+                case RIGHT_GEN:
+                    icon.setIcon(IconRegistry.getIcon("GeneratorRigGen"));
+                    icon.setTooltipText(iconRigGen);
+                    break;
+                case OFF:
+                    icon.setIcon(IconRegistry.getIcon("GeneratorOff"));
+                    icon.setTooltipText(iconOff);
+                    break;
+            }
         }
         lastIcon = tile.getState().ordinal();
     }

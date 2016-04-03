@@ -1,5 +1,6 @@
 package com.ermans.bottledanimals.client.gui;
 
+import com.ermans.bottledanimals.IconRegistry;
 import com.ermans.bottledanimals.block.TileBottledAnimals;
 import com.ermans.bottledanimals.block.generator.TileGenerator;
 import com.ermans.bottledanimals.block.machine.TileMachine;
@@ -9,6 +10,7 @@ import com.ermans.bottledanimals.client.gui.tab.TabRedstone;
 import com.ermans.repackage.cofh.lib.gui.GuiBase;
 import com.ermans.repackage.cofh.lib.gui.element.TabBase;
 import com.ermans.repackage.cofh.lib.util.helpers.StringHelper;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.inventory.Container;
 import net.minecraft.util.ResourceLocation;
 
@@ -35,10 +37,10 @@ public class GuiBaseAdv extends GuiBase {
         }
     }
 
-//    @Override
-//    public IIcon getIcon(String iconName) {
-//        return IconRegistry.getIcon(iconName);
-//    }
+    @Override
+    public TextureAtlasSprite getIcon(String iconName) {
+        return IconRegistry.getIcon(iconName);
+    }
 
 
 }

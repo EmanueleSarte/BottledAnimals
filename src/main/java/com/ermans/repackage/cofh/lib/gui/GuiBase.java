@@ -4,12 +4,15 @@ import com.ermans.repackage.cofh.lib.audio.SoundBase;
 import com.ermans.repackage.cofh.lib.gui.element.ElementBase;
 import com.ermans.repackage.cofh.lib.gui.element.TabBase;
 import com.ermans.repackage.cofh.lib.gui.slot.SlotFalseCopy;
+import com.ermans.repackage.cofh.lib.render.RenderHelper;
 import com.ermans.repackage.cofh.lib.util.helpers.StringHelper;
 import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
@@ -481,10 +484,9 @@ public abstract class GuiBase extends GuiContainer {
     /**
      * Abstract method to retrieve icons by name from a registry. You must override this if you use any of the String methods below.
      */
-//    public IIcon getIcon(String name) {
-//
-//        return null;
-//    }
+	public TextureAtlasSprite getIcon(String name) {
+        return null;
+    }
 //
 //    /**
 //     * Essentially a placeholder method for tabs to use should they need to draw a button.
@@ -493,7 +495,6 @@ public abstract class GuiBase extends GuiContainer {
 //
 //        drawIcon(icon, x, y, spriteSheet);
 //    }
-
     public void drawButton(String iconName, int x, int y, int spriteSheet, int mode) {
 
 //        drawButton(getIcon(iconName), x, y, spriteSheet, mode);
@@ -534,59 +535,58 @@ public abstract class GuiBase extends GuiContainer {
      */
     public void drawFluid(int x, int y, FluidStack fluid, int width, int height) {
 
-        if (fluid == null || fluid.getFluid() == null) {
-            return;
-        }
+//        if (fluid == null || fluid.getFluid() == null) {
+//            return;
+//        }
 //        RenderHelper.setBlockTextureSheet();
 //        RenderHelper.setColor3ub(fluid.getFluid().getColor(fluid));
 //
-//        drawTiledTexture(x, y, fluid.getFluid().getI(fluid), width, height);
-
+//        drawTiledTexture(x, y, fluid.getFluid().getIcon(fluid), width, height);
     }
 
-//    public void drawTiledTexture(int x, int y, IIcon icon, int width, int height) {
-//
-//        int i = 0;
-//        int j = 0;
-//
-//        int drawHeight = 0;
-//        int drawWidth = 0;
-//
-//        for (i = 0; i < width; i += 16) {
-//            for (j = 0; j < height; j += 16) {
-//                drawWidth = Math.min(width - i, 16);
-//                drawHeight = Math.min(height - j, 16);
-//                drawScaledTexturedModelRectFromIcon(x + i, y + j, icon, drawWidth, drawHeight);
-//            }
-//        }
-//        GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0F);
-//    }
+    public void drawTiledTexture(int x, int y, TextureAtlasSprite icon, int width, int height) {
 
-//    public void drawIcon(IIcon icon, int x, int y, int spriteSheet) {
-//
-//        if (spriteSheet == 0) {
-//            RenderHelper.setBlockTextureSheet();
-//        } else {
-//            RenderHelper.setItemTextureSheet();
-//        }
-//        GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0F);
-//        drawTexturedModelRectFromIcon(x, y, icon, 16, 16);
-//    }
-//
-//    public void drawColorIcon(IIcon icon, int x, int y, int spriteSheet) {
-//
-//        if (spriteSheet == 0) {
-//            RenderHelper.setBlockTextureSheet();
-//        } else {
-//            RenderHelper.setItemTextureSheet();
-//        }
-//        drawTexturedModelRectFromIcon(x, y, icon, 16, 16);
-//    }
+        int i = 0;
+        int j = 0;
 
-//    public void drawIcon(String iconName, int x, int y, int spriteSheet) {
-//
-//        drawIcon(getIcon(iconName), x, y, spriteSheet);
-//    }
+        int drawHeight = 0;
+        int drawWidth = 0;
+
+        for (i = 0; i < width; i += 16) {
+            for (j = 0; j < height; j += 16) {
+                drawWidth = Math.min(width - i, 16);
+                drawHeight = Math.min(height - j, 16);
+                drawScaledTexturedModalRect(x + i, y + j, icon, drawWidth, drawHeight);
+            }
+        }
+        GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0F);
+    }
+
+    public void drawIcon(TextureAtlasSprite icon, int x, int y, int spriteSheet) {
+
+        if (spriteSheet == 0) {
+            RenderHelper.setBlockTextureSheet();
+        } else {
+            RenderHelper.setItemTextureSheet();
+        }
+        GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0F);
+        drawTexturedModalRect(x, y, icon, 16, 16);
+    }
+
+    public void drawColorIcon(TextureAtlasSprite icon, int x, int y, int spriteSheet) {
+
+        if (spriteSheet == 0) {
+            RenderHelper.setBlockTextureSheet();
+        } else {
+            RenderHelper.setItemTextureSheet();
+        }
+        drawTexturedModalRect(x, y, icon, 16, 16);
+    }
+
+    public void drawIcon(String iconName, int x, int y, int spriteSheet) {
+
+        drawIcon(getIcon(iconName), x, y, spriteSheet);
+    }
 
     public void drawSizedModalRect(int x1, int y1, int x2, int y2, int color) {
 
@@ -607,16 +607,21 @@ public abstract class GuiBase extends GuiContainer {
         float r = (color >> 16 & 255) / 255.0F;
         float g = (color >> 8 & 255) / 255.0F;
         float b = (color & 255) / 255.0F;
-        Tessellator tessellator = Tessellator.getInstance();
+
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glDisable(GL11.GL_TEXTURE_2D);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         GL11.glColor4f(r, g, b, a);
-//        tessellator.addVertex(x1, y2, this.zLevel);
-//        tessellator.addVertex(x2, y2, this.zLevel);
-//        tessellator.addVertex(x2, y1, this.zLevel);
-//        tessellator.addVertex(x1, y1, this.zLevel);
+
+        Tessellator tessellator = Tessellator.getInstance();
+        WorldRenderer worldrenderer = tessellator.getWorldRenderer();
+        worldrenderer.begin(7, DefaultVertexFormats.POSITION);
+        worldrenderer.pos(x1, y2, this.zLevel).endVertex();
+        worldrenderer.pos(x2, y2, this.zLevel).endVertex();
+        worldrenderer.pos(x2, y1, this.zLevel).endVertex();
+        worldrenderer.pos(x1, y1, this.zLevel).endVertex();
         tessellator.draw();
+
         GL11.glEnable(GL11.GL_TEXTURE_2D);
         GL11.glDisable(GL11.GL_BLEND);
     }
@@ -640,46 +645,56 @@ public abstract class GuiBase extends GuiContainer {
         float r = (color >> 16 & 255) / 255.0F;
         float g = (color >> 8 & 255) / 255.0F;
         float b = (color & 255) / 255.0F;
-//        Tessellator tessellator = Tessellator.instance;
-//        GL11.glDisable(GL11.GL_TEXTURE_2D);
-//        GL11.glColor4f(r, g, b, a);
-//        tessellator.startDrawingQuads();
-//        tessellator.addVertex(x1, y2, this.zLevel);
-//        tessellator.addVertex(x2, y2, this.zLevel);
-//        tessellator.addVertex(x2, y1, this.zLevel);
-//        tessellator.addVertex(x1, y1, this.zLevel);
-//        tessellator.draw();
-//        GL11.glEnable(GL11.GL_TEXTURE_2D);
-//        Gui.drawRect();
+
+        GL11.glDisable(GL11.GL_TEXTURE_2D);
+        GL11.glColor4f(r, g, b, a);
+
+        Tessellator tessellator = Tessellator.getInstance();
+        WorldRenderer worldrenderer = tessellator.getWorldRenderer();
+        worldrenderer.begin(7, DefaultVertexFormats.POSITION);
+        worldrenderer.pos(x1, y2, this.zLevel).endVertex();
+        worldrenderer.pos(x2, y2, this.zLevel).endVertex();
+        worldrenderer.pos(x2, y1, this.zLevel).endVertex();
+        worldrenderer.pos(x1, y1, this.zLevel).endVertex();
+        tessellator.draw();
+
+        GL11.glEnable(GL11.GL_TEXTURE_2D);
     }
 
+    public void drawSizedTexturedModalRect(int x, int y, int u, int v, int width, int height, float texW, float texH) {
 
+        float texU = 1 / texW;
+        float texV = 1 / texH;
 
-
-    public void drawSizedTexturedModalRec(int x, int y, int u, int v, int width, int height, float texW, float texH) {
-        Gui.drawModalRectWithCustomSizedTexture(x, y, u, v, width, height, texW, texH);
+        Tessellator tessellator = Tessellator.getInstance();
+        WorldRenderer worldrenderer = tessellator.getWorldRenderer();
+        worldrenderer.begin(7, DefaultVertexFormats.POSITION_TEX);
+        worldrenderer.pos(x + 0, y + height, this.zLevel).tex((u + 0) * texU, (v + height) * texV).endVertex();
+        worldrenderer.pos(x + width, y + height, this.zLevel).tex((u + width) * texU, (v + height) * texV).endVertex();
+        worldrenderer.pos(x + width, y + 0, this.zLevel).tex((u + width) * texU, (v + 0) * texV).endVertex();
+        worldrenderer.pos(x + 0, y + 0, this.zLevel).tex((u + 0) * texU, (v + 0) * texV).endVertex();
+        tessellator.draw();
     }
 
+    public void drawScaledTexturedModalRect(int x, int y, TextureAtlasSprite icon, int width, int height) {
 
+        if (icon == null) {
+            return;
+        }
+        double minU = icon.getMinU();
+        double maxU = icon.getMaxU();
+        double minV = icon.getMinV();
+        double maxV = icon.getMaxV();
 
-//    public void drawScaledTexturedModelRectFromIcon(int x, int y, IIcon icon, int width, int height) {
-//
-//        if (icon == null) {
-//            return;
-//        }
-//        double minU = icon.getMinU();
-//        double maxU = icon.getMaxU();
-//        double minV = icon.getMinV();
-//        double maxV = icon.getMaxV();
-//
-//        Tessellator tessellator = Tessellator.instance;
-//        tessellator.startDrawingQuads();
-//        tessellator.addVertexWithUV(x + 0, y + height, this.zLevel, minU, minV + (maxV - minV) * height / 16F);
-//        tessellator.addVertexWithUV(x + width, y + height, this.zLevel, minU + (maxU - minU) * width / 16F, minV + (maxV - minV) * height / 16F);
-//        tessellator.addVertexWithUV(x + width, y + 0, this.zLevel, minU + (maxU - minU) * width / 16F, minV);
-//        tessellator.addVertexWithUV(x + 0, y + 0, this.zLevel, minU, minV);
-//        tessellator.draw();
-//    }
+        Tessellator tessellator = Tessellator.getInstance();
+        WorldRenderer worldrenderer = tessellator.getWorldRenderer();
+        worldrenderer.begin(7, DefaultVertexFormats.POSITION_TEX);
+        worldrenderer.pos(x + 0, y + height, this.zLevel).tex(minU, minV + (maxV - minV) * height / 16F);
+        worldrenderer.pos(x + width, y + height, this.zLevel).tex(minU + (maxU - minU) * width / 16F, minV + (maxV - minV) * height / 16F);
+        worldrenderer.pos(x + width, y + 0, this.zLevel).tex(minU + (maxU - minU) * width / 16F, minV);
+        worldrenderer.pos(x + 0, y + 0, this.zLevel).tex(minU, minV);
+        tessellator.draw();
+    }
 
     public void drawTooltip(List<String> list) {
 

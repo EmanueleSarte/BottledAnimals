@@ -14,13 +14,16 @@ import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fluids.IFluidBlock;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +49,27 @@ public class ClientProxy extends CommonProxy {
                 registerItemModel(itemName);
             }
         }
+
+
     }
+
+    @SideOnly(Side.CLIENT)
+    @SubscribeEvent
+    public void registerIcons(TextureStitchEvent.Pre paramPre) {
+        IconRegistry.addIcon("EnergyNow", Textures.RESOURCE_PREFIX + "icons/Energy_Now", paramPre.map);
+        IconRegistry.addIcon("EnergyMax",  Textures.RESOURCE_PREFIX + "icons/Energy_Max", paramPre.map);
+        IconRegistry.addIcon("EnergyOut",  Textures.RESOURCE_PREFIX + "icons/Energy_Out", paramPre.map);
+        IconRegistry.addIcon("EnergyTime",  Textures.RESOURCE_PREFIX + "icons/Energy_Time", paramPre.map);
+        IconRegistry.addIcon("IconEnergy",  Textures.RESOURCE_PREFIX + "icons/Icon_Energy", paramPre.map);
+        IconRegistry.addIcon("IconEnergyOn",  Textures.RESOURCE_PREFIX + "icons/Icon_Energy_On", paramPre.map);
+        IconRegistry.addIcon("IconMachineInfo",  Textures.RESOURCE_PREFIX + "icons/Icon_Machine_Info", paramPre.map);
+        IconRegistry.addIcon("IconRedstone",  Textures.RESOURCE_PREFIX + "icons/Icon_Redstone", paramPre.map);
+        IconRegistry.addIcon("GeneratorOff",  Textures.RESOURCE_PREFIX + "icons/Generator_Off", paramPre.map);
+        IconRegistry.addIcon("GeneratorBalance",  Textures.RESOURCE_PREFIX + "icons/Generator_Balance", paramPre.map);
+        IconRegistry.addIcon("GeneratorLowGen",  Textures.RESOURCE_PREFIX + "icons/Generator_LowGen", paramPre.map);
+        IconRegistry.addIcon("GeneratorRigGen",  Textures.RESOURCE_PREFIX + "icons/Generator_RigGen", paramPre.map);
+    }
+
 
     @Override
     public void init(FMLInitializationEvent event) {

@@ -27,11 +27,11 @@ public abstract class TabEnergy extends TabBase {
     @Override
     protected void drawForeground() {
 
-//        if (isActive()) {
-//            drawTabIcon("IconEnergyOn");
-//        } else {
-//            drawTabIcon("IconEnergy");
-//        }
+        if (isActive()) {
+            drawTabIcon("IconEnergyOn");
+        } else {
+            drawTabIcon("IconEnergy");
+        }
     }
 
 
