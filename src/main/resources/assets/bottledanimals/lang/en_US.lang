@@ -35,15 +35,15 @@ item.bottledanimals:digitalizedAnimal.wolf.name=Digitalized Wolf
 item.bottledanimals:digitalizedAnimal.cow.name=Digitalized Cow
 item.bottledanimals:digitalizedAnimal.ocelot.name=Digitalized Ocelot
     #Digitalized Baby Animals
-item.bottledanimals:digitalizedBabyAnimal.babyChicken.name=Digitalized Baby Chicken
-item.bottledanimals:digitalizedBabyAnimal.babyPig.name=Digitalized Baby Pig
-item.bottledanimals:digitalizedBabyAnimal.babySheep.name=Digitalized Baby Sheep
-item.bottledanimals:digitalizedBabyAnimal.babySquid.name=Digitalized Baby Squid
-item.bottledanimals:digitalizedBabyAnimal.babyHorse.name=Digitalized Baby Horse
-item.bottledanimals:digitalizedBabyAnimal.babyMoosh.name=Digitalized Baby Mooshroom
-item.bottledanimals:digitalizedBabyAnimal.babyWolf.name=Digitalized Baby Wolf
-item.bottledanimals:digitalizedBabyAnimal.babyCow.name=Digitalized Baby Cow
-item.bottledanimals:digitalizedBabyAnimal.babyOcelot.name=Digitalized Baby Ocelot
+item.bottledanimals:digitalizedBabyAnimal.chicken.name=Digitalized Baby Chicken
+item.bottledanimals:digitalizedBabyAnimal.pig.name=Digitalized Baby Pig
+item.bottledanimals:digitalizedBabyAnimal.sheep.name=Digitalized Baby Sheep
+item.bottledanimals:digitalizedBabyAnimal.squid.name=Digitalized Baby Squid
+item.bottledanimals:digitalizedBabyAnimal.horse.name=Digitalized Baby Horse
+item.bottledanimals:digitalizedBabyAnimal.moosh.name=Digitalized Baby Mooshroom
+item.bottledanimals:digitalizedBabyAnimal.wolf.name=Digitalized Baby Wolf
+item.bottledanimals:digitalizedBabyAnimal.cow.name=Digitalized Baby Cow
+item.bottledanimals:digitalizedBabyAnimal.ocelot.name=Digitalized Baby Ocelot
 
 
 

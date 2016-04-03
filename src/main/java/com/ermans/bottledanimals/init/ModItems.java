@@ -35,15 +35,14 @@ public class ModItems {
         itemAnimalInABottle = (ItemAnimalInABottle) registerItem(new ItemAnimalInABottle(), Names.Items.ANIMAL_IN_A_BOTTLE);
         itemDigitalizedAnimal = (ItemDigitalizedAnimal) registerItem(new ItemDigitalizedAnimal(), Names.Items.DIGITALIZED_ANIMAL);
         itemDigitalizedBabyAnimal = (ItemDigitalizedBabyAnimal) registerItem(new ItemDigitalizedBabyAnimal(), Names.Items.DIGITALIZED_BABY_ANIMAL);
+        itemBlankPattern = (ItemBlankPattern) registerItem(new ItemBlankPattern(), Names.Items.BLANK_PATTERN);
+        itemBrokenPattern = (ItemBrokenPattern) registerItem(new ItemBrokenPattern(), Names.Items.BROKEN_PATTERN);
+        itemAnimalCircuit = (ItemAnimalCircuit) registerItem(new ItemAnimalCircuit(), Names.Items.ANIMAL_CIRCUIT);
+        itemSquidFood = (ItemSquidFood) registerItem(new ItemSquidFood(), Names.Items.SQUID_FOOD);
+        itemRancherGear = (ItemRancherGear) registerItem(new ItemRancherGear(), Names.Items.RANCHER_GEAR);
+        itemSpawnEggFrame = (ItemSpawnEggFrame) registerItem(new ItemSpawnEggFrame(), Names.Items.SPAWN_EGG_FRAME);
 
-//        itemBlankPattern = (ItemBlankPattern) registerItem(new ItemBlankPattern(), Names.Items.BLANK_PATTERN);
-//        itemBrokenPattern = (ItemBrokenPattern) registerItem(new ItemBrokenPattern(), Names.Items.BROKEN_PATTERN);
-//        itemAnimalCircuit = (ItemAnimalCircuit) registerItem(new ItemAnimalCircuit(), Names.Items.ANIMAL_CIRCUIT);
-//        itemSquidFood = (ItemSquidFood) registerItem(new ItemSquidFood(), Names.Items.SQUID_FOOD);
-//        itemRancherGear = (ItemRancherGear) registerItem(new ItemRancherGear(), Names.Items.RANCHER_GEAR);
-//        itemSpawnEggFrame = (ItemSpawnEggFrame) registerItem(new ItemSpawnEggFrame(), Names.Items.SPAWN_EGG_FRAME);
-//
-//        itemModIcon = (ItemModIcon) registerItem(new ItemModIcon(), "modIcon");
+        itemModIcon = (ItemModIcon) registerItem(new ItemModIcon(), "modIcon");
 
 
         milkBucket = registerBucket(ModBlocks.milkBlock, ModFluids.milk);

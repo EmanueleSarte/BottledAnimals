@@ -1,5 +1,6 @@
 package com.ermans.bottledanimals.init;
 
+import com.ermans.bottledanimals.block.FluidBlockBA;
 import com.ermans.bottledanimals.block.generator.basicgenerator.BlockBasicGenerator;
 import com.ermans.bottledanimals.block.machine.animaldigitizer.BlockAnimalDigitizer;
 import com.ermans.bottledanimals.block.machine.animalmaterializer.BlockAnimalMaterializer;
@@ -10,7 +11,6 @@ import com.ermans.bottledanimals.block.machine.growthaccelerator.BlockGrowthAcce
 import com.ermans.bottledanimals.block.machine.rancher.BlockRancher;
 import com.ermans.bottledanimals.block.machine.wirelessfeeder.BlockWirelessFeeder;
 import com.ermans.bottledanimals.block.simple.BlockMachineFrame;
-import com.ermans.bottledanimals.block.FluidBlockBA;
 import com.ermans.bottledanimals.reference.Names;
 import net.minecraft.block.Block;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -42,47 +42,27 @@ public class ModBlocks {
 
     public static void registerBlocks() {
 
+        ////SIMPLE BLOCKS
+        blockMachineFrame = (BlockMachineFrame) registerBlock(new BlockMachineFrame(), Names.Blocks.MACHINE_FRAME);
+
+
         ////MACHINES
         blockAnimalDigitizer = (BlockAnimalDigitizer) registerBlock(new BlockAnimalDigitizer(), Names.Machines.ANIMAL_DIGITIZER);
+        blockBreeder = (BlockBreeder) registerBlock(new BlockBreeder(), Names.Machines.BREEDER);
+        blockGrowthAccelerator = (BlockGrowthAccelerator) registerBlock(new BlockGrowthAccelerator(), Names.Machines.GROWTH_ACCELERATOR);
+        blockDropExtractor = (BlockDropExtractor) registerBlock(new BlockDropExtractor(), Names.Machines.DROP_EXTRACTOR);
+        blockRancher = (BlockRancher) registerBlock(new BlockRancher(), Names.Machines.RANCHER);
+        blockFoodCrusher = (BlockFoodCrusher) registerBlock(new BlockFoodCrusher(), Names.Machines.FOOD_CRUSHER);
+        blockAnimalMaterializer = (BlockAnimalMaterializer) registerBlock(new BlockAnimalMaterializer(), Names.Machines.ANIMAL_MATERIALIZER);
+        blockWirelessFeeder = (BlockWirelessFeeder) registerBlock(new BlockWirelessFeeder(), Names.Machines.WIRELESS_FEEDER);
 
-
+        blockBasicGenerator = (BlockBasicGenerator) registerBlock(new BlockBasicGenerator(), Names.Machines.BASIC_GENERATOR);
 
 
         ////FLUID BLOCKS
         milkBlock = registerFluidBlock(FluidBlockBA.create(ModFluids.milk));
         foodBlock = registerFluidBlock(FluidBlockBA.create(ModFluids.food));
 
-
-//        blockBreeder = new BlockBreeder();
-//        blockGrowthAccelerator = new BlockGrowthAccelerator();
-//        blockDropExtractor = new BlockDropExtractor();
-//        blockWirelessFeeder = new BlockWirelessFeeder();
-//        blockRancher = new BlockRancher();
-//        blockFoodCrusher = new BlockFoodCrusher();
-//        blockAnimalMaterializer = new BlockAnimalMaterializer();
-//
-//        blockMachineFrame = new BlockMachineFrame();
-//
-//        blockBasicGenerator = new BlockBasicGenerator();
-
-//        milkBlock = FluidBlockBA.create(ModFluids.milk, Material.water);
-//        foodBlock = FluidBlockBA.create(ModFluids.food, Material.water);
-
-//        GameRegistry.registerBlock(blockAnimalDigitizer, Names.Machines.ANIMAL_DIGITIZER);
-//        GameRegistry.registerBlock(blockBreeder, Names.Machines.BREEDER);
-//        GameRegistry.registerBlock(blockGrowthAccelerator, Names.Machines.GROWTH_ACCELERATOR);
-//        GameRegistry.registerBlock(blockDropExtractor, Names.Machines.DROP_EXTRACTOR);
-//        GameRegistry.registerBlock(blockWirelessFeeder, Names.Machines.WIRELESS_FEEDER);
-//        GameRegistry.registerBlock(blockRancher, Names.Machines.RANCHER);
-//        GameRegistry.registerBlock(blockFoodCrusher, Names.Machines.FOOD_CRUSHER);
-//        GameRegistry.registerBlock(blockAnimalMaterializer, Names.Machines.ANIMAL_MATERIALIZER);
-//
-//        GameRegistry.registerBlock(blockMachineFrame, Names.Blocks.MACHINE_FRAME);
-//
-//        GameRegistry.registerBlock(blockBasicGenerator, Names.Machines.BASIC_GENERATOR);
-//
-//        GameRegistry.registerBlock(milkBlock, "block" + StringUtils.capitalize(ModFluids.milk.getName()));
-//        GameRegistry.registerBlock(foodBlock, "block" + StringUtils.capitalize(ModFluids.food.getName()));
     }
 
     private static Block registerBlock(Block block, String blockName) {

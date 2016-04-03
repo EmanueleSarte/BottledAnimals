@@ -1,0 +1,6 @@
+{
+  "parent": "bottledanimals:block/generator",
+  "textures": {
+    "front": "bottledanimals:blocks/basicGenerator_on"
+  }
+}

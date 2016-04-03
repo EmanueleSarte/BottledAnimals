@@ -1,0 +1,6 @@
+{
+  "parent": "bottledanimals:block/block",
+  "textures": {
+    "all": "bottledanimals:blocks/machineFrame"
+  }
+}

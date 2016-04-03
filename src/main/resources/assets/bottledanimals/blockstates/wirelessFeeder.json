@@ -1,0 +1,12 @@
+{
+    "variants": {
+           "active=false,facing=north": { "model": "bottledanimals:wirelessFeeder"},
+            "active=false,facing=east": { "model": "bottledanimals:wirelessFeeder", "y": 90 },
+           "active=false,facing=south": { "model": "bottledanimals:wirelessFeeder", "y": 180 },
+            "active=false,facing=west": { "model": "bottledanimals:wirelessFeeder", "y": 270 },
+            "active=true,facing=north": { "model": "bottledanimals:wirelessFeeder"},
+             "active=true,facing=east": { "model": "bottledanimals:wirelessFeeder", "y": 90 },
+            "active=true,facing=south": { "model": "bottledanimals:wirelessFeeder", "y": 180 },
+             "active=true,facing=west": { "model": "bottledanimals:wirelessFeeder", "y": 270 }
+    }
+}

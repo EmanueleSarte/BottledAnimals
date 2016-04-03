@@ -1,0 +1,6 @@
+{
+  "parent": "bottledanimals:block/machine",
+  "textures": {
+    "front": "bottledanimals:blocks/wirelessFeeder"
+  }
+}
