@@ -56,18 +56,18 @@ public class ClientProxy extends CommonProxy {
     @SideOnly(Side.CLIENT)
     @SubscribeEvent
     public void registerIcons(TextureStitchEvent.Pre paramPre) {
-        IconRegistry.addIcon("EnergyNow", Textures.RESOURCE_PREFIX + "icons/Energy_Now", paramPre.map);
-        IconRegistry.addIcon("EnergyMax",  Textures.RESOURCE_PREFIX + "icons/Energy_Max", paramPre.map);
-        IconRegistry.addIcon("EnergyOut",  Textures.RESOURCE_PREFIX + "icons/Energy_Out", paramPre.map);
-        IconRegistry.addIcon("EnergyTime",  Textures.RESOURCE_PREFIX + "icons/Energy_Time", paramPre.map);
-        IconRegistry.addIcon("IconEnergy",  Textures.RESOURCE_PREFIX + "icons/Icon_Energy", paramPre.map);
-        IconRegistry.addIcon("IconEnergyOn",  Textures.RESOURCE_PREFIX + "icons/Icon_Energy_On", paramPre.map);
-        IconRegistry.addIcon("IconMachineInfo",  Textures.RESOURCE_PREFIX + "icons/Icon_Machine_Info", paramPre.map);
-        IconRegistry.addIcon("IconRedstone",  Textures.RESOURCE_PREFIX + "icons/Icon_Redstone", paramPre.map);
-        IconRegistry.addIcon("GeneratorOff",  Textures.RESOURCE_PREFIX + "icons/Generator_Off", paramPre.map);
-        IconRegistry.addIcon("GeneratorBalance",  Textures.RESOURCE_PREFIX + "icons/Generator_Balance", paramPre.map);
-        IconRegistry.addIcon("GeneratorLowGen",  Textures.RESOURCE_PREFIX + "icons/Generator_LowGen", paramPre.map);
-        IconRegistry.addIcon("GeneratorRigGen",  Textures.RESOURCE_PREFIX + "icons/Generator_RigGen", paramPre.map);
+        IconRegistry.addIcon("EnergyNow", Textures.ICON_LOCATION_PREFIX + "Energy_Now", paramPre.map);
+        IconRegistry.addIcon("EnergyMax",  Textures.ICON_LOCATION_PREFIX + "Energy_Max", paramPre.map);
+        IconRegistry.addIcon("EnergyOut",  Textures.ICON_LOCATION_PREFIX + "Energy_Out", paramPre.map);
+        IconRegistry.addIcon("EnergyTime",  Textures.ICON_LOCATION_PREFIX + "Energy_Time", paramPre.map);
+        IconRegistry.addIcon("IconEnergy",  Textures.ICON_LOCATION_PREFIX + "Icon_Energy", paramPre.map);
+        IconRegistry.addIcon("IconEnergyOn",  Textures.ICON_LOCATION_PREFIX + "Icon_Energy_On", paramPre.map);
+        IconRegistry.addIcon("IconMachineInfo",  Textures.ICON_LOCATION_PREFIX + "Icon_Machine_Info", paramPre.map);
+        IconRegistry.addIcon("IconRedstone",  Textures.ICON_LOCATION_PREFIX + "Icon_Redstone", paramPre.map);
+        IconRegistry.addIcon("GeneratorOff",  Textures.ICON_LOCATION_PREFIX + "Generator_Off", paramPre.map);
+        IconRegistry.addIcon("GeneratorBalance",  Textures.ICON_LOCATION_PREFIX + "Generator_Balance", paramPre.map);
+        IconRegistry.addIcon("GeneratorLowGen",  Textures.ICON_LOCATION_PREFIX + "Generator_LowGen", paramPre.map);
+        IconRegistry.addIcon("GeneratorRigGen",  Textures.ICON_LOCATION_PREFIX + "Generator_RigGen", paramPre.map);
     }
 
 

@@ -484,20 +484,21 @@ public abstract class GuiBase extends GuiContainer {
     /**
      * Abstract method to retrieve icons by name from a registry. You must override this if you use any of the String methods below.
      */
-	public TextureAtlasSprite getIcon(String name) {
+    public TextureAtlasSprite getIcon(String name) {
         return null;
     }
-//
-//    /**
-//     * Essentially a placeholder method for tabs to use should they need to draw a button.
-//     */
-//    public void drawButton(IIcon icon, int x, int y, int spriteSheet, int mode) {
-//
-//        drawIcon(icon, x, y, spriteSheet);
-//    }
+
+
+    /**
+     * Essentially a placeholder method for tabs to use should they need to draw a button.
+     */
+    public void drawButton(TextureAtlasSprite icon, int x, int y, int spriteSheet, int mode) {
+
+        drawIcon(icon, x, y, spriteSheet);
+    }
     public void drawButton(String iconName, int x, int y, int spriteSheet, int mode) {
 
-//        drawButton(getIcon(iconName), x, y, spriteSheet, mode);
+        drawButton(getIcon(iconName), x, y, spriteSheet, mode);
     }
 
     public void drawItemStack(ItemStack stack, int x, int y, boolean drawOverlay, String overlayTxt) {
@@ -520,7 +521,7 @@ public abstract class GuiBase extends GuiContainer {
         itemRender.renderItemAndEffectIntoGUI(stack, x, y);
 
         if (drawOverlay) {
-            //itemRender.renderItemOverlayIntoGUI(font, this.mc.getTextureManager(), stack, x, y - (this.draggedStack == null ? 0 : 8), overlayTxt);
+//            itemRender.renderItemOverlayIntoGUI(font, this.mc.getTextureManager(), stack, x, y - (this.draggedStack == null ? 0 : 8), overlayTxt);
             itemRender.renderItemOverlayIntoGUI(font, stack, x, y - 8, overlayTxt);
         }
 
@@ -535,14 +536,18 @@ public abstract class GuiBase extends GuiContainer {
      */
     public void drawFluid(int x, int y, FluidStack fluid, int width, int height) {
 
-//        if (fluid == null || fluid.getFluid() == null) {
-//            return;
-//        }
-//        RenderHelper.setBlockTextureSheet();
-//        RenderHelper.setColor3ub(fluid.getFluid().getColor(fluid));
-//
-//        drawTiledTexture(x, y, fluid.getFluid().getIcon(fluid), width, height);
+        if (fluid == null || fluid.getFluid() == null) {
+            return;
+        }
+
+        RenderHelper.setBlockTextureSheet();
+        RenderHelper.setColor3ub(fluid.getFluid().getColor(fluid));
+
+        TextureAtlasSprite fluidSprite = mc.getTextureMapBlocks().getAtlasSprite(fluid.getFluid().getStill(fluid).toString());
+
+        drawTiledTexture(x, y, fluidSprite, width, height);
     }
+
 
     public void drawTiledTexture(int x, int y, TextureAtlasSprite icon, int width, int height) {
 
@@ -688,11 +693,11 @@ public abstract class GuiBase extends GuiContainer {
 
         Tessellator tessellator = Tessellator.getInstance();
         WorldRenderer worldrenderer = tessellator.getWorldRenderer();
-        worldrenderer.begin(7, DefaultVertexFormats.POSITION_TEX);
-        worldrenderer.pos(x + 0, y + height, this.zLevel).tex(minU, minV + (maxV - minV) * height / 16F);
-        worldrenderer.pos(x + width, y + height, this.zLevel).tex(minU + (maxU - minU) * width / 16F, minV + (maxV - minV) * height / 16F);
-        worldrenderer.pos(x + width, y + 0, this.zLevel).tex(minU + (maxU - minU) * width / 16F, minV);
-        worldrenderer.pos(x + 0, y + 0, this.zLevel).tex(minU, minV);
+        worldrenderer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+        worldrenderer.pos(x, y + height, this.zLevel).tex(minU, minV + (maxV - minV) * height / 16F).endVertex();
+        worldrenderer.pos(x + width, y + height, this.zLevel).tex(minU + (maxU - minU) * width / 16F, minV + (maxV - minV) * height / 16F).endVertex();
+        worldrenderer.pos(x + width, y, this.zLevel).tex(minU + (maxU - minU) * width / 16F, minV).endVertex();
+        worldrenderer.pos(x, y, this.zLevel).tex(minU, minV).endVertex();
         tessellator.draw();
     }
 

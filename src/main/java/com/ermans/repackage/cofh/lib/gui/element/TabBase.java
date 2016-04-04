@@ -203,13 +203,7 @@ public abstract class TabBase extends ElementBase {
     }
 
     protected void drawTabIcon(String iconName) {
-
-		gui.drawIcon(iconName, posXOffset(), posY + 3, 0);
-//        GuiColor color = new GuiColor(-1);
-//        GL11.glColor4f(color.getFloatR(), color.getFloatG(), color.getFloatB(), color.getFloatA());
-//        gui.drawColorIcon(IconRegistry.getIcon(iconName), posX, posY, 0);
-//        GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0F);
-
+        gui.drawIcon(iconName, posXOffset(), posY + 3, 0);
     }
 
     /**
