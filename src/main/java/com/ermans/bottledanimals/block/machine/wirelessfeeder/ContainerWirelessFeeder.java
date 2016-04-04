@@ -1,6 +1,6 @@
 package com.ermans.bottledanimals.block.machine.wirelessfeeder;
 
-import com.ermans.bottledanimals.block.machine.ContainerTile;
+import com.ermans.bottledanimals.block.ContainerTile;
 import com.ermans.bottledanimals.client.container.slot.SlotValidatorItemFluidOutput;
 import com.ermans.repackage.cofh.lib.gui.slot.SlotValidated;
 import net.minecraft.entity.player.InventoryPlayer;

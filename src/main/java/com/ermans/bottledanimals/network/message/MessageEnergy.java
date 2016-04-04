@@ -18,10 +18,10 @@ public class MessageEnergy implements IMessage {
     public MessageEnergy() {
     }
 
-    public MessageEnergy(int x, int y, int z, int energy) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
+    public MessageEnergy(BlockPos pos, int energy) {
+        this.x = pos.getX();
+        this.y = pos.getY();
+        this.z = pos.getZ();
         this.energy = energy;
     }
 

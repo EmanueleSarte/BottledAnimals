@@ -45,7 +45,7 @@ public class TileWirelessFeeder extends TileFluidTank {
         this.tank.setCapacity(TANK_CAPACITY);
         this.fluidTile = ModFluids.food;
 
-        this.checkForRecipes = false;
+        this.processRecipes = false;
         this.transferFluid = true;
         this.fillSlot = input;
 

@@ -41,7 +41,6 @@ public abstract class TileBottledAnimals extends TileBase implements IRedstoneCo
     }
 
     //RSControl Interface
-    //Here we edit the RSControlMode, probably when a user click on the RSTab Button
     @Override
     public void setControl(ControlMode control) {
         if (control != rsControlMode) {

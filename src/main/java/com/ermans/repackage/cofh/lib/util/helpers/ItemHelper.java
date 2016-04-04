@@ -112,6 +112,7 @@ public final class ItemHelper {
         return true;
     }
 
+
     public static String getUnwrappedName(ItemStack stack) {
         return stack.getUnlocalizedName().substring(stack.getUnlocalizedName().lastIndexOf(':') + 1);
     }

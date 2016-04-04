@@ -19,6 +19,10 @@ public abstract class TileBase extends TileEntity implements ITickable {
     public void initTile() {
     }
 
+    @Override
+    public void update() {
+    }
+
     //Who call this want a packet (for world-saving) that describe this TE, so we call writeToNbt to get all the information
     @Override
     public Packet getDescriptionPacket() {

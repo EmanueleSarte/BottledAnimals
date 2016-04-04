@@ -138,7 +138,7 @@ public abstract class TileGenerator extends TileEnergyProvider implements IEnerg
             }
         }
 
-        if (isActive && checkTick(4) || actualRateVar != actualRate || stateChanged != state || lastEnergyOut != lastEnergyOutVar) {
+        if (isActive && checkTick(4) || sendUpdate || actualRateVar != actualRate || stateChanged != state || lastEnergyOut != lastEnergyOutVar) {
             this.worldObj.addBlockEvent(pos, getBlockType(), 1, actualRate);
             this.worldObj.addBlockEvent(pos, getBlockType(), 2, state.ordinal());
             this.worldObj.addBlockEvent(pos, getBlockType(), 3, lastEnergyOut);
@@ -154,7 +154,7 @@ public abstract class TileGenerator extends TileEnergyProvider implements IEnerg
 
     protected void syncMachine(boolean updateTexture) {
 
-        PacketHandler.INSTANCE.sendToAllAround(new MessageTile(this, updateTexture), TargetPointHelper.getTargetPoint(this));
+        PacketHandler.INSTANCE.sendToAllAround(new MessageTile(this, updateTexture), TargetPointHelper.getTargetPoint(worldObj, pos));
         markDirty();
 
         if (updateTexture) {
@@ -229,7 +229,6 @@ public abstract class TileGenerator extends TileEnergyProvider implements IEnerg
 
 
     ////DATA SYNC
-
     @Override
     public boolean receiveClientEvent(int action, int value) {
         switch (action) {
@@ -276,22 +275,12 @@ public abstract class TileGenerator extends TileEnergyProvider implements IEnerg
     @Override
     public void toBytes(ByteBuf buf) {
         super.toBytes(buf);
-//        buf.writeInt(remaining);
-//        buf.writeInt(totalFuel);
-//        buf.writeInt(actualRate);
-//        buf.writeInt(lastEnergyOut);
-//        buf.writeByte(state.ordinal());
         buf.writeBoolean(isActive);
     }
 
     @Override
     public void fromBytes(ByteBuf buf) {
         super.fromBytes(buf);
-//        remaining = buf.readInt();
-//        totalFuel = buf.readInt();
-//        actualRate = buf.readInt();
-//        lastEnergyOut = buf.readInt();
-//        state = STATE.values()[buf.readByte()];
         isActive = buf.readBoolean();
     }
 

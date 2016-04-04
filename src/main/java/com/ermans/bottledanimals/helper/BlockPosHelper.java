@@ -8,28 +8,20 @@ public class BlockPosHelper {
 
     public static BlockPos getBlockAdjacent(BlockPos blockPos, EnumFacing direction) {
 
-        BlockPos pos = new BlockPos(blockPos);
-
         switch (direction) {
             case DOWN:
-                pos.down();
-                break;
+                return new BlockPos(blockPos).add(0, -1, 0);
             case UP:
-                pos.up();
-                break;
+                return new BlockPos(blockPos).add(0, 1, 0);
             case NORTH:
-                pos.north();
-                break;
+                return new BlockPos(blockPos).add(0, 0, -1);
             case SOUTH:
-                pos.south();
-                break;
+                return new BlockPos(blockPos).add(0, 0, 1);
             case WEST:
-                pos.west();
-                break;
+                return new BlockPos(blockPos).add(-1, 0, 0);
             case EAST:
-                pos.east();
-                break;
+                return new BlockPos(blockPos).add(1, 0, 0);
         }
-        return pos;
+        return null;
     }
 }

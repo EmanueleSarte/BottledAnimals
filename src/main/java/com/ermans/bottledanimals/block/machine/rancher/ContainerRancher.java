@@ -1,6 +1,6 @@
 package com.ermans.bottledanimals.block.machine.rancher;
 
-import com.ermans.bottledanimals.block.machine.ContainerTile;
+import com.ermans.bottledanimals.block.ContainerTile;
 import com.ermans.bottledanimals.client.container.slot.SlotValidatorItemFluidInput;
 import com.ermans.repackage.cofh.lib.gui.slot.SlotAcceptValid;
 import com.ermans.repackage.cofh.lib.gui.slot.SlotRemoveOnly;

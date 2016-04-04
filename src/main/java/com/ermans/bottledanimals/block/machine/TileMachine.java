@@ -16,12 +16,12 @@ public abstract class TileMachine extends TilePowered implements IMachineInfo {
     //greater timeMult, lesser the operation total time
     protected byte timeMult;
     //remaining time
-    public int remaining;
-    public int operationTime;
-    public int recipeCode;
+    protected int remaining;
+    protected int operationTime;
+    protected int recipeCode;
 
-    public boolean isActive;
-    public boolean checkForRecipes;
+    protected boolean isActive;
+    protected boolean processRecipes;
 
 
     @Override
@@ -29,14 +29,14 @@ public abstract class TileMachine extends TilePowered implements IMachineInfo {
         super.initTile();
         this.powerMult = 1;
         this.timeMult = 1;
-        this.checkForRecipes = true;
+        this.processRecipes = true;
     }
 
     @Override
     public void update() {
         super.update();
 
-        if (checkForRecipes) {
+        if (processRecipes) {
             if (worldObj.isRemote) {
                 return;
             }
@@ -44,6 +44,7 @@ public abstract class TileMachine extends TilePowered implements IMachineInfo {
             boolean sendUpdate = false;
             //To track if the state changes
             boolean isChanged = isActive;
+            int trackRecipeCode = recipeCode;
 
             if (isActive) {
                 //We don't need to check energy because the operation starts only if there is enough energy for the operation
@@ -61,6 +62,10 @@ public abstract class TileMachine extends TilePowered implements IMachineInfo {
                     sendUpdate = true;
                     isActive = false;
                 }
+            }else{
+                if (remaining > 0){
+                    remaining = 0;
+                }
             }
             //If we can start cooking again, we just do it so we haven't to mess with blinking value/texture
             if (remaining <= 0 && hasPassedRedstoneTest()) {
@@ -77,26 +82,31 @@ public abstract class TileMachine extends TilePowered implements IMachineInfo {
                 }
             }
 
-            //If there is a update or each 4 tick, sync the machine
-            if (sendUpdate || (isActive && checkTick(4))) {
+            if (isActive && checkTick(4) || sendUpdate || trackRecipeCode != recipeCode) {
+                this.worldObj.addBlockEvent(pos, getBlockType(), 1, recipeCode);
+                this.worldObj.addBlockEvent(pos, getBlockType(), 2, remaining);
+            }
+
+            //If there is a update, sync the machine
+            if (sendUpdate) {
                 syncMachine(isChanged != isActive);
+                this.worldObj.addBlockEvent(pos, getBlockType(), 3, operationTime);
             }
         }
     }
 
-
-    //if true updateTexture will call markBlockForRenderUpdate
     protected void syncMachine(boolean updateTexture) {
-        //this is called clientside (I mean the message) to update the texture
-        PacketHandler.INSTANCE.sendToAllAround(new MessageTile(this, updateTexture), TargetPointHelper.getTargetPoint(this));
+
+        PacketHandler.INSTANCE.sendToAllAround(new MessageTile(this, updateTexture), TargetPointHelper.getTargetPoint(worldObj, pos));
         markDirty();
-        //This is called server side to update light
+
         if (updateTexture) {
-            worldObj.markBlockForUpdate(getPos());
+            worldObj.markBlockForUpdate(pos);
         }
     }
 
 
+    //Machines can implement these if they need
     protected boolean updateMachine() {
         return false;
     }
@@ -107,6 +117,7 @@ public abstract class TileMachine extends TilePowered implements IMachineInfo {
     protected void startProcess() {
     }
 
+    //Machines need to implement these
     abstract protected boolean canStillProcess(int recipeCode);
 
     abstract protected IRecipe getRecipeIfCanStart();
@@ -114,7 +125,8 @@ public abstract class TileMachine extends TilePowered implements IMachineInfo {
     abstract protected void finishProcess();
 
 
-    private boolean enoughEnergyOperation() {
+    //Easy storage
+    protected boolean enoughEnergyOperation() {
         return this.getEnergyStored(null) >= getTotalOperationEnergy();
     }
 
@@ -122,15 +134,19 @@ public abstract class TileMachine extends TilePowered implements IMachineInfo {
         return operationTime * RFTick;
     }
 
-    private int calculateEnergy() {
+    protected int calculateEnergy() {
         return RFTick * powerMult;
     }
 
+
     public int getProgressScaled(int scale) {
-        if (!isActive) return 0;
+        //dirty way to avoid progress bar from blinking
+        if (!isActive || operationTime == 0 || remaining == 0) return 0;
         return scale * (operationTime - remaining) / operationTime;
     }
 
+
+    //Check if someone right clicks an itemstack (to half it) inside the machine
     @Override
     public ItemStack decrStackSize(int slot, int amount) {
         ItemStack stack = super.decrStackSize(slot, amount);
@@ -140,7 +156,7 @@ public abstract class TileMachine extends TilePowered implements IMachineInfo {
         return stack;
     }
 
-
+    //Check if someone changes the itemstacks inside the machine
     @Override
     public void setInventorySlotContents(int slot, ItemStack contents) {
         super.setInventorySlotContents(slot, contents);
@@ -152,11 +168,12 @@ public abstract class TileMachine extends TilePowered implements IMachineInfo {
     protected final void stopOperation(){
         remaining = 0;
         isActive = false;
+        recipeCode = -1;
         operationStopped();
         syncMachine(true);
-        recipeCode = -1;
     }
 
+    //If someone changed a slot, should I worry?
     protected boolean shouldStopIfChangeSlot(int slotIndex, int mode) {
         return invHelper.isInput(slotIndex);
     }
@@ -175,7 +192,7 @@ public abstract class TileMachine extends TilePowered implements IMachineInfo {
 
     @Override
     public int getInfoMaxEnergyPerTick() {
-        return getInfoEnergyPerTick();
+        return storage.getMaxReceive();
     }
 
     @Override
@@ -183,7 +200,6 @@ public abstract class TileMachine extends TilePowered implements IMachineInfo {
         if (!isActive) return 0;
         return calculateEnergy();
     }
-
     @Override
     public int getInfoTimePercentage() {
         if (!isActive) return 0;
@@ -193,6 +209,25 @@ public abstract class TileMachine extends TilePowered implements IMachineInfo {
     @Override
     public boolean isActive() {
         return isActive;
+    }
+
+
+    ////DATA SYNC
+    @Override
+    public boolean receiveClientEvent(int action, int value) {
+        switch (action) {
+            case 1:
+                recipeCode = value;
+                return true;
+            case 2:
+                remaining = value;
+                return true;
+            case 3:
+                operationTime = value;
+                return true;
+            default:
+                return super.receiveClientEvent(action, value);
+        }
     }
 
     @Override
@@ -217,19 +252,13 @@ public abstract class TileMachine extends TilePowered implements IMachineInfo {
     @Override
     public void fromBytes(ByteBuf buf) {
         super.fromBytes(buf);
-        this.remaining = buf.readInt();
         this.isActive = buf.readBoolean();
-        this.operationTime = buf.readInt();
-        this.recipeCode = buf.readInt();
     }
 
     @Override
     public void toBytes(ByteBuf buf) {
         super.toBytes(buf);
-        buf.writeInt(this.remaining);
         buf.writeBoolean(this.isActive);
-        buf.writeInt(this.operationTime);
-        buf.writeInt(this.recipeCode);
     }
 }
 
