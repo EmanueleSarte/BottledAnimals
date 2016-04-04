@@ -1,4 +1,4 @@
-package com.ermans.bottledanimals.block.machine;
+package com.ermans.bottledanimals.block;
 
 
 import com.ermans.repackage.cofh.lib.gui.container.ContainerBase;

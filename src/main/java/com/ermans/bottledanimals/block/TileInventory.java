@@ -1,4 +1,4 @@
-package com.ermans.bottledanimals.block.machine;
+package com.ermans.bottledanimals.block;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;

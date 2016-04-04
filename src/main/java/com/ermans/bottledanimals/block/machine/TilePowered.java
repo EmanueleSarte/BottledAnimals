@@ -4,9 +4,7 @@ import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyReceiver;
 import cofh.api.energy.IEnergyStorage;
 import com.ermans.api.IEnergyBA;
-import com.ermans.bottledanimals.helper.TargetPointHelper;
-import com.ermans.bottledanimals.network.PacketHandler;
-import com.ermans.bottledanimals.network.message.MessageEnergy;
+import com.ermans.bottledanimals.block.TileInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fml.relauncher.Side;
@@ -32,12 +30,7 @@ public abstract class TilePowered extends TileInventory implements IEnergyReceiv
 
     //We don't want to force tiles who implements this class to have a storage, use initTile to setup the storage...
     protected EnergyStorage storage;
-    //...but you need to tell us when you want to. This field doesn't disable the storage, just don't allow machines/wires to connect this tileentity
-    //You shouldn't switch that, just set on init, otherwise is a your problem
-    protected boolean activeEnergyStorage = true;
     protected int RFTick;
-
-    private boolean doSync;
 
 
     @Override
@@ -47,18 +40,8 @@ public abstract class TilePowered extends TileInventory implements IEnergyReceiv
         this.RFTick = DF_ENERGY_CAPACITY / 3200; //default: 10RF/t
     }
 
-
-
-    @Override
-    public void update() {
-        if (!worldObj.isRemote && doSync) {
-            doSync = false;
-            PacketHandler.INSTANCE.sendToAllAround(new MessageEnergy(getPos().getX(), getPos().getY(), getPos().getZ(), this.storage.getEnergyStored()), TargetPointHelper.getTargetPoint(this));
-        }
-    }
-
-    private void markDirtyEnergy(){
-        doSync = true;
+    private void syncEnergy(){
+        worldObj.addBlockEvent(pos,getBlockType(), 100, storage.getEnergyStored());
     }
 
     @Override
@@ -72,9 +55,6 @@ public abstract class TilePowered extends TileInventory implements IEnergyReceiv
         return this.storage;
     }
 
-    public int getMaxReceiveEnergy(){
-        return storage.getMaxReceive();
-    }
 
 
     @SideOnly(Side.CLIENT)
@@ -85,7 +65,7 @@ public abstract class TilePowered extends TileInventory implements IEnergyReceiv
 
     protected void modifyEnergyStored(int energy) {
         if (!worldObj.isRemote && energy != 0) {
-            markDirtyEnergy();
+            syncEnergy();
         }
         storage.modifyEnergyStored(energy);
     }
@@ -95,14 +75,14 @@ public abstract class TilePowered extends TileInventory implements IEnergyReceiv
     public int receiveEnergy(EnumFacing from, int maxReceive, boolean simulate) {
         int energy = storage.receiveEnergy(maxReceive, simulate);
         if (!worldObj.isRemote && energy > 0 && !simulate) {
-            markDirtyEnergy();
+            syncEnergy();
         }
         return energy;
     }
 
     @Override
     public boolean canConnectEnergy(EnumFacing from) {
-        return activeEnergyStorage && DF_VALID_SIDE[from.ordinal()][facing.ordinal()];
+        return DF_VALID_SIDE[from.ordinal()][facing.ordinal()];
     }
 
     @Override
@@ -116,21 +96,26 @@ public abstract class TilePowered extends TileInventory implements IEnergyReceiv
     }
 
 
+    @Override
+    public boolean receiveClientEvent(int id, int value) {
+        if (id == 100){
+            storage.setEnergyStored(value);
+            return true;
+        }
+        return super.receiveClientEvent(id, value);
+    }
+
     //NBT
     @Override
     public void readFromNBT(NBTTagCompound nbtTagCompound) {
         super.readFromNBT(nbtTagCompound);
-        activeEnergyStorage = nbtTagCompound.getBoolean("activeEnergy");
-        //Idk if this can cause problems
-        if (activeEnergyStorage) storage.readFromNBT(nbtTagCompound);
+        storage.readFromNBT(nbtTagCompound);
 
     }
 
     @Override
     public void writeToNBT(NBTTagCompound nbtTagCompound) {
         super.writeToNBT(nbtTagCompound);
-        nbtTagCompound.setBoolean("activeEnergy", activeEnergyStorage);
-        //Idk if this can cause problems
-        if (activeEnergyStorage) storage.writeToNBT(nbtTagCompound);
+        storage.writeToNBT(nbtTagCompound);
     }
 }
