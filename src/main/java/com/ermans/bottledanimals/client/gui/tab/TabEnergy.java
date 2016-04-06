@@ -18,7 +18,7 @@ public abstract class TabEnergy extends TabBase {
         this.textColor = 0;
         this.backgroundColor = ColorHelper.rgb(34, 167, 240);
 
-        this.maxHeight = 67;
+        this.maxHeight = 72;
         this.maxWidth = 80;
 
     }

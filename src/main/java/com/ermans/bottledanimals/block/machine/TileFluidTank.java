@@ -39,20 +39,19 @@ public abstract class TileFluidTank extends TileMachine implements IFluidHandler
     @Override
     public void update() {
         super.update();
-        if (!worldObj.isRemote) {
-            if (transferFluid && checkTick(20)) {
-                if (!isTankEmpty() && drainSlotInput != -1 && drainSlotOutput != -1) {
-                    drainFluidIntoItems(drainSlotInput, drainSlotOutput);
-                }
-                if (!isTankFull() && fillSlot != -1) {
-                    fillFluidFromItems(fillSlot);
-                }
+        if (worldObj.isRemote) {
+            return;
+        }
+
+        if (transferFluid && checkTick(20)) {
+            if (!isTankEmpty() && drainSlotInput != -1 && drainSlotOutput != -1) {
+                drainFluidIntoItems(drainSlotInput, drainSlotOutput);
+            }
+            if (!isTankFull() && fillSlot != -1) {
+                fillFluidFromItems(fillSlot);
             }
         }
-    }
 
-    protected void syncFluid() {
-        worldObj.addBlockEvent(pos, getBlockType(), 110, tank.getFluidAmount());
     }
 
     protected void modifyFluidAmount(Fluid fluid, int amount) {
@@ -60,9 +59,6 @@ public abstract class TileFluidTank extends TileMachine implements IFluidHandler
             tank.fill(new FluidStack(fluid, amount), true);
         } else if (amount < 0) {
             tank.drain(-1 * amount, true);
-        }
-        if (!worldObj.isRemote && amount != 0) {
-            syncFluid();
         }
     }
 
@@ -87,7 +83,6 @@ public abstract class TileFluidTank extends TileMachine implements IFluidHandler
                     modifyFluidAmount(ModFluids.food, MAX_TRANSFER_RATE);
                     decrStackSize(slot, 64);
                     increaseStackSize(slot, new ItemStack(Items.bucket));
-
                 }
             }
         }
@@ -130,7 +125,7 @@ public abstract class TileFluidTank extends TileMachine implements IFluidHandler
     @Override
     public boolean handleRightClick(EntityPlayer player, ItemStack itemStack, float xClicked, float yClicked, float zClicked) {
         if (transferFluid && !isTankEmpty() && drainSlotInput != -1) {
-            if (itemStack != null && itemStack.getItem() == Items.bucket && tank.getFluidAmount() >= FluidContainerRegistry.BUCKET_VOLUME) {
+            if (itemStack != null && itemStack.getItem() == Items.bucket && tank.getFluidAmount() >= MAX_TRANSFER_RATE) {
                 ItemStack filledContainer = FluidHelper.getFluidContainerData(fluidTile, itemStack).filledContainer.copy();
                 filledContainer.stackSize = 1;
                 if (itemStack.stackSize == 1) {
@@ -139,7 +134,7 @@ public abstract class TileFluidTank extends TileMachine implements IFluidHandler
                     ItemHelper.decreaseStackSize(itemStack, 1);
                     ItemHelper.addItemStackToPlayer(player, filledContainer, true);
                 }
-                modifyFluidAmount(fluidTile, -1 * FluidContainerRegistry.BUCKET_VOLUME);
+                modifyFluidAmount(fluidTile, -1 * MAX_TRANSFER_RATE);
                 player.inventoryContainer.detectAndSendChanges();
                 return true;
             }
@@ -153,14 +148,7 @@ public abstract class TileFluidTank extends TileMachine implements IFluidHandler
         if (resource == null || !canFill(from, resource.getFluid())) {
             return 0;
         }
-
-        int res = tank.fill(resource, doFill);
-
-        if (!worldObj.isRemote && res > 0 && doFill) {
-            syncFluid();
-        }
-
-        return res;
+        return tank.fill(resource, doFill);
     }
 
     @Override
@@ -169,24 +157,16 @@ public abstract class TileFluidTank extends TileMachine implements IFluidHandler
             return null;
         }
 
-        FluidStack res = tank.drain(resource.amount, doDrain);
-        if (!worldObj.isRemote && doDrain && res.amount > 0) {
-            syncFluid();
-        }
-        return res;
+        return tank.drain(resource.amount, doDrain);
     }
 
     @Override
     public FluidStack drain(EnumFacing from, int maxDrain, boolean doDrain) {
-
         if (tank.getFluid() == null || !canDrain(from, this.fluidTile)) {
             return null;
         }
-        FluidStack res = tank.drain(maxDrain, doDrain);
-        if (!worldObj.isRemote && doDrain && res.amount > 0) {
-            syncFluid();
-        }
-        return res;
+
+        return tank.drain(maxDrain, doDrain);
     }
 
     public String getFluidName() {
@@ -227,13 +207,27 @@ public abstract class TileFluidTank extends TileMachine implements IFluidHandler
     }
 
 
+    //////////////////////DATA SYNC/////////////////////////
     @Override
-    public boolean receiveClientEvent(int action, int value) {
-        if (action == 110) {
-            tank.setFluid(new FluidStack(fluidTile, value));
-            return true;
+    public int getField(int id) {
+        if (id == 110) {
+            return tank.getFluidAmount();
         }
-        return super.receiveClientEvent(action, value);
+        return super.getField(id);
+    }
+
+    @Override
+    public void setField(int id, int value) {
+        if (id == 110) {
+            tank.setFluid(new FluidStack(fluidTile, value));
+            return;
+        }
+        super.setField(id, value);
+    }
+
+    @Override
+    public int getFieldCount() {
+        return super.getFieldCount() + 1;
     }
 
     @Override

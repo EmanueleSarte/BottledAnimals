@@ -37,19 +37,7 @@ public abstract class TileEnergyProvider extends TileInventory implements IEnerg
     }
 
 
-    @Override
-    public void update() {
-        super.update();
-    }
-
-    protected void syncEnergy() {
-        worldObj.addBlockEvent(pos, getBlockType(), 100, storage.getEnergyStored());
-    }
-
     protected void modifyEnergyStored(int energy) {
-        if (!worldObj.isRemote && energy != 0) {
-            syncEnergy();
-        }
         storage.modifyEnergyStored(energy);
     }
 
@@ -65,9 +53,6 @@ public abstract class TileEnergyProvider extends TileInventory implements IEnerg
 
     @Override
     public int extractEnergy(EnumFacing from, int maxExtract, boolean simulate) {
-        if (!worldObj.isRemote && maxExtract > 0 && !simulate) {
-            syncEnergy();
-        }
         return storage.extractEnergy(maxExtract, simulate);
     }
 
@@ -82,16 +67,6 @@ public abstract class TileEnergyProvider extends TileInventory implements IEnerg
     }
 
 
-
-    @Override
-    public boolean receiveClientEvent(int id, int value) {
-        if (id == 100){
-            storage.setEnergyStored(value);
-            return true;
-        }
-        return super.receiveClientEvent(id, value);
-    }
-
     @Override
     public void readFromNBT(NBTTagCompound nbt) {
         super.readFromNBT(nbt);
@@ -104,9 +79,25 @@ public abstract class TileEnergyProvider extends TileInventory implements IEnerg
         storage.writeToNBT(nbt);
     }
 
+    @Override
+    public int getField(int id) {
+        if (id == 100){
+            return storage.getEnergyStored();
+        }
+        return super.getField(id);
+    }
 
     @Override
-    public void setEnergyStored(int amount) {
-        storage.setEnergyStored(amount);
+    public void setField(int id, int value) {
+        if (id == 100){
+            storage.setEnergyStored(value);
+            return;
+        }
+        super.setField(id, value);
+    }
+
+    @Override
+    public int getFieldCount() {
+        return super.getFieldCount() + 1;
     }
 }

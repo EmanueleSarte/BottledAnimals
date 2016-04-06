@@ -33,11 +33,7 @@ public abstract class TileBottledAnimals extends TileBase implements IRedstoneCo
     }
 
     public void onNeighborChange() {
-//        boolean wasPowered = this.isRedstonePowered;
         this.isRedstonePowered = worldObj.isBlockIndirectlyGettingPowered(getPos()) > 0;
-//        if (wasPowered != this.isRedstonePowered && !rsControlMode.isDisabled()) {
-//            // TODO: 22/01/2016 SYNC CLIENT?
-//        }
     }
 
     //RSControl Interface

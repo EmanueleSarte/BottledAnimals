@@ -22,7 +22,7 @@ public class GuiDropExtractor extends GuiBaseAdv {
         super.initGui();
         addTab(new TabInfo(this, TabBase.LEFT, "Get Drop from a Digitalized Animal"));
 
-        addElement(new ElementEnergyStored(this, tile.getEnergyStorage()));
+        addElement(new ElementEnergyStored(this, tile.getEnergyStorage()).setAlwaysShow(true));
 
         this.speed = ((ElementDualScaled) addElement(new ElementDualScaled(this, 77, 29).setMode(1).setSize(26, 16).setTexture(Textures.Gui.Element.PROGRESS_EXTRACT, 64, 16)));
     }

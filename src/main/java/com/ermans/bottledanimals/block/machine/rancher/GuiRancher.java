@@ -26,8 +26,8 @@ public class GuiRancher extends GuiBaseAdv {
         super.initGui();
         addTab(new TabInfo(this, TabBase.LEFT, "Ranch the animal to get its products"));
 
-        addElement(new ElementEnergyStored(this, tile.getEnergyStorage()));
-        addElement(new ElementFluidTank(this, tile.getFluidTank()).setGauge(1));
+        addElement(new ElementEnergyStored(this, tile.getEnergyStorage()).setAlwaysShow(true));
+        addElement(new ElementFluidTank(this, tile.getFluidTank()).setGauge(1).setAlwaysShow(true));
 
         this.speedShears = ((ElementDualScaled) addElement(new ElementDualScaled(this, 69, 40).setMode(0).setSize(16, 12).setTexture(Textures.Gui.Element.PROGRESS_SHEARS, 32, 16)));
         this.speedBucket = ((ElementDualScaled) addElement(new ElementDualScaled(this, 69, 40).setMode(0).setSize(16, 13).setTexture(Textures.Gui.Element.PROGRESS_MILK, 32, 16)));

@@ -26,7 +26,7 @@ public class GuiGrowthAccelerator extends GuiBaseAdv {
         super.initGui();
         addTab(new TabInfo(this, TabBase.LEFT, "Turn a baby animals into full sized animals"));
 
-        addElement(new ElementEnergyStored(this, tile.getEnergyStorage()));
+        addElement(new ElementEnergyStored(this, tile.getEnergyStorage()).setAlwaysShow(true));
 
         this.speed = ((ElementDualScaled) addElement(new ElementDualScaled(this, 73, 38).setMode(1).setSize(24, 16).setTexture(Textures.Gui.Element.PROGRESS_ARROW, 64, 16)));
         this.mult = ((ElementDualScaled) addElement(new ElementDualScaled(this, 45, 59).setMode(1).setSize(15, 10).setTexture(Textures.Gui.Element.PROGRESS_MULT, 32, 16).setTooltipText(Arrays.asList("Speed"))));

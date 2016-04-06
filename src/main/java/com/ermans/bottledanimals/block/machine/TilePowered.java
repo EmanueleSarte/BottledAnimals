@@ -40,44 +40,28 @@ public abstract class TilePowered extends TileInventory implements IEnergyReceiv
         this.RFTick = DF_ENERGY_CAPACITY / 3200; //default: 10RF/t
     }
 
-    private void syncEnergy(){
-        worldObj.addBlockEvent(pos,getBlockType(), 100, storage.getEnergyStored());
-    }
-
-    @Override
-    public void setEnergyStored(int amount) {
-        this.storage.setEnergyStored(amount);
-    }
-
 
     @Override
     public IEnergyStorage getEnergyStorage() {
         return this.storage;
     }
 
+    protected void modifyEnergyStored(int energy) {
+        storage.modifyEnergyStored(energy);
+    }
 
 
+    ///////////////////////CLIENT////////////////////////////
     @SideOnly(Side.CLIENT)
     public int getScaledEnergyStored(int scale) {
         return getEnergyStored(null) * scale / getMaxEnergyStored(null);
     }
 
 
-    protected void modifyEnergyStored(int energy) {
-        if (!worldObj.isRemote && energy != 0) {
-            syncEnergy();
-        }
-        storage.modifyEnergyStored(energy);
-    }
-
-    ////IEnergyReceiver///
+    //////////////////////IENERGYRECEIVER/////////////////////
     @Override
     public int receiveEnergy(EnumFacing from, int maxReceive, boolean simulate) {
-        int energy = storage.receiveEnergy(maxReceive, simulate);
-        if (!worldObj.isRemote && energy > 0 && !simulate) {
-            syncEnergy();
-        }
-        return energy;
+        return  storage.receiveEnergy(maxReceive, simulate);
     }
 
     @Override
@@ -96,16 +80,29 @@ public abstract class TilePowered extends TileInventory implements IEnergyReceiv
     }
 
 
+    ////////////////////DATA SYNC/////////////////////////////
     @Override
-    public boolean receiveClientEvent(int id, int value) {
+    public int getField(int id) {
         if (id == 100){
-            storage.setEnergyStored(value);
-            return true;
+            return storage.getEnergyStored();
         }
-        return super.receiveClientEvent(id, value);
+        return super.getField(id);
     }
 
-    //NBT
+    @Override
+    public void setField(int id, int value) {
+        if (id == 100){
+            storage.setEnergyStored(value);
+            return;
+        }
+        super.setField(id, value);
+    }
+
+    @Override
+    public int getFieldCount() {
+        return super.getFieldCount() + 1;
+    }
+
     @Override
     public void readFromNBT(NBTTagCompound nbtTagCompound) {
         super.readFromNBT(nbtTagCompound);

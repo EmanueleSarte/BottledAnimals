@@ -32,6 +32,10 @@ public class TabRedstone extends TabBase {
         buttonRedstones[1] = new ElementButtonRedstone(gui, 30, 20, 16, 16, 0, 16, 16, 16, 32, 16, Textures.WIDGET_TEXTURE_STRING).setTabRedstone(this).setType(IRedstoneControl.ControlMode.LOW);
         buttonRedstones[2] = new ElementButtonRedstone(gui, 50, 20, 16, 16, 0, 32, 16, 32, 32, 32, Textures.WIDGET_TEXTURE_STRING).setTabRedstone(this).setType(IRedstoneControl.ControlMode.DISABLED);
 
+        buttonRedstones[0].setVisible(false);
+        buttonRedstones[1].setVisible(false);
+        buttonRedstones[2].setVisible(false);
+
         addElement(buttonRedstones[0].setToolTip("Active with Energy"));
         addElement(buttonRedstones[1].setToolTip("Active without Energy"));
         addElement(buttonRedstones[2].setToolTip("Always Active"));

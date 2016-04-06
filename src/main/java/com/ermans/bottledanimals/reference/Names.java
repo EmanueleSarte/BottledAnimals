@@ -19,7 +19,8 @@ public class Names {
         public static final String RANCHER_GEAR = "rancherGear";
         public static final String SPAWN_EGG_FRAME = "spawnEggFrame";
 
-        public static final String BUCKET_SUFFIX = "Bucket";
+        public static final String MILK_BUCKET = "milkBucket";
+        public static final String FOOD_BUCKET = "foodBucket";
     }
 
     public static final class Machines {

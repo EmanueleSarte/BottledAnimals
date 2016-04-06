@@ -1,12 +1,12 @@
 package com.ermans.bottledanimals.init;
 
-import com.ermans.bottledanimals.block.FluidBlockBA;
-import com.ermans.bottledanimals.item.ItemBucketBA;
 import com.ermans.bottledanimals.item.ItemModIcon;
+import com.ermans.bottledanimals.item.bucket.ItemBucketBA;
+import com.ermans.bottledanimals.item.bucket.ItemBucketFood;
+import com.ermans.bottledanimals.item.bucket.ItemBucketMilk;
 import com.ermans.bottledanimals.item.simple.*;
 import com.ermans.bottledanimals.reference.Names;
 import net.minecraft.item.Item;
-import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import java.util.HashMap;
@@ -25,7 +25,7 @@ public class ModItems {
     public static ItemRancherGear itemRancherGear;
     public static ItemBucketBA milkBucket;
     public static ItemSpawnEggFrame itemSpawnEggFrame;
-    public static ItemBucketBA foodBucket;
+    public static ItemBucketFood foodBucket;
 
     public static Map<String, Item> items = new HashMap<String, Item>();
 
@@ -45,8 +45,8 @@ public class ModItems {
         itemModIcon = (ItemModIcon) registerItem(new ItemModIcon(), "modIcon");
 
 
-        milkBucket = registerBucket(ModBlocks.milkBlock, ModFluids.milk);
-        foodBucket = registerBucket(ModBlocks.foodBlock, ModFluids.food);
+        milkBucket = (ItemBucketMilk) registerItem(new ItemBucketMilk(),Names.Items.MILK_BUCKET);
+        foodBucket = (ItemBucketFood) registerItem(new ItemBucketFood(), Names.Items.FOOD_BUCKET);
 
     }
 
@@ -56,11 +56,5 @@ public class ModItems {
         return item;
     }
 
-    private static ItemBucketBA registerBucket(FluidBlockBA fluidBlock, Fluid fluid) {
-        ItemBucketBA bucket = ItemBucketBA.create(fluidBlock, fluid.getName() + Names.Items.BUCKET_SUFFIX);
-        items.put(fluid.getName() + Names.Items.BUCKET_SUFFIX, bucket);
-        GameRegistry.registerItem(bucket, fluid.getName() + Names.Items.BUCKET_SUFFIX);
-        return bucket;
-    }
 }
 

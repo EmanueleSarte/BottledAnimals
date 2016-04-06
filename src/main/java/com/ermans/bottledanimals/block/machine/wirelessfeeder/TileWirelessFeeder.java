@@ -22,8 +22,8 @@ public class TileWirelessFeeder extends TileFluidTank {
     private static final int TANK_CAPACITY = 10 * FluidContainerRegistry.BUCKET_VOLUME;
     private static final double MULT = 1.5;
 
-    private static final int COST_FOR_FOOD = (int) (80 * MULT);
-    private static final int COST_FOR_HEAL = (int) (40 * MULT);
+    public static final int COST_FOR_FOOD = (int) (80 * MULT);
+    public static final int COST_FOR_HEAL = (int) (40 * MULT);
     private static final int RF_FOR_FOOD = (int) (160 * MULT);
     private static final int RF_FOR_HEAL = (int) (80 * MULT);
 

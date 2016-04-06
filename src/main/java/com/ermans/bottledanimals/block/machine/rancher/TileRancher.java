@@ -38,8 +38,8 @@ public class TileRancher extends TileFluidTank {
         this.fluidTile = ModFluids.milk;
 
         this.transferFluid = true;
-        this.drainSlotInput = 2;
-        this.drainSlotOutput = 4;
+        this.drainSlotInput = fluidInput;
+        this.drainSlotOutput = fluidOutput;
     }
 
 

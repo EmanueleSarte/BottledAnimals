@@ -6,7 +6,6 @@ import com.ermans.bottledanimals.recipe.GrowthAcceleratorManager;
 import com.ermans.bottledanimals.recipe.IRecipe;
 import com.ermans.bottledanimals.reference.Animals;
 import com.ermans.repackage.cofh.lib.util.helpers.MathHelper;
-import io.netty.buffer.ByteBuf;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.relauncher.Side;
@@ -144,16 +143,25 @@ public class TileGrowthAccelerator extends TileMachine {
     }
 
     @Override
-    public void fromBytes(ByteBuf buf) {
-        super.fromBytes(buf);
-        multLevel = buf.readByte();
-
+    public int getField(int id) {
+        if (id == 10){
+            return multLevel;
+        }
+        return super.getField(id);
     }
 
     @Override
-    public void toBytes(ByteBuf buf) {
-        super.toBytes(buf);
-        buf.writeByte(multLevel);
+    public void setField(int id, int value) {
+        if (id == 10){
+            multLevel = (byte) value;
+            return;
+        }
+        super.setField(id, value);
+    }
+
+    @Override
+    public int getFieldCount() {
+        return super.getFieldCount() + 1;
     }
 
     @Override

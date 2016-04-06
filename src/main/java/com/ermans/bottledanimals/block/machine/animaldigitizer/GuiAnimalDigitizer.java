@@ -22,7 +22,7 @@ public class GuiAnimalDigitizer extends GuiBaseAdv{
     public void initGui() {
         super.initGui();
         addTab(new TabInfo(this, TabBase.LEFT, "Convert Bottled Animals to Digitalized Animals"));
-        addElement(new ElementEnergyStored(this, tile.getEnergyStorage()));
+        addElement(new ElementEnergyStored(this, tile.getEnergyStorage()).setAlwaysShow(true));
         this.speed = ((ElementDualScaled) addElement(new ElementDualScaled(this, 80, 30).setMode(1).setSize(24, 16).setTexture(Textures.Gui.Element.PROGRESS_ARROW, 64, 16)));
     }
 

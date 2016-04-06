@@ -24,8 +24,8 @@ public class GuiFoodCrusher extends GuiBaseAdv {
         super.initGui();
         addTab(new TabInfo(this, TabBase.LEFT, "Breaks up the food until it becomes liquid"));
 
-        addElement(new ElementEnergyStored(this, tile.getEnergyStorage()));
-        addElement(new ElementFluidTank(this, tile.getFluidTank()).setGauge(1));
+        addElement(new ElementEnergyStored(this, tile.getEnergyStorage()).setAlwaysShow(true));
+        addElement(new ElementFluidTank(this, tile.getFluidTank()).setGauge(1).setAlwaysShow(true));
 
         this.speed = ((ElementDualScaled) addElement(new ElementDualScaled(this, 61, 41).setMode(0).setSize(16, 16).setTexture(Textures.Gui.Element.PROGRESS_SAW, 32, 16)));
     }

@@ -23,7 +23,7 @@ public class GuiAnimalMaterializer extends GuiBaseAdv{
     public void initGui() {
         super.initGui();
         addTab(new TabInfo(this, TabBase.LEFT, "Materializes digitalized Animals into Spawn Eggs"));
-        addElement(new ElementEnergyStored(this, tile.getEnergyStorage()));
+        addElement(new ElementEnergyStored(this, tile.getEnergyStorage()).setAlwaysShow(true));
         this.speed = ((ElementDualScaled) addElement(new ElementDualScaled(this, 97, 36).setMode(1).setSize(24, 16).setTexture(Textures.Gui.Element.PROGRESS_ARROW, 64, 16)));
     }
 

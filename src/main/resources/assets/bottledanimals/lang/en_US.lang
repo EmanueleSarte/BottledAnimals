@@ -8,7 +8,7 @@ item.bottledanimals:blankPattern.name=Blank Pattern
 item.bottledanimals:animalCircuit.name=Animal Circuit
 item.bottledanimals:brokenPattern.name=Broken Pattern
 item.bottledanimals:squidFood.name=Squid Food
-item.bottledanimals:bamilkBucket.name=Milk Bucket
+item.bottledanimals:milkBucket.name=Milk Bucket
 item.bottledanimals:foodBucket.name=Food Bucket
 item.bottledanimals:rancherGear.name=Gear
 item.bottledanimals:spawnEggFrame.name=Spawn Egg Frame
@@ -49,7 +49,7 @@ item.bottledanimals:digitalizedBabyAnimal.ocelot.name=Digitalized Baby Ocelot
 
 
 #Machine
-tile.bottledanimals:animalDigitizer.name=Animal Digitizer
+tile.bottledanimals:digitizer.name=Animal Digitizer
 tile.bottledanimals:breeder.name=Animal Breeder
 tile.bottledanimals:growthAccelerator.name=Growth Accelerator
 tile.bottledanimals:dropExtractor.name=Drop Extractor
@@ -60,14 +60,12 @@ tile.bottledanimals:animalMaterializer.name=Animal Materializer
 tile.bottledanimals:basicGenerator.name=Basic Generator
 
 #Block
-block.bottledanimals:machineFrame.name=Machine Frame
+tile.bottledanimals:machineFrame.name=Machine Frame
 
 
 #Fluid
-fluid.bottledanimals.food=Liquid Food
-fluid.bottledanimals.BAmilk=Milk
-tile.food.name=Liquid Food
-tile.bamilk.name=Milk
+tile.bottledanimals:bamilk.name=Food Fluid
+tile.bottledanimals:bamilk.name=Milk Fluid
 
 
 

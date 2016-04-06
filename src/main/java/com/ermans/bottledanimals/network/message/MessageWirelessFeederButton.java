@@ -48,8 +48,9 @@ public class MessageWirelessFeederButton implements IMessage {
             if (entity == null || !(entity instanceof TileWirelessFeeder)) {
                 return null;
             }
-            ((TileWirelessFeeder) entity).setMode(TileWirelessFeeder.Mode.values()[message.buttonClicked]);
-
+            if (((TileWirelessFeeder) entity).canPlayerAccess(ctx.getServerHandler().playerEntity)) {
+                ((TileWirelessFeeder) entity).setMode(TileWirelessFeeder.Mode.values()[message.buttonClicked]);
+            }
             return null;
         }
     }

@@ -1,13 +1,13 @@
 package com.ermans.bottledanimals.block.machine.foodcrusher;
 
-import com.ermans.bottledanimals.block.ContainerTile;
+import com.ermans.bottledanimals.block.machine.ContainerFluid;
 import com.ermans.bottledanimals.client.container.slot.SlotValidatorItemFluidInput;
 import com.ermans.repackage.cofh.lib.gui.slot.SlotAcceptValid;
 import com.ermans.repackage.cofh.lib.gui.slot.SlotRemoveOnly;
 import com.ermans.repackage.cofh.lib.gui.slot.SlotValidated;
 import net.minecraft.entity.player.InventoryPlayer;
 
-public class ContainerFoodCrusher extends ContainerTile {
+public class ContainerFoodCrusher extends ContainerFluid {
 
 
     public ContainerFoodCrusher(InventoryPlayer invPlayer, TileFoodCrusher entity) {

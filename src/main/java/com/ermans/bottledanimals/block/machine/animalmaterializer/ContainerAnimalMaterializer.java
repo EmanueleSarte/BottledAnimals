@@ -1,24 +1,20 @@
 package com.ermans.bottledanimals.block.machine.animalmaterializer;
 
 
-import com.ermans.bottledanimals.block.ContainerTile;
+import com.ermans.bottledanimals.block.machine.ContainerMachine;
 import com.ermans.repackage.cofh.lib.gui.slot.SlotAcceptValid;
 import com.ermans.repackage.cofh.lib.gui.slot.SlotRemoveOnly;
 import net.minecraft.entity.player.InventoryPlayer;
 
-public class ContainerAnimalMaterializer extends ContainerTile{
+public class ContainerAnimalMaterializer extends ContainerMachine{
 
-
-    private TileAnimalMaterializer tileAnimalMaterializer;
 
     public ContainerAnimalMaterializer(InventoryPlayer invPlayer, TileAnimalMaterializer entity) {
         super(invPlayer, entity);
 
-        this.tileAnimalMaterializer = entity;
-
-        addSlotToContainer(new SlotAcceptValid(tileAnimalMaterializer, 0, 46, 36));
-        addSlotToContainer(new SlotAcceptValid(tileAnimalMaterializer, 1, 68, 36));
-        addSlotToContainer(new SlotRemoveOnly(tileAnimalMaterializer, 2, 134, 36));
+        addSlotToContainer(new SlotAcceptValid(entity, 0, 46, 36));
+        addSlotToContainer(new SlotAcceptValid(entity, 1, 68, 36));
+        addSlotToContainer(new SlotRemoveOnly(entity, 2, 134, 36));
     }
 
 }

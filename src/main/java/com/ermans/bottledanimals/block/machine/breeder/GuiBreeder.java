@@ -23,7 +23,7 @@ public class GuiBreeder extends GuiBaseAdv {
         super.initGui();
 
         addTab(new TabInfo(this, TabBase.LEFT, "Get a baby digitalized animals from two digitalized parent"));
-        addElement(new ElementEnergyStored(this, tile.getEnergyStorage()));
+        addElement(new ElementEnergyStored(this, tile.getEnergyStorage()).setAlwaysShow(true));
         this.speed = ((ElementDualScaled) addElement(new ElementDualScaled(this, 82, 27).setMode(1).setSize(31, 16).setTexture(Textures.Gui.Element.PROGRESS_ARROW_HEART, 64, 16)));
     }
 

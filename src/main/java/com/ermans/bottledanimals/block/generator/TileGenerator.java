@@ -47,9 +47,6 @@ public abstract class TileGenerator extends TileEnergyProvider implements IEnerg
 
         boolean sendUpdate = false;
         boolean hasChanged = isActive;
-        STATE stateChanged = state;
-        int actualRateVar = actualRate;
-        int lastEnergyOutVar = lastEnergyOut;
 
         if (!worldObj.isRemote) {
 
@@ -138,16 +135,8 @@ public abstract class TileGenerator extends TileEnergyProvider implements IEnerg
             }
         }
 
-        if (isActive && checkTick(4) || sendUpdate || actualRateVar != actualRate || stateChanged != state || lastEnergyOut != lastEnergyOutVar) {
-            this.worldObj.addBlockEvent(pos, getBlockType(), 1, actualRate);
-            this.worldObj.addBlockEvent(pos, getBlockType(), 2, state.ordinal());
-            this.worldObj.addBlockEvent(pos, getBlockType(), 3, lastEnergyOut);
-            this.worldObj.addBlockEvent(pos, getBlockType(), 4, remaining);
-        }
-
         if (sendUpdate) {
             syncMachine(hasChanged != isActive);
-            this.worldObj.addBlockEvent(pos, getBlockType(), 5, totalFuel);
         }
     }
 
@@ -228,28 +217,48 @@ public abstract class TileGenerator extends TileEnergyProvider implements IEnerg
     }
 
 
-    ////DATA SYNC
     @Override
-    public boolean receiveClientEvent(int action, int value) {
-        switch (action) {
+    public int getField(int id) {
+        switch (id) {
+            case 1:
+                return actualRate;
+            case 2:
+                return state.ordinal();
+            case 3:
+                return lastEnergyOut;
+            case 4:
+                return remaining;
+            case 5:
+                return totalFuel;
+        }
+        return super.getField(id);
+    }
+
+    @Override
+    public void setField(int id, int value) {
+        switch (id) {
             case 1:
                 actualRate = value;
-                return true;
+                return;
             case 2:
                 state = STATE.values()[value];
-                return true;
+                return;
             case 3:
                 lastEnergyOut = value;
-                return true;
+                return;
             case 4:
                 remaining = value;
-                return true;
+                return;
             case 5:
                 totalFuel = value;
-                return true;
-            default:
-                return super.receiveClientEvent(action, value);
+                return;
         }
+        super.setField(id, value);
+    }
+
+    @Override
+    public int getFieldCount() {
+        return super.getFieldCount() + 5;
     }
 
     @Override

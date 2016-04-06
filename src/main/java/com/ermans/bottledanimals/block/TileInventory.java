@@ -35,13 +35,7 @@ public abstract class TileInventory extends TileReconfigurable implements ISided
 
     @Override
     public boolean isUseableByPlayer(EntityPlayer player) {
-        if (canPlayerAccess(player)) {
-            if (this.worldObj.getTileEntity(getPos()) != this) {
-                return false;
-            }
-            return player.getDistanceSq(getPos().getX() + 0.5D, getPos().getY() + 0.5D, getPos().getZ() + 0.5D) <= 64.0D;
-        }
-        return false;
+        return canPlayerAccess(player);
     }
 
 

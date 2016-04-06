@@ -84,7 +84,6 @@ public abstract class BlockTile extends BlockBase implements IGuiHandler, ITileE
     }
 
 
-
     @Override
     public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing blockFaceClickedOn, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
         EnumFacing enumfacing = (placer == null) ? EnumFacing.NORTH : EnumFacing.fromAngle(placer.rotationYaw).getOpposite();
@@ -111,17 +110,20 @@ public abstract class BlockTile extends BlockBase implements IGuiHandler, ITileE
 
             if (tileEntity != null) {
                 if (tileEntity instanceof TileBase) {
-
                     if (((TileBase) tileEntity).handleRightClick(player, equipped, hitX, hitY, hitZ)) {
                         return true;
                     }
-                }
-                if (player.isSneaking()) {
+                    if (player.isSneaking()) {
+                        return false;
+                    }
+                    if (((TileBase) tileEntity).canPlayerAccess(player)) {
+                        openGui(world, pos.getX(), pos.getY(), pos.getZ(), player);
+                        return true;
+                    }
+                    return false;
+                } else {
                     return false;
                 }
-                openGui(world, pos.getX(), pos.getY(), pos.getZ(), player);
-                return true;
-
             }
         }
         return true;

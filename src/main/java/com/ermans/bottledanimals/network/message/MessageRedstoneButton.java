@@ -49,7 +49,9 @@ public class MessageRedstoneButton implements IMessage {
             if (entity == null || !(entity instanceof TileBottledAnimals)) {
                 return null;
             }
-            ((TileBottledAnimals) entity).setControl(IRedstoneControl.ControlMode.values()[message.state]);
+            if (((TileBottledAnimals) entity).canPlayerAccess(ctx.getServerHandler().playerEntity)) {
+                ((TileBottledAnimals) entity).setControl(IRedstoneControl.ControlMode.values()[message.state]);
+            }
             return null;
         }
     }

@@ -38,20 +38,20 @@ public abstract class TileBase extends TileEntity implements ITickable {
     }
 
 
-    //We are checking if a player can access at this TE (could be useful for a security system, now it just returns true)
-    //But keep in mind to use this.
     public boolean canPlayerAccess(EntityPlayer player) {
-        return true;
+        if (this.worldObj.getTileEntity(getPos()) != this) {
+            return false;
+        }
+        return player.getDistanceSq(getPos().getX() + 0.5D, getPos().getY() + 0.5D, getPos().getZ() + 0.5D) <= 64.0D;
     }
 
 
-    protected boolean checkTick(int tick){
+    protected boolean checkTick(int tick) {
         return worldObj.getTotalWorldTime() % tick == 0;
     }
 
 
-
-    public boolean handleRightClick(EntityPlayer player, ItemStack itemStack, float xClicked, float yClicked, float zClicked){
+    public boolean handleRightClick(EntityPlayer player, ItemStack itemStack, float xClicked, float yClicked, float zClicked) {
         return false;
     }
 

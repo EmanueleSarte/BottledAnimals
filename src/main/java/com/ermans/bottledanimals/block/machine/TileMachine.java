@@ -8,13 +8,12 @@ import com.ermans.bottledanimals.recipe.IRecipe;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public abstract class TileMachine extends TilePowered implements IMachineInfo {
 
 
-    protected byte powerMult;
-    //greater timeMult, lesser the operation total time
-    protected byte timeMult;
     //remaining time
     protected int remaining;
     protected int operationTime;
@@ -27,8 +26,6 @@ public abstract class TileMachine extends TilePowered implements IMachineInfo {
     @Override
     public void initTile() {
         super.initTile();
-        this.powerMult = 1;
-        this.timeMult = 1;
         this.processRecipes = true;
     }
 
@@ -44,7 +41,6 @@ public abstract class TileMachine extends TilePowered implements IMachineInfo {
             boolean sendUpdate = false;
             //To track if the state changes
             boolean isChanged = isActive;
-            int trackRecipeCode = recipeCode;
 
             if (isActive) {
                 //We don't need to check energy because the operation starts only if there is enough energy for the operation
@@ -54,7 +50,7 @@ public abstract class TileMachine extends TilePowered implements IMachineInfo {
                         sendUpdate = true;
                     }
                     this.modifyEnergyStored(-1 * calculateEnergy());
-                    remaining -= timeMult;
+                    remaining--;
                 }
 
                 if (remaining <= 0 && canStillProcess(this.recipeCode)) {
@@ -62,8 +58,8 @@ public abstract class TileMachine extends TilePowered implements IMachineInfo {
                     sendUpdate = true;
                     isActive = false;
                 }
-            }else{
-                if (remaining > 0){
+            } else {
+                if (remaining > 0) {
                     remaining = 0;
                 }
             }
@@ -82,21 +78,14 @@ public abstract class TileMachine extends TilePowered implements IMachineInfo {
                 }
             }
 
-            if (isActive && checkTick(4) || sendUpdate || trackRecipeCode != recipeCode) {
-                this.worldObj.addBlockEvent(pos, getBlockType(), 1, recipeCode);
-                this.worldObj.addBlockEvent(pos, getBlockType(), 2, remaining);
-            }
-
             //If there is a update, sync the machine
             if (sendUpdate) {
                 syncMachine(isChanged != isActive);
-                this.worldObj.addBlockEvent(pos, getBlockType(), 3, operationTime);
             }
         }
     }
 
     protected void syncMachine(boolean updateTexture) {
-
         PacketHandler.INSTANCE.sendToAllAround(new MessageTile(this, updateTexture), TargetPointHelper.getTargetPoint(worldObj, pos));
         markDirty();
 
@@ -105,7 +94,7 @@ public abstract class TileMachine extends TilePowered implements IMachineInfo {
         }
     }
 
-
+    /////////////MACHINE METHODS////////////////////////
     //Machines can implement these if they need
     protected boolean updateMachine() {
         return false;
@@ -125,7 +114,7 @@ public abstract class TileMachine extends TilePowered implements IMachineInfo {
     abstract protected void finishProcess();
 
 
-    //Easy storage
+    //////////
     protected boolean enoughEnergyOperation() {
         return this.getEnergyStored(null) >= getTotalOperationEnergy();
     }
@@ -135,16 +124,8 @@ public abstract class TileMachine extends TilePowered implements IMachineInfo {
     }
 
     protected int calculateEnergy() {
-        return RFTick * powerMult;
+        return RFTick;
     }
-
-
-    public int getProgressScaled(int scale) {
-        //dirty way to avoid progress bar from blinking
-        if (!isActive || operationTime == 0 || remaining == 0) return 0;
-        return scale * (operationTime - remaining) / operationTime;
-    }
-
 
     //Check if someone right clicks an itemstack (to half it) inside the machine
     @Override
@@ -165,7 +146,7 @@ public abstract class TileMachine extends TilePowered implements IMachineInfo {
         }
     }
 
-    protected final void stopOperation(){
+    protected final void stopOperation() {
         remaining = 0;
         isActive = false;
         recipeCode = -1;
@@ -179,7 +160,16 @@ public abstract class TileMachine extends TilePowered implements IMachineInfo {
     }
 
 
-    //////////////IEnergyInfo///////////
+    ///////////CLIENT////////////////
+
+    @SideOnly(Side.CLIENT)
+    public int getProgressScaled(int scale) {
+        //dirty way to avoid progress bar from blinking
+        if (!isActive || operationTime == 0 || remaining == 0) return 0;
+        return scale * (operationTime - remaining) / operationTime;
+    }
+
+    //////////////IENERGYINFO///////////
     @Override
     public int getInfoMaxEnergyStored() {
         return storage.getMaxEnergyStored();
@@ -200,9 +190,10 @@ public abstract class TileMachine extends TilePowered implements IMachineInfo {
         if (!isActive) return 0;
         return calculateEnergy();
     }
+
     @Override
     public int getInfoTimePercentage() {
-        if (!isActive) return 0;
+        if (!isActive || operationTime == 0) return 0;
         return (operationTime - remaining) * 100 / operationTime;
     }
 
@@ -212,22 +203,40 @@ public abstract class TileMachine extends TilePowered implements IMachineInfo {
     }
 
 
-    ////DATA SYNC
+
+    ////////////////////DATA SYNC/////////////
     @Override
-    public boolean receiveClientEvent(int action, int value) {
-        switch (action) {
+    public int getField(int id) {
+        switch (id) {
+            case 1:
+                return recipeCode;
+            case 2:
+                return remaining;
+            case 3:
+                return operationTime;
+        }
+        return super.getField(id);
+    }
+
+    @Override
+    public void setField(int id, int value) {
+        switch (id) {
             case 1:
                 recipeCode = value;
-                return true;
+                return;
             case 2:
                 remaining = value;
-                return true;
+                return;
             case 3:
                 operationTime = value;
-                return true;
-            default:
-                return super.receiveClientEvent(action, value);
+                return;
         }
+        super.setField(id, value);
+    }
+
+    @Override
+    public int getFieldCount() {
+        return super.getFieldCount() + 3;
     }
 
     @Override

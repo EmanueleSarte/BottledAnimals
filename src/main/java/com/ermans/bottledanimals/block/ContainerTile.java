@@ -4,11 +4,14 @@ package com.ermans.bottledanimals.block;
 import com.ermans.repackage.cofh.lib.gui.container.ContainerBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.ICrafting;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public abstract class ContainerTile extends ContainerBase {
 
-    public TileInventory baseTile;
+    protected TileInventory baseTile;
     protected boolean hasPlayerInvSlots = true;
 
 
@@ -23,6 +26,7 @@ public abstract class ContainerTile extends ContainerBase {
         if (this.hasPlayerInvSlots) {
             bindPlayerInventory(player);
         }
+
     }
 
     @Override
@@ -52,6 +56,26 @@ public abstract class ContainerTile extends ContainerBase {
         return this.baseTile.isUseableByPlayer(player);
     }
 
+
+    public void onCraftGuiOpened(ICrafting listener) {
+        super.onCraftGuiOpened(listener);
+        listener.sendAllWindowProperties(this, this.baseTile);
+    }
+
+    @Override
+    public void detectAndSendChanges() {
+        super.detectAndSendChanges();
+        if (baseTile.checkTick(10)){
+            for (ICrafting crafter: this.crafters){
+                crafter.sendAllWindowProperties(this,baseTile);
+            }
+        }
+    }
+
+    @SideOnly(Side.CLIENT)
+    public void updateProgressBar(int id, int data) {
+        baseTile.setField(id, data);
+    }
 
 
 }
