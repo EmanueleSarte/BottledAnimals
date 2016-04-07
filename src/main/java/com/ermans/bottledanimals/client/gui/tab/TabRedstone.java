@@ -36,8 +36,8 @@ public class TabRedstone extends TabBase {
         buttonRedstones[1].setVisible(false);
         buttonRedstones[2].setVisible(false);
 
-        addElement(buttonRedstones[0].setToolTip("Active with Energy"));
-        addElement(buttonRedstones[1].setToolTip("Active without Energy"));
+        addElement(buttonRedstones[0].setToolTip("Active with Redstone"));
+        addElement(buttonRedstones[1].setToolTip("Active without Redstone"));
         addElement(buttonRedstones[2].setToolTip("Always Active"));
     }
 

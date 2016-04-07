@@ -208,11 +208,11 @@ public abstract class TileMachine extends TilePowered implements IMachineInfo {
     @Override
     public int getField(int id) {
         switch (id) {
-            case 1:
-                return recipeCode;
             case 2:
-                return remaining;
+                return recipeCode;
             case 3:
+                return remaining;
+            case 4:
                 return operationTime;
         }
         return super.getField(id);
@@ -221,13 +221,13 @@ public abstract class TileMachine extends TilePowered implements IMachineInfo {
     @Override
     public void setField(int id, int value) {
         switch (id) {
-            case 1:
+            case 2:
                 recipeCode = value;
                 return;
-            case 2:
+            case 3:
                 remaining = value;
                 return;
-            case 3:
+            case 4:
                 operationTime = value;
                 return;
         }

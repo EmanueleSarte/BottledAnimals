@@ -22,9 +22,9 @@ public class ContainerFluid extends ContainerMachine {
         super.detectAndSendChanges();
 
         for (ICrafting icrafting : this.crafters) {
-            if (fluidAmount != baseTile.getField(110)) {
-                icrafting.sendProgressBarUpdate(this, 110, baseTile.getField(110));
-                fluidAmount = baseTile.getField(110);
+            if (fluidAmount != baseTile.getField(5)) {
+                icrafting.sendProgressBarUpdate(this, 5, baseTile.getField(5));
+                fluidAmount = baseTile.getField(5);
             }
         }
     }

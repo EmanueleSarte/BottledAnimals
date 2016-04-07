@@ -144,7 +144,7 @@ public class TileGrowthAccelerator extends TileMachine {
 
     @Override
     public int getField(int id) {
-        if (id == 10){
+        if (id == 5){
             return multLevel;
         }
         return super.getField(id);
@@ -152,7 +152,7 @@ public class TileGrowthAccelerator extends TileMachine {
 
     @Override
     public void setField(int id, int value) {
-        if (id == 10){
+        if (id == 5){
             multLevel = (byte) value;
             return;
         }

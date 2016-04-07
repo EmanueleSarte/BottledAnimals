@@ -20,9 +20,9 @@ public abstract class ContainerEnergy extends ContainerTile {
         super.detectAndSendChanges();
 
         for (ICrafting icrafting : this.crafters) {
-            if (this.energyStored != baseTile.getField(100)){
-                icrafting.sendProgressBarUpdate(this, 100, baseTile.getField(100));
-                energyStored = baseTile.getField(100);
+            if (this.energyStored != baseTile.getField(1)){
+                icrafting.sendProgressBarUpdate(this, 1, baseTile.getField(1));
+                energyStored = baseTile.getField(1);
             }
         }
     }

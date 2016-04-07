@@ -39,7 +39,7 @@ public abstract class BlockTile extends BlockBase implements IGuiHandler, ITileE
     public void onNeighborBlockChange(World world, BlockPos pos, IBlockState state, Block neighborBlock) {
         TileEntity te = world.getTileEntity(pos);
         if (te instanceof TileBottledAnimals) {
-            ((TileBottledAnimals) te).onNeighborChange();
+            ((TileBottledAnimals) te).onNeighborBlockChange(pos, state, neighborBlock);
         }
     }
 
@@ -48,7 +48,7 @@ public abstract class BlockTile extends BlockBase implements IGuiHandler, ITileE
     public void onNeighborChange(IBlockAccess world, BlockPos pos, BlockPos neighbor) {
         TileEntity te = world.getTileEntity(pos);
         if (te instanceof TileBottledAnimals) {
-            ((TileBottledAnimals) te).onNeighborChange();
+            ((TileBottledAnimals) te).onNeighborChange(pos, neighbor);
         }
     }
 
@@ -56,6 +56,7 @@ public abstract class BlockTile extends BlockBase implements IGuiHandler, ITileE
         entityPlayer.openGui(BottledAnimals.INSTANCE, this.guiId, world, x, y, z);
         return true;
     }
+
 
 
     //facing bits XX00

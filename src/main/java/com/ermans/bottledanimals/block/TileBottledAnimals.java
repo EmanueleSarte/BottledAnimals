@@ -5,7 +5,10 @@ import cofh.api.tileentity.IRedstoneControl;
 import com.ermans.bottledanimals.network.PacketHandler;
 import com.ermans.bottledanimals.network.message.MessageRedstoneButton;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 
 public abstract class TileBottledAnimals extends TileBase implements IRedstoneControl {
@@ -32,8 +35,11 @@ public abstract class TileBottledAnimals extends TileBase implements IRedstoneCo
         return (this.rsControlMode.isDisabled()) || (this.isRedstonePowered == this.rsControlMode.getState());
     }
 
-    public void onNeighborChange() {
-        this.isRedstonePowered = worldObj.isBlockIndirectlyGettingPowered(getPos()) > 0;
+    public void onNeighborChange(BlockPos pos, BlockPos neighbor) {
+    }
+
+    public void onNeighborBlockChange(BlockPos pos, IBlockState state, Block neighborBlock) {
+        this.isRedstonePowered = worldObj.isBlockIndirectlyGettingPowered(pos) > 0;
     }
 
     //RSControl Interface

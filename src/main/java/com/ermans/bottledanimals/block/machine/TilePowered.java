@@ -83,7 +83,7 @@ public abstract class TilePowered extends TileInventory implements IEnergyReceiv
     ////////////////////DATA SYNC/////////////////////////////
     @Override
     public int getField(int id) {
-        if (id == 100){
+        if (id == 1){
             return storage.getEnergyStored();
         }
         return super.getField(id);
@@ -91,7 +91,7 @@ public abstract class TilePowered extends TileInventory implements IEnergyReceiv
 
     @Override
     public void setField(int id, int value) {
-        if (id == 100){
+        if (id == 1){
             storage.setEnergyStored(value);
             return;
         }

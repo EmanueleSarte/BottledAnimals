@@ -210,7 +210,7 @@ public abstract class TileFluidTank extends TileMachine implements IFluidHandler
     //////////////////////DATA SYNC/////////////////////////
     @Override
     public int getField(int id) {
-        if (id == 110) {
+        if (id == 5) {
             return tank.getFluidAmount();
         }
         return super.getField(id);
@@ -218,7 +218,7 @@ public abstract class TileFluidTank extends TileMachine implements IFluidHandler
 
     @Override
     public void setField(int id, int value) {
-        if (id == 110) {
+        if (id == 5) {
             tank.setFluid(new FluidStack(fluidTile, value));
             return;
         }

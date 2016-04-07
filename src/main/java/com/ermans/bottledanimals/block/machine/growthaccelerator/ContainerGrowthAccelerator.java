@@ -21,9 +21,9 @@ public class ContainerGrowthAccelerator extends ContainerMachine {
         super.detectAndSendChanges();
 
         for (ICrafting icrafting : this.crafters) {
-            if (multLevel != baseTile.getField(10)) {
-                icrafting.sendProgressBarUpdate(this, 10, baseTile.getField(10));
-                multLevel = baseTile.getField(10);
+            if (multLevel != baseTile.getField(5)) {
+                icrafting.sendProgressBarUpdate(this, 5, baseTile.getField(5));
+                multLevel = baseTile.getField(5);
             }
         }
     }

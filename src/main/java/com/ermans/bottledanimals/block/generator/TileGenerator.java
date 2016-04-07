@@ -7,12 +7,17 @@ import com.ermans.bottledanimals.helper.TargetPointHelper;
 import com.ermans.bottledanimals.network.PacketHandler;
 import com.ermans.bottledanimals.network.message.MessageTile;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public abstract class TileGenerator extends TileEnergyProvider implements IEnergyInfoProvider {
 
@@ -22,6 +27,8 @@ public abstract class TileGenerator extends TileEnergyProvider implements IEnerg
     protected boolean isActive;
 
     protected int lastEnergyOut;
+
+    private Map<EnumFacing, IEnergyReceiver> receiversMap;
 
 
     protected STATE state;
@@ -119,17 +126,53 @@ public abstract class TileGenerator extends TileEnergyProvider implements IEnerg
             lastEnergyOut = 0;
             if (hasPassedRedstoneTest() && !isStorageEmpty()) {
 
-                for (int i = 0; !isStorageEmpty() && lastEnergyOut < maxRF && i < EnumFacing.values().length; i++) {
-                    EnumFacing ef = EnumFacing.values()[i];
-                    if (canConnectEnergy(ef)) {
-                        BlockPos bp = BlockPosHelper.getBlockAdjacent(getPos(), ef);
-                        if (bp != null) {
-                            TileEntity tile = worldObj.getTileEntity(bp);
-                            if (tile instanceof IEnergyReceiver) {
-                                int energy = ((IEnergyReceiver) tile).receiveEnergy(ef, extractEnergy(ef, Math.min(maxRF, maxRF - lastEnergyOut), true), false);
-                                lastEnergyOut += extractEnergy(ef, energy, false);
+                if (receiversMap == null) {
+                    updateReceivers();
+                }
+
+//                for (int i = 0; !isStorageEmpty() && lastEnergyOut < maxRF && i < cachedReceivers.length; i++) {
+////                    EnumFacing ef = EnumFacing.values()[i];
+////                    if (canConnectEnergy(ef)) {
+////                        BlockPos bp = BlockPosHelper.getBlockAdjacent(getPos(), ef);
+////                        if (bp != null) {
+////                            TileEntity tile = worldObj.getTileEntity(bp);
+////                            if (tile instanceof IEnergyReceiver) {
+////                                int energy = ((IEnergyReceiver) tile).receiveEnergy(ef, extractEnergy(ef, Math.min(maxRF, maxRF - lastEnergyOut), true), false);
+////                                lastEnergyOut += extractEnergy(ef, energy, false);
+////                            }
+////                        }
+////                    }
+//                    if (cachedReceivers[i] != null) {
+//                        EnumFacing face = EnumFacing.values()[i];
+//                        int energy = cachedReceivers[i].receiveEnergy(face, extractEnergy(face, Math.min(maxRF, maxRF - lastEnergyOut), true), false);
+//                        lastEnergyOut += extractEnergy(face, energy, false);
+//                    }
+//                }
+
+                int good = receiversMap.size();
+                int badFaces = 0;
+                while (good > 0 && lastEnergyOut < maxRF && !isStorageFull()) {
+
+                    int actualAverage = (maxRF - lastEnergyOut) / good;
+                    int odd = (maxRF - lastEnergyOut) - actualAverage * good;
+
+                    good = 0;
+                    int counter = 1;
+                    for (EnumFacing face : receiversMap.keySet()) {
+                        IEnergyReceiver receiver = receiversMap.get(face);
+                        if ((badFaces & counter) != counter) {
+
+                            int energy = receiver.receiveEnergy(face, extractEnergy(face, actualAverage + odd, true), false);
+                            lastEnergyOut += extractEnergy(face, energy, false);
+
+                            if (energy == actualAverage + odd && receiver.receiveEnergy(face, 1, true) > 0) {
+                                good++;
+                            }else{
+                                badFaces = badFaces | counter;
                             }
+                            odd = 0;
                         }
+                        counter = counter * 2;
                     }
                 }
             }
@@ -151,6 +194,52 @@ public abstract class TileGenerator extends TileEnergyProvider implements IEnerg
         }
     }
 
+    protected void updateReceivers() {
+//        cachedReceivers.clear();
+//        facingReceivers.clear();
+//
+//        for (EnumFacing face : EnumFacing.values()) {
+//            if (canConnectEnergy(face)) {
+//                BlockPos adjacent = BlockPosHelper.getBlockAdjacent(pos, face);
+//                if (adjacent != null) {
+//                    TileEntity entity = worldObj.getTileEntity(adjacent);
+//                    if (entity != null && entity instanceof IEnergyReceiver) {
+//                        cachedReceivers.add((IEnergyReceiver) entity);
+//                        facingReceivers.add(face);
+//                    }
+//                }
+//            }
+//        }
+
+        if (facing == null){
+            return;
+        }
+        receiversMap = new HashMap<EnumFacing, IEnergyReceiver>();
+        for (EnumFacing face : EnumFacing.values()) {
+            if (canConnectEnergy(face)) {
+                BlockPos adjacent = BlockPosHelper.getBlockAdjacent(pos, face);
+                if (adjacent != null) {
+                    TileEntity entity = worldObj.getTileEntity(adjacent);
+                    if (entity != null && entity instanceof IEnergyReceiver) {
+                        receiversMap.put(face, (IEnergyReceiver) entity);
+                    }
+                }
+            }
+        }
+
+    }
+
+    @Override
+    public void onNeighborChange(BlockPos pos, BlockPos neighbor) {
+        super.onNeighborChange(pos, neighbor);
+        updateReceivers();
+    }
+
+    @Override
+    public void onNeighborBlockChange(BlockPos pos, IBlockState state, Block neighborBlock) {
+        super.onNeighborBlockChange(pos, state, neighborBlock);
+        updateReceivers();
+    }
 
     protected boolean isStorageHalfFull() {
         return getEnergyStored(null) * 2 >= getMaxEnergyStored(null);
@@ -220,15 +309,15 @@ public abstract class TileGenerator extends TileEnergyProvider implements IEnerg
     @Override
     public int getField(int id) {
         switch (id) {
-            case 1:
-                return actualRate;
             case 2:
-                return state.ordinal();
+                return actualRate;
             case 3:
-                return lastEnergyOut;
+                return state.ordinal();
             case 4:
-                return remaining;
+                return lastEnergyOut;
             case 5:
+                return remaining;
+            case 6:
                 return totalFuel;
         }
         return super.getField(id);
@@ -237,19 +326,19 @@ public abstract class TileGenerator extends TileEnergyProvider implements IEnerg
     @Override
     public void setField(int id, int value) {
         switch (id) {
-            case 1:
+            case 2:
                 actualRate = value;
                 return;
-            case 2:
+            case 3:
                 state = STATE.values()[value];
                 return;
-            case 3:
+            case 4:
                 lastEnergyOut = value;
                 return;
-            case 4:
+            case 5:
                 remaining = value;
                 return;
-            case 5:
+            case 6:
                 totalFuel = value;
                 return;
         }

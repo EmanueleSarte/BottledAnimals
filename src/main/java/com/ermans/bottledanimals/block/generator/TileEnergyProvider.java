@@ -81,7 +81,7 @@ public abstract class TileEnergyProvider extends TileInventory implements IEnerg
 
     @Override
     public int getField(int id) {
-        if (id == 100){
+        if (id == 1){
             return storage.getEnergyStored();
         }
         return super.getField(id);
@@ -89,7 +89,7 @@ public abstract class TileEnergyProvider extends TileInventory implements IEnerg
 
     @Override
     public void setField(int id, int value) {
-        if (id == 100){
+        if (id == 1){
             storage.setEnergyStored(value);
             return;
         }
