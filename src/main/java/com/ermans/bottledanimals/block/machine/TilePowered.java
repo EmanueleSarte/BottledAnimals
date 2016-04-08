@@ -3,14 +3,14 @@ package com.ermans.bottledanimals.block.machine;
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyReceiver;
 import cofh.api.energy.IEnergyStorage;
-import com.ermans.api.IEnergyBA;
+import com.ermans.bottledanimals.api.ITileEnergyInfo;
 import com.ermans.bottledanimals.block.TileInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public abstract class TilePowered extends TileInventory implements IEnergyReceiver, IEnergyBA {
+public abstract class TilePowered extends TileInventory implements IEnergyReceiver, ITileEnergyInfo {
 
     public static final int DF_ENERGY_CAPACITY = 32000;
     public static final int DF_ENERGY_MAX_RCV = 32;
@@ -31,6 +31,9 @@ public abstract class TilePowered extends TileInventory implements IEnergyReceiv
     //We don't want to force tiles who implements this class to have a storage, use initTile to setup the storage...
     protected EnergyStorage storage;
     protected int RFTick;
+    private int lastEnergyInOld;
+    protected int lastEnergyIn;
+
 
 
     @Override
@@ -40,10 +43,15 @@ public abstract class TilePowered extends TileInventory implements IEnergyReceiv
         this.RFTick = DF_ENERGY_CAPACITY / 3200; //default: 10RF/t
     }
 
-
     @Override
-    public IEnergyStorage getEnergyStorage() {
-        return this.storage;
+    public void update() {
+        super.update();
+        if (worldObj.isRemote){
+            return;
+        }
+        lastEnergyIn = lastEnergyInOld;
+        lastEnergyInOld = 0;
+
     }
 
     protected void modifyEnergyStored(int energy) {
@@ -51,17 +59,14 @@ public abstract class TilePowered extends TileInventory implements IEnergyReceiv
     }
 
 
-    ///////////////////////CLIENT////////////////////////////
-    @SideOnly(Side.CLIENT)
-    public int getScaledEnergyStored(int scale) {
-        return getEnergyStored(null) * scale / getMaxEnergyStored(null);
-    }
-
-
     //////////////////////IENERGYRECEIVER/////////////////////
     @Override
     public int receiveEnergy(EnumFacing from, int maxReceive, boolean simulate) {
-        return  storage.receiveEnergy(maxReceive, simulate);
+        int energy = storage.receiveEnergy(maxReceive, simulate);
+        if (!worldObj.isRemote && !simulate){
+            lastEnergyInOld += energy;
+        }
+        return energy;
     }
 
     @Override
@@ -80,27 +85,42 @@ public abstract class TilePowered extends TileInventory implements IEnergyReceiv
     }
 
 
+    //////////////////////////////CLIENT///////////////////////////////////
+    //////////////////////////////ITILEENERGYINFO//////////////////////////
+    @SideOnly(Side.CLIENT)
+    @Override
+    public IEnergyStorage getEnergyStorage(EnumFacing facing) {
+        return storage;
+    }
+
     ////////////////////DATA SYNC/////////////////////////////
     @Override
     public int getField(int id) {
-        if (id == 1){
-            return storage.getEnergyStored();
+        switch (id){
+            case 1:
+                return storage.getEnergyStored();
+            case 2:
+                return lastEnergyIn;
         }
         return super.getField(id);
     }
 
     @Override
     public void setField(int id, int value) {
-        if (id == 1){
-            storage.setEnergyStored(value);
-            return;
+        switch (id){
+            case 1:
+                storage.setEnergyStored(value);
+                return;
+            case 2:
+                lastEnergyIn = value;
+                return;
         }
         super.setField(id, value);
     }
 
     @Override
     public int getFieldCount() {
-        return super.getFieldCount() + 1;
+        return super.getFieldCount() + 2;
     }
 
     @Override

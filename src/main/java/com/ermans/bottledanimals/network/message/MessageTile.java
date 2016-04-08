@@ -5,6 +5,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
+import net.minecraft.world.EnumSkyBlock;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -54,8 +55,8 @@ public class MessageTile implements IMessage {
         @Override
         public IMessage onMessage(MessageTile message, MessageContext ctx) {
             if (message.updateTexture) {
-                // TODO: 26/03/2016 check if this works
                 Minecraft.getMinecraft().renderGlobal.markBlockRangeForRenderUpdate(message.x, message.y, message.z, message.x, message.y, message.z);
+                Minecraft.getMinecraft().theWorld.checkLightFor(EnumSkyBlock.BLOCK, new BlockPos(message.x, message.y, message.z));
             }
             return null;
         }

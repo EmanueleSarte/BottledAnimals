@@ -23,9 +23,6 @@ public class GuiWirelessFeeder extends GuiBaseAdv {
         super.initGui();
         addTab(new TabInfo(this, TabBase.LEFT, "Heals and feeds player in a 5x5x5 area"));
 
-        addElement(new ElementEnergyStored(this, tile.getEnergyStorage()).setAlwaysShow(true));
-        addElement(new ElementFluidTank(this, tile.getFluidTank()).setGauge(1).setAlwaysShow(true));
-
         ElementButtonOption buttonHeal = (ElementButtonOption) addElement(new ElementButtonOptionWF(this, 30, 18, 16, 16).setTexture(Textures.WIDGET_TEXTURE_STRING, 256, 256));
         buttonHeal.setDefaultValue(tile.getMode().ordinal());
 

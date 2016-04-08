@@ -20,20 +20,18 @@ public abstract class TileBottledAnimals extends TileBase implements IRedstoneCo
     protected boolean isRedstonePowered;
 
 
-    public TileBottledAnimals setTileName(String tileName) {
-        this.tileName = tileName;
-        return this;
+    @Override
+    public void initTile() {
+        super.initTile();
     }
 
-
-    public void setFacing(EnumFacing facing) {
-        this.facing = facing;
-    }
-
+    /////////////////////////////METODHS/////////////////////////////////////////
+    public abstract boolean isActive();
 
     public boolean hasPassedRedstoneTest() {
         return (this.rsControlMode.isDisabled()) || (this.isRedstonePowered == this.rsControlMode.getState());
     }
+
 
     public void onNeighborChange(BlockPos pos, BlockPos neighbor) {
     }
@@ -42,26 +40,8 @@ public abstract class TileBottledAnimals extends TileBase implements IRedstoneCo
         this.isRedstonePowered = worldObj.isBlockIndirectlyGettingPowered(pos) > 0;
     }
 
-    //RSControl Interface
-    @Override
-    public void setControl(ControlMode control) {
-        if (control != rsControlMode) {
-            this.rsControlMode = control;
-            if (worldObj.isRemote) {
-                PacketHandler.INSTANCE.sendToServer(new MessageRedstoneButton(this));
-            } else {
-                markDirty();
-            }
-        }
 
-    }
-
-
-    @Override
-    public ControlMode getControl() {
-        return this.rsControlMode;
-    }
-
+    /////////////////////////////GETTERS AND SETTERS////////////////////////////////
     @Override
     public boolean isPowered() {
         return isRedstonePowered;
@@ -72,11 +52,43 @@ public abstract class TileBottledAnimals extends TileBase implements IRedstoneCo
         this.isRedstonePowered = isPowered;
     }
 
+    public TileBottledAnimals setTileName(String tileName) {
+        this.tileName = tileName;
+        return this;
+    }
+
     public String getTileName() {
         return this.tileName;
     }
 
+    public TileBottledAnimals setFacing(EnumFacing facing) {
+        this.facing = facing;
+        return this;
+    }
 
+    public EnumFacing getFacing() {
+        return facing;
+    }
+
+    @Override
+    public void setControl(ControlMode control) {
+        if (control != rsControlMode) {
+            this.rsControlMode = control;
+            if (worldObj.isRemote) {
+                PacketHandler.INSTANCE.sendToServer(new MessageRedstoneButton(this));
+            } else {
+                markDirty();
+            }
+        }
+    }
+
+    @Override
+    public ControlMode getControl() {
+        return this.rsControlMode;
+    }
+
+
+    //////////////////////////////DATA SYNC/////////////////////////////////
     @Override
     public void readFromNBT(NBTTagCompound nbtTagCompound) {
         super.readFromNBT(nbtTagCompound);

@@ -1,7 +1,7 @@
 package com.ermans.bottledanimals.block.generator;
 
 import cofh.api.energy.IEnergyReceiver;
-import com.ermans.api.IEnergyInfoProvider;
+import com.ermans.bottledanimals.api.ITileInfo;
 import com.ermans.bottledanimals.helper.BlockPosHelper;
 import com.ermans.bottledanimals.helper.TargetPointHelper;
 import com.ermans.bottledanimals.network.PacketHandler;
@@ -19,7 +19,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class TileGenerator extends TileEnergyProvider implements IEnergyInfoProvider {
+public abstract class TileGenerator extends TileEnergyProvider implements ITileInfo {
 
     protected int remaining;
     protected int totalFuel;
@@ -129,26 +129,6 @@ public abstract class TileGenerator extends TileEnergyProvider implements IEnerg
                 if (receiversMap == null) {
                     updateReceivers();
                 }
-
-//                for (int i = 0; !isStorageEmpty() && lastEnergyOut < maxRF && i < cachedReceivers.length; i++) {
-////                    EnumFacing ef = EnumFacing.values()[i];
-////                    if (canConnectEnergy(ef)) {
-////                        BlockPos bp = BlockPosHelper.getBlockAdjacent(getPos(), ef);
-////                        if (bp != null) {
-////                            TileEntity tile = worldObj.getTileEntity(bp);
-////                            if (tile instanceof IEnergyReceiver) {
-////                                int energy = ((IEnergyReceiver) tile).receiveEnergy(ef, extractEnergy(ef, Math.min(maxRF, maxRF - lastEnergyOut), true), false);
-////                                lastEnergyOut += extractEnergy(ef, energy, false);
-////                            }
-////                        }
-////                    }
-//                    if (cachedReceivers[i] != null) {
-//                        EnumFacing face = EnumFacing.values()[i];
-//                        int energy = cachedReceivers[i].receiveEnergy(face, extractEnergy(face, Math.min(maxRF, maxRF - lastEnergyOut), true), false);
-//                        lastEnergyOut += extractEnergy(face, energy, false);
-//                    }
-//                }
-
                 int good = receiversMap.size();
                 int badFaces = 0;
                 while (good > 0 && lastEnergyOut < maxRF && !isStorageFull()) {
@@ -195,22 +175,6 @@ public abstract class TileGenerator extends TileEnergyProvider implements IEnerg
     }
 
     protected void updateReceivers() {
-//        cachedReceivers.clear();
-//        facingReceivers.clear();
-//
-//        for (EnumFacing face : EnumFacing.values()) {
-//            if (canConnectEnergy(face)) {
-//                BlockPos adjacent = BlockPosHelper.getBlockAdjacent(pos, face);
-//                if (adjacent != null) {
-//                    TileEntity entity = worldObj.getTileEntity(adjacent);
-//                    if (entity != null && entity instanceof IEnergyReceiver) {
-//                        cachedReceivers.add((IEnergyReceiver) entity);
-//                        facingReceivers.add(face);
-//                    }
-//                }
-//            }
-//        }
-
         if (facing == null){
             return;
         }
@@ -268,44 +232,47 @@ public abstract class TileGenerator extends TileEnergyProvider implements IEnerg
         return isActive;
     }
 
+
+    ////////////////////////////CLIENT///////////////////////////////////////////
+    ////////////////////////////ITILEINFO/////////////////////////////////////////
+    @SideOnly(Side.CLIENT)
     @Override
-    public int getInfoFuelPercentage() {
-        if (!isActive || remaining == 0) return 0;
-        return remaining * 100 / totalFuel;
+    public boolean isReceiver() {
+        return false;
     }
 
+    @SideOnly(Side.CLIENT)
     @Override
-    public int getInfoEnergyPerTick() {
-        return actualRate;
+    public boolean isTileActive() {
+        return isActive;
     }
 
+    @SideOnly(Side.CLIENT)
     @Override
-    public int getInfoMaxEnergyPerTick() {
-        return storage.getMaxExtract();
-    }
-
-    @Override
-    public int getInfoEnergyStored() {
-        return storage.getEnergyStored();
-    }
-
-    @Override
-    public int getInfoMaxEnergyStored() {
-        return storage.getMaxEnergyStored();
-    }
-
-    @Override
-    public int getEnergyDrainPerTick() {
+    public int getEnergyPerTick() {
         return lastEnergyOut;
     }
 
     @SideOnly(Side.CLIENT)
-    public int getFuelScaled(int scale) {
+    @Override
+    public int getEnergyMaxPerTick() {
+        return storage.getMaxExtract();
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Override
+    public int getActualEnergyPerTick() {
+        return actualRate;
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Override
+    public int getPercentage(int scale) {
         if (!isActive || remaining == 0) return 0;
         return remaining * scale / totalFuel;
     }
 
-
+    //////////////////////////////DATA SYNC//////////////////////////
     @Override
     public int getField(int id) {
         switch (id) {

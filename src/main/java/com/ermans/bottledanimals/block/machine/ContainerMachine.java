@@ -26,17 +26,17 @@ public abstract class ContainerMachine extends ContainerEnergy {
         super.detectAndSendChanges();
 
         for (ICrafting icrafting : this.crafters) {
-            if (recipeCode != baseTile.getField(2)) {
-                icrafting.sendProgressBarUpdate(this, 2, baseTile.getField(2));
-                recipeCode = baseTile.getField(2);
-            }
-            if (remaining != baseTile.getField(3)) {
+            if (recipeCode != baseTile.getField(3)) {
                 icrafting.sendProgressBarUpdate(this, 3, baseTile.getField(3));
-                remaining = baseTile.getField(3);
+                recipeCode = baseTile.getField(3);
             }
-            if (operationTime != baseTile.getField(4)) {
+            if (remaining != baseTile.getField(4)) {
                 icrafting.sendProgressBarUpdate(this, 4, baseTile.getField(4));
-                operationTime = baseTile.getField(4);
+                remaining = baseTile.getField(4);
+            }
+            if (operationTime != baseTile.getField(5)) {
+                icrafting.sendProgressBarUpdate(this, 5, baseTile.getField(5));
+                operationTime = baseTile.getField(5);
             }
         }
     }

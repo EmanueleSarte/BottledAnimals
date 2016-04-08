@@ -1,6 +1,7 @@
 package com.ermans.bottledanimals.block.machine;
 
 
+import com.ermans.bottledanimals.api.ITileFluidInfo;
 import com.ermans.bottledanimals.init.ModFluids;
 import com.ermans.bottledanimals.init.ModItems;
 import com.ermans.repackage.cofh.lib.util.helpers.FluidHelper;
@@ -11,8 +12,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.*;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-public abstract class TileFluidTank extends TileMachine implements IFluidHandler {
+public abstract class TileFluidTank extends TileMachine implements IFluidHandler, ITileFluidInfo {
 
     public FluidTank tank;
 
@@ -207,7 +210,15 @@ public abstract class TileFluidTank extends TileMachine implements IFluidHandler
     }
 
 
-    //////////////////////DATA SYNC/////////////////////////
+    ////////////////////////////CLIENT///////////////////////////////
+    ////////////////////////////ITILEFLUIDINFO///////////////////////
+    @SideOnly(Side.CLIENT)
+    @Override
+    public IFluidTank getFluidTank(EnumFacing facing) {
+        return tank;
+    }
+
+    //////////////////////////////DATA SYNC/////////////////////////
     @Override
     public int getField(int id) {
         if (id == 5) {

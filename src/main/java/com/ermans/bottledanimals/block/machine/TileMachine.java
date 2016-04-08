@@ -1,6 +1,6 @@
 package com.ermans.bottledanimals.block.machine;
 
-import com.ermans.api.IMachineInfo;
+import com.ermans.bottledanimals.api.ITileInfo;
 import com.ermans.bottledanimals.helper.TargetPointHelper;
 import com.ermans.bottledanimals.network.PacketHandler;
 import com.ermans.bottledanimals.network.message.MessageTile;
@@ -8,10 +8,11 @@ import com.ermans.bottledanimals.recipe.IRecipe;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.EnumSkyBlock;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public abstract class TileMachine extends TilePowered implements IMachineInfo {
+public abstract class TileMachine extends TilePowered implements ITileInfo {
 
 
     //remaining time
@@ -91,6 +92,7 @@ public abstract class TileMachine extends TilePowered implements IMachineInfo {
 
         if (updateTexture) {
             worldObj.markBlockForUpdate(pos);
+            worldObj.checkLightFor(EnumSkyBlock.BLOCK, pos);
         }
     }
 
@@ -159,60 +161,60 @@ public abstract class TileMachine extends TilePowered implements IMachineInfo {
         return invHelper.isInput(slotIndex);
     }
 
-
-    ///////////CLIENT////////////////
-
-    @SideOnly(Side.CLIENT)
-    public int getProgressScaled(int scale) {
-        //dirty way to avoid progress bar from blinking
-        if (!isActive || operationTime == 0 || remaining == 0) return 0;
-        return scale * (operationTime - remaining) / operationTime;
-    }
-
-    //////////////IENERGYINFO///////////
-    @Override
-    public int getInfoMaxEnergyStored() {
-        return storage.getMaxEnergyStored();
-    }
-
-    @Override
-    public int getInfoEnergyStored() {
-        return storage.getEnergyStored();
-    }
-
-    @Override
-    public int getInfoMaxEnergyPerTick() {
-        return storage.getMaxReceive();
-    }
-
-    @Override
-    public int getInfoEnergyPerTick() {
-        if (!isActive) return 0;
-        return calculateEnergy();
-    }
-
-    @Override
-    public int getInfoTimePercentage() {
-        if (!isActive || operationTime == 0) return 0;
-        return (operationTime - remaining) * 100 / operationTime;
-    }
-
     @Override
     public boolean isActive() {
         return isActive;
     }
 
+    ///////////CLIENT////////////////
+    //////////////ITILEINFO///////////
+    @SideOnly(Side.CLIENT)
+    @Override
+    public boolean isReceiver() {
+        return true;
+    }
 
+    @SideOnly(Side.CLIENT)
+    @Override
+    public boolean isTileActive() {
+        return isActive;
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Override
+    public int getEnergyPerTick() {
+        return lastEnergyIn;
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Override
+    public int getEnergyMaxPerTick() {
+        return storage.getMaxReceive();
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Override
+    public int getActualEnergyPerTick() {
+        return isActive ? calculateEnergy() : 0;
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Override
+    public int getPercentage(int scale) {
+        //dirty way to avoid progress bar from blinking
+        if (!isActive || operationTime == 0 || remaining == 0) return 0;
+        return scale * (operationTime - remaining) / operationTime;
+    }
 
     ////////////////////DATA SYNC/////////////
     @Override
     public int getField(int id) {
         switch (id) {
-            case 2:
-                return recipeCode;
             case 3:
-                return remaining;
+                return recipeCode;
             case 4:
+                return remaining;
+            case 5:
                 return operationTime;
         }
         return super.getField(id);
@@ -221,13 +223,13 @@ public abstract class TileMachine extends TilePowered implements IMachineInfo {
     @Override
     public void setField(int id, int value) {
         switch (id) {
-            case 2:
+            case 3:
                 recipeCode = value;
                 return;
-            case 3:
+            case 4:
                 remaining = value;
                 return;
-            case 4:
+            case 5:
                 operationTime = value;
                 return;
         }

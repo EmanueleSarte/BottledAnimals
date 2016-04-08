@@ -58,25 +58,36 @@ public abstract class BlockTile extends BlockBase implements IGuiHandler, ITileE
     }
 
 
+    @Override
+    public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+        TileEntity tileEntity = worldIn.getTileEntity(pos);
+        if (tileEntity instanceof TileBottledAnimals) {
+            TileBottledAnimals tileBA = (TileBottledAnimals) tileEntity;
+            return getDefaultState().withProperty(PROPERTY_ACTIVE, tileBA.isActive()).withProperty(PROPERTY_FACING, tileBA.getFacing());
+        }
+        return state;
+    }
 
     //facing bits XX00
     //is active bit: 00X0
     //unused bit: 000X
     @Override
     public IBlockState getStateFromMeta(int meta) {
-        EnumFacing facing = EnumFacing.getHorizontal((meta & 12) >> 2);
-        boolean active = ((meta & 2) >> 1) == 1;
-        return this.getDefaultState().withProperty(PROPERTY_FACING, facing).withProperty(PROPERTY_ACTIVE, active);
+//        EnumFacing facing = EnumFacing.getHorizontal((meta & 12) >> 2);
+//        boolean active = ((meta & 2) >> 1) == 1;
+//        return this.getDefaultState().withProperty(PROPERTY_FACING, facing).withProperty(PROPERTY_ACTIVE, active);
+        return this.getDefaultState();
     }
 
     @Override
     public int getMetaFromState(IBlockState state) {
-        EnumFacing facing = state.getValue(PROPERTY_FACING);
-        boolean active = state.getValue(PROPERTY_ACTIVE);
-
-        int facingbits = facing.getHorizontalIndex() << 2;
-        int activebit = (active ? 1 : 0) << 1;
-        return facingbits | activebit;
+//        EnumFacing facing = state.getValue(PROPERTY_FACING);
+//        boolean active = state.getValue(PROPERTY_ACTIVE);
+//
+//        int facingbits = facing.getHorizontalIndex() << 2;
+//        int activebit = (active ? 1 : 0) << 1;
+//        return facingbits | activebit;
+        return 0;
     }
 
     @Override

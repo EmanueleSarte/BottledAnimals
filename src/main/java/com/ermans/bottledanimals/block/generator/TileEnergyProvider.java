@@ -3,12 +3,14 @@ package com.ermans.bottledanimals.block.generator;
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyProvider;
 import cofh.api.energy.IEnergyStorage;
-import com.ermans.api.IEnergyBA;
+import com.ermans.bottledanimals.api.ITileEnergyInfo;
 import com.ermans.bottledanimals.block.TileInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-public abstract class TileEnergyProvider extends TileInventory implements IEnergyProvider, IEnergyBA {
+public abstract class TileEnergyProvider extends TileInventory implements IEnergyProvider, ITileEnergyInfo{
 
     private static final int MAX_RF = 80;
     private static final int CAPACITY = 64000;
@@ -33,17 +35,12 @@ public abstract class TileEnergyProvider extends TileInventory implements IEnerg
         super.initTile();
         maxRF = MAX_RF;
         capacity = CAPACITY;
-        this.storage = new EnergyStorage(capacity, capacity, maxRF);
+        this.storage = new EnergyStorage(capacity, 0, maxRF);
     }
 
 
     protected void modifyEnergyStored(int energy) {
         storage.modifyEnergyStored(energy);
-    }
-
-    @Override
-    public IEnergyStorage getEnergyStorage() {
-        return storage;
     }
 
     @Override
@@ -67,6 +64,15 @@ public abstract class TileEnergyProvider extends TileInventory implements IEnerg
     }
 
 
+    //////////////////////////////CLIENT///////////////////////////////////
+    //////////////////////////////ITILEENERGYINFO//////////////////////////
+    @SideOnly(Side.CLIENT)
+    @Override
+    public IEnergyStorage getEnergyStorage(EnumFacing facing) {
+        return storage;
+    }
+
+    /////////////////////////////DATA SYNC////////////////////////////////
     @Override
     public void readFromNBT(NBTTagCompound nbt) {
         super.readFromNBT(nbt);

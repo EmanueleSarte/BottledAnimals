@@ -63,6 +63,6 @@ public class BottledAnimals {
     // TODO: 05/04/2016 generator divides energy and cached system                          DONE
     // TODO: 05/04/2016 lang italiano
 // TODO: 05/04/2016 feed platform
-// TODO: 05/04/2016 active doesn't work
+// TODO: 05/04/2016 active doesn't work                                                     DONE
 // TODO: 06/04/2016 join energy powered and energy provider
 // TODO: 06/04/2016 support IC2 power
