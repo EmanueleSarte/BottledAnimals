@@ -70,7 +70,7 @@ public class TileRancher extends TileFluidTank {
             }
         }
 
-        if (recipe.getOutput() == null) {
+        if (recipe.getOutput(true) == null) {
             return recipe;
         }
 
@@ -78,7 +78,7 @@ public class TileRancher extends TileFluidTank {
             return recipe;
         }
 
-        if (inventory[output].isItemEqual(recipe.getOutput()) && inventory[output].stackSize + recipe.getOutputStackSize() <= inventory[output].getMaxStackSize()) {
+        if (inventory[output].isItemEqual(recipe.getOutput(true)) && inventory[output].stackSize + recipe.getOutputMaxSize() <= inventory[output].getMaxStackSize()) {
             return recipe;
         }
         return null;
@@ -98,9 +98,8 @@ public class TileRancher extends TileFluidTank {
     @Override
     protected void finishProcess() {
         RancherManager.RancherRecipe recipe = recManager.getRecipeIfValid(inventory[animal]);
-        if (recipe.getOutput() != null) {
-            increaseStackSize(output, recipe.getOutput());
-        }
+        increaseStackSize(output, recipe.getOutput());
+
         if (recipe.hasFluidOutput()) {
             modifyFluidAmount(fluidTile, recipe.getFluidStackAmount());
         }

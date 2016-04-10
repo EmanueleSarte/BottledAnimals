@@ -12,7 +12,9 @@ public class TileDropExtractor extends TileMachine {
     private static final int animal = 0;
     private static final int output1 = 1;
     private static final int output2 = 2;
-    private static final int pattern = 3;
+    private static final int output3 = 3;
+    private static final int outputRare = 4;
+    private static final int pattern = 5;
 
     @Override
     public void initTile() {
@@ -34,22 +36,23 @@ public class TileDropExtractor extends TileMachine {
         }
 
         if (inventory[pattern] != null) {
-            if (inventory[pattern].stackSize + recipe.getOutput3StackSize() > inventory[pattern].getMaxStackSize()) {
+            if (inventory[pattern].stackSize + recipe.getBrokenPatternStackSize() > inventory[pattern].getMaxStackSize()) {
                 return null;
             }
         }
 
-        ItemStack[] stacksOutput = new ItemStack[]{recipe.getOutput1(), recipe.getOutput2()};
+        ItemStack[] stacksOutput = new ItemStack[]{recipe.getOutput1(true), recipe.getOutput2(true), recipe.getOutput3(true)};
+        int[] sizeOutput = new int[]{recipe.getOutput1MaxSize(), recipe.getOutput2MaxSize(), recipe.getOutput3MaxSize()};
 
-        if (inventory[output1] == null && inventory[output2] == null) {
+        if (inventory[output1] == null && inventory[output2] == null && inventory[output3] == null && inventory[outputRare] == null) {
             return recipe;
         }
 
         int i = 0;
-        for (int index : new int[]{output1, output2}) {
+        for (int index : new int[]{output1, output2, output3}) {
             if (inventory[index] != null && stacksOutput.length > i) {
                 if (inventory[index].isItemEqual(stacksOutput[i])) {
-                    if (stacksOutput[i].stackSize + inventory[index].stackSize > inventory[index].getMaxStackSize()) {
+                    if (sizeOutput[i] + inventory[index].stackSize > inventory[index].getMaxStackSize()) {
                         return null;
                     }
                 } else {
@@ -57,6 +60,17 @@ public class TileDropExtractor extends TileMachine {
                 }
             }
             i++;
+        }
+
+        ItemStack rare = recipe.getOutputRare(true);
+        if (rare == null || inventory[TileDropExtractor.outputRare] == null) {
+            return recipe;
+        }
+
+        if (inventory[TileDropExtractor.outputRare].isItemEqual(rare)) {
+            if (recipe.getOutputRareMaxSize() + inventory[outputRare].stackSize > inventory[outputRare].getMaxStackSize()) {
+                return null;
+            }
         }
 
         return recipe;
@@ -79,11 +93,12 @@ public class TileDropExtractor extends TileMachine {
     protected void finishProcess() {
         DropExtractorManager.DropExtractorRecipe recipe = recManager.getRecipeIfValid(inventory[animal]);
         decrStackSize(animal, recipe.getInputStackSize());
+
         increaseStackSize(output1, recipe.getOutput1());
-        if (recipe.getOutput2() != null) {
-            increaseStackSize(output2, recipe.getOutput2());
-        }
-        increaseStackSize(pattern, recipe.getOutput3());
+        increaseStackSize(output2, recipe.getOutput2());
+        increaseStackSize(output3, recipe.getOutput3());
+        increaseStackSize(outputRare, recipe.getOutputRare());
+        increaseStackSize(pattern, recipe.getBrokenPattern());
     }
 
     @Override
@@ -93,7 +108,7 @@ public class TileDropExtractor extends TileMachine {
 
     @Override
     protected int getNumOutput() {
-        return 3;
+        return 5;
     }
 
     @Override

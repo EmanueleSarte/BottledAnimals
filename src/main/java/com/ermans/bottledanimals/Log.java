@@ -1,12 +1,14 @@
 package com.ermans.bottledanimals;
 
-import com.ermans.bottledanimals.reference.Reference;
-import net.minecraftforge.fml.common.FMLLog;
 import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.Logger;
 
 public class Log {
+
+    public static Logger LOG;
+
     private static void log(Level logLevel, Object object) {
-        FMLLog.log(Reference.MOD_NAME, logLevel, String.valueOf(object));
+        LOG.log(logLevel, String.valueOf(object));
     }
 
     public static void all(Object object) {

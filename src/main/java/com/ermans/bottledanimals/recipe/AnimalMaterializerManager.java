@@ -16,7 +16,6 @@ public class AnimalMaterializerManager {
 
     public AnimalMaterializerManager() {
         this.mapRecipes = new HashMap<String, AnimalMaterializerRecipe>();
-        initRecipes();
     }
 
     public AnimalMaterializerRecipe addRecipe(AnimalMaterializerRecipe recipe) {
@@ -57,7 +56,7 @@ public class AnimalMaterializerManager {
         return generateKey(recipe.input1, recipe.input2);
     }
 
-    protected void initRecipes() {
+    public void initRecipes() {
         AnimalMaterializerRecipe recipe1 = new AnimalMaterializerRecipe(new ItemStack(ModItems.itemDigitalizedAnimal, 1, 0), new ItemStack(ModItems.itemSpawnEggFrame), new ItemStack(Items.spawn_egg, 1, 90));
         recipe1.setRecipeTime(200).setCode(1);
         addRecipe(recipe1);

@@ -1,10 +1,10 @@
 package com.ermans.bottledanimals.block.machine.growthaccelerator;
 
+import com.ermans.bottledanimals.animal.Animals;
 import com.ermans.bottledanimals.block.machine.TileMachine;
 import com.ermans.bottledanimals.init.ModItems;
 import com.ermans.bottledanimals.recipe.GrowthAcceleratorManager;
 import com.ermans.bottledanimals.recipe.IRecipe;
-import com.ermans.bottledanimals.reference.Animals;
 import com.ermans.repackage.cofh.lib.util.helpers.MathHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -80,7 +80,7 @@ public class TileGrowthAccelerator extends TileMachine {
             if (an == null) {
                 return false;
             }
-            for (ItemStack food : an.getValidFoods()) {
+            for (ItemStack food : an.getBreedingItems()) {
                 if (food.isItemEqual(inventory[multi])) {
                     remaining = MathHelper.ceil(remaining * 0.85);
                     decrStackSize(multi, 1);
@@ -137,7 +137,7 @@ public class TileGrowthAccelerator extends TileMachine {
             return itemstack.getItem() == ModItems.itemDigitalizedBabyAnimal;
         }
         if (slot == multi) {
-            return Animals.getFoodsSet().contains(itemstack.getItem());
+            return Animals.isValidBreedFood(itemstack);
         }
         return false;
     }

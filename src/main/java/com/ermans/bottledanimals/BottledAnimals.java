@@ -1,9 +1,8 @@
 package com.ermans.bottledanimals;
 
+import com.ermans.bottledanimals.animal.Animals;
 import com.ermans.bottledanimals.handlers.BucketHandler;
-import com.ermans.bottledanimals.helper.FoodHelper;
 import com.ermans.bottledanimals.network.PacketHandler;
-import com.ermans.bottledanimals.recipe.FoodCrusherManager;
 import com.ermans.bottledanimals.reference.Reference;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
@@ -23,46 +22,44 @@ public class BottledAnimals {
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
+        Log.LOG = event.getModLog();
         Log.info("Starting Pre Initialization");
-
         MinecraftForge.EVENT_BUS.register(proxy);
-        proxy.preInit(event);
         PacketHandler.init();
 
+        proxy.preInit(event);
         Log.info("Pre Initialization Complete");
     }
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
         Log.info("Starting Initialization");
-
-        proxy.init(event);
         NetworkRegistry.INSTANCE.registerGuiHandler(this, guiHandler);
         MinecraftForge.EVENT_BUS.register(BucketHandler.INSTANCE);
 
-//        MinecraftForge.EVENT_BUS.register(TextureIconHook.INSTANCE);
+        proxy.init(event);
         Log.info("Initialization Complete");
     }
 
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event) {
-        proxy.postInit(event);
-
-        FoodHelper.initItemValue();
-        FoodCrusherManager.init();
         Log.info("Starting Post Initialization");
+
+        proxy.postInit(event);
         Log.info("Post Initialization Complete");
     }
 }
 
 
-    //TODO Add support for other mods
-    // TODO: 05/04/2016 add support for 1.8 things
-    // TODO: 05/04/2016 new Animals class
-    // TODO: 05/04/2016 remove milkBucket and use fluid from dictionary
-    // TODO: 05/04/2016 generator divides energy and cached system                          DONE
-    // TODO: 05/04/2016 lang italiano
+//TODO Add support for other mods
+// TODO: 05/04/2016 add support for 1.8 things
+// TODO: 05/04/2016 new Animals class
+// TODO: 05/04/2016 remove milkBucket and use fluid from dictionary
+// TODO: 05/04/2016 generator divides energy and cached system                              DONE
+// TODO: 05/04/2016 lang italiano
 // TODO: 05/04/2016 feed platform
 // TODO: 05/04/2016 active doesn't work                                                     DONE
 // TODO: 06/04/2016 join energy powered and energy provider
 // TODO: 06/04/2016 support IC2 power
+// TODO: 08/04/2016 textures animation
+// TODO: 08/04/2016 fix recipes

@@ -9,9 +9,11 @@ public class ContainerDropExtractor extends ContainerMachine {
 
     public ContainerDropExtractor(InventoryPlayer invPlayer, TileDropExtractor entity) {
         super(invPlayer, entity);
-        addSlotToContainer(new SlotAcceptValid(entity, 0, 53, 29));
-        addSlotToContainer(new SlotRemoveOnly(entity, 1, 116, 29));
-        addSlotToContainer(new SlotRemoveOnly(entity, 2, 140, 33));
-        addSlotToContainer(new SlotRemoveOnly(entity, 3, 116, 56));
+        addSlotToContainer(new SlotAcceptValid(entity, 0, 45, 29));
+        addSlotToContainer(new SlotRemoveOnly(entity, 1, 106, 22));
+        addSlotToContainer(new SlotRemoveOnly(entity, 2, 126, 22));
+        addSlotToContainer(new SlotRemoveOnly(entity, 3, 106, 42));
+        addSlotToContainer(new SlotRemoveOnly(entity, 4, 129, 45));
+        addSlotToContainer(new SlotRemoveOnly(entity, 5, 152, 61));
     }
 }

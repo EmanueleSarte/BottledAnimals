@@ -6,7 +6,6 @@ import net.minecraft.item.ItemFishFood;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
-import net.minecraftforge.fml.common.registry.GameData;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
@@ -14,31 +13,23 @@ import java.util.Map;
 
 public class FoodHelper {
 
-    // TODO: 26/03/2016 STILL I NEED REFLECTION?
-
     private static Map<Integer, Double> foodValues = new HashMap<Integer, Double>();
 
-    public static void initItemValue() {
-        for (Object o : GameData.getItemRegistry()) {
-            Item item = (Item) o;
+    static{
+        foodValues.put(generateKey(new ItemStack(Items.cake)), 2D);
+    }
 
-            if (item instanceof ItemFood && !item.getHasSubtypes()) {
-                foodValues.put(generateKey(item), calculateFoodValue(new ItemStack(item, 1, 0)));
+    public static void addIfValid(ItemStack stack){
+        if (stack.getItem() instanceof ItemFood){
+            double foodValue = calculateFoodValue(stack);
+            if (foodValue > 0){
+                foodValues.put(generateKey(stack), foodValue);
             }
         }
-        foodValues.put(generateKey(Items.cake), 2D);
     }
 
     private static int generateKey(ItemStack stack) {
-        Item item = stack.getItem();
-        if (item.getHasSubtypes()) {
-            return item.hashCode() + stack.getItemDamage();
-        }
-        return item.hashCode();
-    }
-
-    private static int generateKey(Item item) {
-        return item.hashCode();
+        return stack.getItem().hashCode() + stack.getItemDamage();
     }
 
     private static double calculateFoodValue(ItemStack itemStack) {
@@ -141,9 +132,10 @@ public class FoodHelper {
         Double foodValue = foodValues.get(key);
         if (foodValue != null) return foodValue;
 
-        if (stack.getHasSubtypes()) {
-            foodValue = calculateFoodValue(stack);
-            foodValues.put(key, foodValue);
+        double value = calculateFoodValue(stack);
+        if (value != 0) {
+            foodValues.put(generateKey(stack), value);
+            return value;
         }
         return 0;
     }

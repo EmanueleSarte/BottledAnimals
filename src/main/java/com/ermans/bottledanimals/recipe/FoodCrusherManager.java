@@ -17,7 +17,7 @@ public class FoodCrusherManager {
 
     public static final FoodCrusherManager INSTANCE = new FoodCrusherManager();
     private final Map<String, FoodCrusherRecipe> mapRecipes;
-    private Random random = new Random();
+    private static Random random = new Random();
 
     public FoodCrusherManager() {
         this.mapRecipes = new HashMap<String, FoodCrusherRecipe>();

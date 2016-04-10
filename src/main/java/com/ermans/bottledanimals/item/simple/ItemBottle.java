@@ -1,8 +1,8 @@
 package com.ermans.bottledanimals.item.simple;
 
+import com.ermans.bottledanimals.animal.Animals;
 import com.ermans.bottledanimals.init.ModItems;
 import com.ermans.bottledanimals.item.ItemBottledAnimals;
-import com.ermans.bottledanimals.reference.Animals;
 import com.ermans.bottledanimals.reference.Names;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
@@ -31,10 +31,12 @@ public class ItemBottle extends ItemBottledAnimals {
         if (entity instanceof EntityAnimal && ((EntityAnimal) entity).getGrowingAge() < 0) {
             return false;
         }
-        Animals entityAnimals = Animals.getAnimalsFromEntityName(EntityList.classToStringMapping.get(entity.getClass()));
-        if (entityAnimals == null) {
+
+        Animals animal;
+        if ((animal = Animals.classToAnimalsMap.get(entity.getClass())) == null) {
             return false;
         }
+
         entity.setDead();
         if (entity.isDead) {
 
@@ -44,7 +46,7 @@ public class ItemBottle extends ItemBottledAnimals {
                     itemStack = null;
                 }
 
-                ItemStack filledBottle = new ItemStack(ModItems.itemAnimalInABottle, 1, entityAnimals.getID());
+                ItemStack filledBottle = new ItemStack(ModItems.itemAnimalInABottle, 1, animal.getID());
                 if (!player.inventory.addItemStackToInventory(filledBottle)) {
                     player.dropPlayerItemWithRandomChoice(filledBottle, false);
                 }

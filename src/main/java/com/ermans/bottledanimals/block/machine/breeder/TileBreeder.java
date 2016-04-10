@@ -1,10 +1,10 @@
 package com.ermans.bottledanimals.block.machine.breeder;
 
+import com.ermans.bottledanimals.animal.Animals;
 import com.ermans.bottledanimals.block.machine.TileMachine;
 import com.ermans.bottledanimals.init.ModItems;
 import com.ermans.bottledanimals.recipe.BreederManager;
 import com.ermans.bottledanimals.recipe.IRecipe;
-import com.ermans.bottledanimals.reference.Animals;
 import net.minecraft.item.ItemStack;
 
 public class TileBreeder extends TileMachine {
@@ -95,7 +95,7 @@ public class TileBreeder extends TileMachine {
         }
 
         if (slot == food) {
-            return Animals.getFoodsSet().contains(itemstack.getItem());
+            return Animals.isValidBreedFood(itemstack);
         }
         return false;
     }

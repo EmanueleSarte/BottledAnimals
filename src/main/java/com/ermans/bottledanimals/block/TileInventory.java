@@ -140,6 +140,10 @@ public abstract class TileInventory extends TileReconfigurable implements ISided
 
 
     public void increaseStackSize(int slot, ItemStack stack) {
+        if (stack == null){
+            return;
+        }
+
         ItemStack fromStack = this.inventory[slot];
         if (fromStack == null) {
             inventory[slot] = stack.copy();

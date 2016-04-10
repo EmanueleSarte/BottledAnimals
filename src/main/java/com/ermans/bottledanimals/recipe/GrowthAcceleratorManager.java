@@ -1,8 +1,8 @@
 package com.ermans.bottledanimals.recipe;
 
 
+import com.ermans.bottledanimals.animal.Animals;
 import com.ermans.bottledanimals.init.ModItems;
-import com.ermans.bottledanimals.reference.Animals;
 import net.minecraft.item.ItemStack;
 
 import java.util.Collection;
@@ -16,7 +16,6 @@ public class GrowthAcceleratorManager {
 
     public GrowthAcceleratorManager() {
         this.mapRecipes = new HashMap<String, GrowthAcceleratorRecipe>();
-        initRecipes();
     }
 
     public GrowthAcceleratorRecipe addRecipe(GrowthAcceleratorRecipe recipe) {
@@ -43,9 +42,9 @@ public class GrowthAcceleratorManager {
     }
 
 
-    protected void initRecipes() {
+    public void initRecipes() {
         int i = 13;
-        for (Animals animal : Animals.values()) {
+        for (Animals animal : Animals.animalsList) {
             ItemStack input = new ItemStack(ModItems.itemDigitalizedBabyAnimal, 1, animal.getID());
             GrowthAcceleratorRecipe recipe = new GrowthAcceleratorRecipe(input, new ItemStack(ModItems.itemDigitalizedAnimal, 1, animal.getID()));
             recipe.setRecipeTime(20000).setCode(i * 7);

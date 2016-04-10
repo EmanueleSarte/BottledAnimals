@@ -21,7 +21,7 @@ public class GuiDropExtractor extends GuiBaseAdv {
         super.initGui();
         addTab(new TabInfo(this, TabBase.LEFT, "Get Drop from a Digitalized Animal"));
 
-        this.speed = ((ElementDualScaled) addElement(new ElementDualScaled(this, 77, 29).setMode(1).setSize(26, 16).setTexture(Textures.Gui.Element.PROGRESS_EXTRACT, 64, 16)));
+        this.speed = ((ElementDualScaled) addElement(new ElementDualScaled(this, 69, 29).setMode(1).setSize(26, 16).setTexture(Textures.Gui.Element.PROGRESS_EXTRACT, 64, 16)));
     }
 
     @Override

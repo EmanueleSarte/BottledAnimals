@@ -12,7 +12,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.List;
 
 public class ItemAnimalInABottle extends ItemBottledAnimals {
-    private static final String[] BOTTLED_ANIMAL_NAME = {"pig", "sheep", "cow", "chicken", "squid", "wolf", "moosh", "ocelot", "horse"};
+    private static final String[] BOTTLED_ANIMAL_NAME = {"pig", "sheep", "cow", "chicken", "squid", "wolf", "moosh", "ocelot", "horse", "rabbit"};
 //    private static final String[] BOTTLED_ANIMAL_FILE_NAME = {"animalBottle_pig", "animalBottle_sheep", "animalBottle_cow", "animalBottle_chicken", "animalBottle_squid", "animalBottle_wolf", "animalBottle_moosh", "animalBottle_ocelot", "animalBottle_horse"};
 
 

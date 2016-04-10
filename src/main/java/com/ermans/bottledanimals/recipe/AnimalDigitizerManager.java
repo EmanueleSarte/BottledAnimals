@@ -1,8 +1,8 @@
 package com.ermans.bottledanimals.recipe;
 
 
+import com.ermans.bottledanimals.animal.Animals;
 import com.ermans.bottledanimals.init.ModItems;
-import com.ermans.bottledanimals.reference.Animals;
 import net.minecraft.item.ItemStack;
 
 import java.util.Collection;
@@ -16,7 +16,6 @@ public class AnimalDigitizerManager {
 
     public AnimalDigitizerManager() {
         this.mapRecipes = new HashMap<String, AnimalDigitizerRecipe>();
-//        initRecipes();
     }
 
     public AnimalDigitizerRecipe addRecipe(AnimalDigitizerRecipe recipe) {
@@ -57,9 +56,9 @@ public class AnimalDigitizerManager {
         return generateKey(recipe.input1, recipe.input2);
     }
 
-    protected void initRecipes() {
+    public void initRecipes() {
         int i = 13;
-        for (Animals animal : Animals.values()) {
+        for (Animals animal : Animals.animalsList) {
             AnimalDigitizerRecipe recipe = new AnimalDigitizerRecipe(new ItemStack(ModItems.itemAnimalInABottle, 1, animal.getID()),
                     new ItemStack(ModItems.itemBlankPattern), new ItemStack(ModItems.itemDigitalizedAnimal, 1, animal.getID()));
             recipe.setRecipeTime(200).setCode(i * 7);

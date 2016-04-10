@@ -12,7 +12,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.List;
 
 public class ItemDigitalizedAnimal extends ItemBottledAnimals {
-    private static final String[] DIGITIALIZED_ANIMAL_NAME = {"pig", "sheep", "cow", "chicken", "squid", "wolf", "moosh", "ocelot", "horse"};
+    private static final String[] DIGITIALIZED_ANIMAL_NAME = {"pig", "sheep", "cow", "chicken", "squid", "wolf", "moosh", "ocelot", "horse", "rabbit"};
 
     public ItemDigitalizedAnimal() {
         super(Names.Items.DIGITALIZED_ANIMAL);

@@ -1,8 +1,8 @@
 package com.ermans.bottledanimals.recipe;
 
 
+import com.ermans.bottledanimals.animal.Animals;
 import com.ermans.bottledanimals.init.ModItems;
-import com.ermans.bottledanimals.reference.Animals;
 import net.minecraft.item.ItemStack;
 
 import java.util.Collection;
@@ -16,7 +16,6 @@ public class BreederManager {
 
     public BreederManager() {
         this.mapRecipes = new HashMap<String, BreederRecipe>();
-        initRecipes();
     }
 
     public BreederRecipe addRecipe(BreederRecipe recipe) {
@@ -45,11 +44,11 @@ public class BreederManager {
         return generateKey(recipe.input1, recipe.input2);
     }
 
-    protected void initRecipes() {
+    public void initRecipes() {
         int k = 13;
-        for (Animals animal : Animals.values()) {
+        for (Animals animal : Animals.animalsList) {
             ItemStack input = new ItemStack(ModItems.itemDigitalizedAnimal, 1, animal.getID());
-            ItemStack[] validFoods = animal.getValidFoods();
+            ItemStack[] validFoods = animal.getBreedingItems();
             ItemStack[] validFoodsCopy = new ItemStack[validFoods.length];
             for (int i = 0; i < validFoods.length; i++) {
                 validFoodsCopy[i] = validFoods[i].copy();

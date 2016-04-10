@@ -1,11 +1,9 @@
 package com.ermans.bottledanimals.recipe;
 
 
-import com.ermans.bottledanimals.init.ModFluids;
+import com.ermans.bottledanimals.animal.AnimalStack;
+import com.ermans.bottledanimals.animal.Animals;
 import com.ermans.bottledanimals.init.ModItems;
-import com.ermans.bottledanimals.reference.Animals;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -20,7 +18,6 @@ public class RancherManager {
 
     public RancherManager() {
         this.mapRecipes = new HashMap<String, RancherRecipe>();
-        initRecipes();
     }
 
     public RancherRecipe addRecipe(RancherRecipe recipe) {
@@ -52,42 +49,38 @@ public class RancherManager {
     }
 
 
-    protected void initRecipes() {
-        RancherRecipe recipe1 = new RancherRecipe(new ItemStack(ModItems.itemDigitalizedAnimal, 1, Animals.COW.getID()), null, new FluidStack(ModFluids.milk, 1000));
-        RancherRecipe recipe2 = new RancherRecipe(new ItemStack(ModItems.itemDigitalizedAnimal, 1, Animals.SHEEP.getID()), new ItemStack(Blocks.wool, 2));
-        RancherRecipe recipe3 = new RancherRecipe(new ItemStack(ModItems.itemDigitalizedAnimal, 1, Animals.CHICKEN.getID()), new ItemStack(Items.egg));
-        RancherRecipe recipe4 = new RancherRecipe(new ItemStack(ModItems.itemDigitalizedAnimal, 1, Animals.MUSHROOM_COW.getID()), null, new FluidStack(ModFluids.milk, 1000));
-        RancherRecipe recipe5 =  new RancherRecipe(new ItemStack(ModItems.itemDigitalizedAnimal, 1, Animals.SQUID.getID()), new ItemStack(Items.dye, 3, 0));
+    public void initRecipes() {
 
-        recipe1.setRecipeTime(200).setCode(10001);
-        recipe2.setRecipeTime(1200).setCode(10010);
-        recipe3.setRecipeTime(2000).setCode(10100);
-        recipe4.setRecipeTime(200).setCode(11000);
-        recipe5.setRecipeTime(3000).setCode(20000);
-
-        addRecipe(recipe1);
-        addRecipe(recipe2);
-        addRecipe(recipe3);
-        addRecipe(recipe4);
-        addRecipe(recipe5);
-
+        for (int i = 0; i < Animals.animalsList.size(); i++) {
+            Animals animal = Animals.animalsList.get(i);
+            if (animal.getRanchableItem() != null) {
+                RancherRecipe recipe;
+                if (animal.getRanchableFluid() != null) {
+                    recipe = new RancherRecipe(new ItemStack(ModItems.itemDigitalizedAnimal, 1, animal.getID()), animal.getRanchableItem(), animal.getRanchableFluid());
+                } else {
+                    recipe = new RancherRecipe(new ItemStack(ModItems.itemDigitalizedAnimal, 1, animal.getID()), animal.getRanchableItem(), animal.getRanchableFluid());
+                }
+                recipe.setCode(i * 7).setRecipeTime(animal.getRanchableTime());
+                addRecipe(recipe);
+            }
+        }
     }
 
-    public Collection<RancherRecipe> getRecipes(){
+    public Collection<RancherRecipe> getRecipes() {
         return this.mapRecipes.values();
     }
 
     public class RancherRecipe extends Recipe {
 
         protected ItemStack input;
-        protected ItemStack output;
+        protected AnimalStack output;
         protected FluidStack fluidOutput;
 
-        public RancherRecipe(ItemStack input, ItemStack output) {
+        public RancherRecipe(ItemStack input, AnimalStack output) {
             this(input, output, null);
         }
 
-        public RancherRecipe(ItemStack input, ItemStack output, FluidStack fluidOutput) {
+        public RancherRecipe(ItemStack input, AnimalStack output, FluidStack fluidOutput) {
             this.input = input;
             this.output = output;
             this.fluidOutput = fluidOutput;
@@ -105,7 +98,11 @@ public class RancherManager {
 
 
         public ItemStack getOutput() {
-            return output;
+            return output.get();
+        }
+
+        public ItemStack getOutput(boolean original) {
+            return original ? output.getOriginal() : output.get();
         }
 
         public FluidStack getFluidOutput() {
@@ -122,8 +119,8 @@ public class RancherManager {
         }
 
 
-        public int getOutputStackSize() {
-            return output.stackSize;
+        public int getOutputMaxSize() {
+            return output == null ? 0 : output.getMaxQuantity();
         }
 
         public int getFluidStackAmount() {
