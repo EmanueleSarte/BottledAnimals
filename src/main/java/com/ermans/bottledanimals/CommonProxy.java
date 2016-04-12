@@ -25,7 +25,6 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class CommonProxy {
@@ -61,8 +60,7 @@ public class CommonProxy {
 
     private void cyclesItems() {
         List<ItemStack> stacks = new ArrayList<ItemStack>();
-        for (Iterator<Item> iterator = Item.itemRegistry.iterator(); iterator.hasNext(); ) {
-            Item item = iterator.next();
+        for (Item item : Item.itemRegistry) {
             stacks.clear();
             if (item.getHasSubtypes()) {
                 item.getSubItems(item, null, stacks);
@@ -73,6 +71,7 @@ public class CommonProxy {
             for (ItemStack stack : stacks) {
                 ///////////INSERT METHOD CALLS HERE //////////
                 FoodHelper.addIfValid(stack);
+                Animals.findEgg(stack);
             }
         }
     }

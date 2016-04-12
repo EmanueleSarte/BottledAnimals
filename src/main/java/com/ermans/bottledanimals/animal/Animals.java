@@ -13,6 +13,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.common.registry.EntityRegistry;
 
 import java.util.*;
 
@@ -34,7 +35,7 @@ public class Animals {
     public static final Map<Class<? extends Entity>, Animals> classToAnimalsMap = new HashMap<Class<? extends Entity>, Animals>();
     public static final Map<Integer, Animals> idToAnimalsMap = new HashMap<Integer, Animals>();
     public static final List<Animals> animalsList = new ArrayList<Animals>();
-    private static final Map<String, EntityList.EntityEggInfo> nameToEggsMap = new HashMap<String, EntityList.EntityEggInfo>();
+    private static Map<String, ItemStack> nameToEggsMap = new HashMap<String, ItemStack>();
 
 
     private static final Set<String> foodBreedSet = new HashSet<String>();
@@ -47,7 +48,7 @@ public class Animals {
     private AnimalStack rareDrop;
     private AnimalStack ranchableItem;
     private FluidStack ranchableFluid;
-    private EntityList.EntityEggInfo egg;
+    private ItemStack egg;
     private int ranchableTime;
     private int id;
 
@@ -56,16 +57,18 @@ public class Animals {
     private Animals() {
     }
 
+
     private static Animals newAnimal(String entityName, String fancyName) {
         Animals animal = new Animals().setEntityName(entityName).setFancyName(fancyName);
         animal.id = idCounter;
-        idCounter++;
-
         animal.egg = nameToEggsMap.get(entityName);
+
         animalsMap.put(entityName, animal);
         idToAnimalsMap.put(animal.id, animal);
         animalsList.add(animal);
         classToAnimalsMap.put(EntityList.stringToClassMapping.get(entityName), animal);
+
+        idCounter++;
         return animal;
     }
 
@@ -84,6 +87,7 @@ public class Animals {
         }
         return null;
     }
+
 
     public static Animals getAnimalsFromID(int id) {
         return idToAnimalsMap.get(id);
@@ -149,7 +153,7 @@ public class Animals {
         return id;
     }
 
-    public EntityList.EntityEggInfo getEggInfo() {
+    public ItemStack getEgg() {
         return egg;
     }
 
@@ -195,18 +199,25 @@ public class Animals {
         return new ItemStack(item, 1, metadata);
     }
 
-    private static void initializeEggMap() {
-        for (Integer id : EntityList.entityEggs.keySet()) {
-            EntityList.EntityEggInfo eggInfo = EntityList.entityEggs.get(id);
-            if (EntityAnimal.class.isAssignableFrom(EntityList.stringToClassMapping.get(eggInfo.name))) {
-                nameToEggsMap.put(eggInfo.name, eggInfo);
+
+    public static void findEgg(ItemStack stack) {
+        if (stack.getItem() == Items.spawn_egg) {
+            EntityList.EntityEggInfo eggInfo = getEggInfo(stack);
+            if (eggInfo != null) {
+                nameToEggsMap.put(eggInfo.name, stack);
             }
         }
     }
 
+    private static EntityList.EntityEggInfo getEggInfo(ItemStack stack) {
+        if (stack.hasTagCompound() && stack.getTagCompound().hasKey("entity_name", 8))
+            return EntityRegistry.getEggs().get(stack.getTagCompound().getString("entity_name"));
+        return EntityList.entityEggs.get(stack.getMetadata());
+    }
+
+
     public static void initializeAnimals() {
 
-        initializeEggMap();
 
         PIG = newAnimal("Pig", "Pig")
                 .setBreedingItems(new ItemStack[]{i(Items.carrot), i(Items.potato)})
@@ -228,13 +239,13 @@ public class Animals {
         CHICKEN = newAnimal("Chicken", "Chicken")
                 .setBreedingItems(new ItemStack[]{i(Items.wheat_seeds)})
                 .setDropItems(new AnimalStack[]{new AnimalStack(i(Items.chicken), 1), new AnimalStack(i(Items.feather), 0, 1, 2)})
-                .setRanchableItem(new AnimalStack(i(Items.egg), 1)).setRanchableTime(2000)
+                .setRanchableItem(new AnimalStack(i(Items.egg), 66, 1, 34, 2)).setRanchableTime(2000)
                 .setRareDrop(new AnimalStack(i(Items.dye, 3), 15, 1, 85, 0));
 
         SQUID = newAnimal("Squid", "Squid")
                 .setBreedingItems(new ItemStack[]{i(ModItems.itemSquidFood)})
                 .setDropItems(new AnimalStack[]{new AnimalStack(i(Items.dye, 0), 1, 2, 3)})
-                .setRanchableItem(new AnimalStack(i(Items.dye, 0), 1)).setRanchableTime(1000)
+                .setRanchableItem(new AnimalStack(i(Items.dye, 0), 66, 1, 34, 2)).setRanchableTime(1000)
                 .setRareDrop(new AnimalStack(i(Items.glass_bottle), 15, 1, 85, 0));
 
         WOLF = newAnimal("Wolf", "Wolf")
@@ -244,7 +255,7 @@ public class Animals {
                 .setBreedingItems(new ItemStack[]{i(Items.wheat)})
                 .setDropItems(new AnimalStack[]{new AnimalStack(i(Items.beef), 1, 2, 3), new AnimalStack(i(Items.leather), 1, 2)})
                 .setRanchableFluid(new FluidStack(ModFluids.milk, 1000)).setRanchableTime(200)
-                .setRareDrop(new AnimalStack(i(Blocks.red_mushroom), 2, 1, 98, 0));
+                .setRareDrop(new AnimalStack(i(Blocks.mycelium), 1, 1, 99, 0));
 
         OCELOT = newAnimal("Ozelot", "Ocelot")
                 .setBreedingItems(new ItemStack[]{i(Items.fish, 0), i(Items.fish, 1), i(Items.fish, 2)});
@@ -255,9 +266,11 @@ public class Animals {
                 .setRareDrop(new AnimalStack(i(Items.saddle), 1, 1, 99, 0));
 
         RABBIT = newAnimal("Rabbit", "Rabbit")
-                .setBreedingItems(new ItemStack[]{i(Items.carrot), i(Items.golden_carrot), i(Blocks.red_flower, 0), i(Blocks.red_flower, 1), i(Blocks.red_flower, 2), i(Blocks.red_flower, 3), i(Blocks.red_flower, 4), i(Blocks.red_flower, 5), i(Blocks.red_flower, 6), i(Blocks.red_flower, 7), i(Blocks.red_flower, 8)})
+                .setBreedingItems(new ItemStack[]{i(Items.carrot), i(Items.golden_carrot), i(Blocks.yellow_flower), i(Blocks.red_flower, 0), i(Blocks.red_flower, 1), i(Blocks.red_flower, 2), i(Blocks.red_flower, 3), i(Blocks.red_flower, 4), i(Blocks.red_flower, 5), i(Blocks.red_flower, 6), i(Blocks.red_flower, 7), i(Blocks.red_flower, 8)})
                 .setDropItems(new AnimalStack[]{new AnimalStack(i(Items.rabbit_hide), 0, 1), new AnimalStack(i(Items.rabbit), 0, 1), new AnimalStack(i(Items.rabbit_foot), 10, 1, 90, 0)})
                 .setRareDrop(new AnimalStack(i(Items.cookie), 20, 1, 80, 0));
+
+        nameToEggsMap = null;
     }
 
 }

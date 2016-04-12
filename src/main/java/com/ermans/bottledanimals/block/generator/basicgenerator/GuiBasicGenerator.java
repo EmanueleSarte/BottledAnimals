@@ -39,8 +39,9 @@ public class GuiBasicGenerator extends GuiBaseAdv {
 
 
     private static List<String> iconLowGen = Arrays.asList("No output,", "generating at 1 RF/t");
-    private static List<String> iconBalance = Arrays.asList("Reaching the half", "at max speed");
-    private static List<String> iconRigGen = Arrays.asList("Generating right", "the energy required");
+    private static List<String> iconBalance = Arrays.asList("Reaching the 90%", "at max speed");
+    private static List<String> iconBuffer = Arrays.asList("Using buffer to", "supply energy required", "...generating at 1 RF/t");
+    private static List<String> iconRigGen = Arrays.asList("Generating just", "the energy required");
     private static List<String> iconOff = Arrays.asList("No energy generation");
 
     @Override
@@ -56,6 +57,10 @@ public class GuiBasicGenerator extends GuiBaseAdv {
                 case BALANCING:
                     icon.setIcon(IconRegistry.getIcon("GeneratorBalance"));
                     icon.setTooltipText(iconBalance);
+                    break;
+                case USING_BUFFER:
+                    icon.setIcon(IconRegistry.getIcon("GeneratorBuffer"));
+                    icon.setTooltipText(iconBuffer);
                     break;
                 case RIGHT_GEN:
                     icon.setIcon(IconRegistry.getIcon("GeneratorRigGen"));

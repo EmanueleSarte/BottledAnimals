@@ -62,15 +62,17 @@ public class AnimalStack {
                 }
 
                 this.probability[this.probability.length - 1] = 100;
+                this.quantity[this.quantity.length - 1] = probability[probability.length - 1];
 
                 minQuantity = maxQuantity = this.quantity[0];
-                for (int value : this.quantity) {
-                    if (value < minQuantity) {
-                        minQuantity = value;
-                    }
-                    if (value > maxQuantity) {
-                        maxQuantity = value;
-                    }
+            }
+
+            for (int value : this.quantity) {
+                if (value < minQuantity) {
+                    minQuantity = value;
+                }
+                if (value > maxQuantity) {
+                    maxQuantity = value;
                 }
             }
 
@@ -99,7 +101,7 @@ public class AnimalStack {
         return minQuantity;
     }
 
-    public ItemStack getOriginal(){
+    public ItemStack getOriginal() {
         return itemStack;
     }
 

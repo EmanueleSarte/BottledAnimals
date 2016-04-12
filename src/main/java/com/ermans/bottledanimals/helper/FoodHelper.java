@@ -15,14 +15,23 @@ public class FoodHelper {
 
     private static Map<Integer, Double> foodValues = new HashMap<Integer, Double>();
 
-    static{
+    static {
         foodValues.put(generateKey(new ItemStack(Items.cake)), 2D);
     }
 
-    public static void addIfValid(ItemStack stack){
-        if (stack.getItem() instanceof ItemFood){
-            double foodValue = calculateFoodValue(stack);
-            if (foodValue > 0){
+    public static void addIfValid(ItemStack stack) {
+        if (stack.getItem() instanceof ItemFood) {
+            double foodValue;
+            if (stack.getItem() == Items.golden_apple) {
+                if (stack.getItemDamage() == 0){
+                    foodValue = 10;
+                }else{
+                    foodValue = 90;
+                }
+            } else {
+                foodValue = calculateFoodValue(stack);
+            }
+            if (foodValue > 0) {
                 foodValues.put(generateKey(stack), foodValue);
             }
         }

@@ -24,6 +24,8 @@ item.bottledanimals:animalBottle.moosh.name=Bottled Mooshroom
 item.bottledanimals:animalBottle.wolf.name=Bottled Wolf
 item.bottledanimals:animalBottle.cow.name=Bottled Cow
 item.bottledanimals:animalBottle.ocelot.name=Bottled Ocelot
+item.bottledanimals:animalBottle.rabbit.name=Bottled Rabbit
+
     #Digitalized Animals
 item.bottledanimals:digitalizedAnimal.chicken.name=Digitalized Chicken
 item.bottledanimals:digitalizedAnimal.pig.name=Digitalized Pig
@@ -34,6 +36,8 @@ item.bottledanimals:digitalizedAnimal.moosh.name=Digitalized Mooshroom
 item.bottledanimals:digitalizedAnimal.wolf.name=Digitalized Wolf
 item.bottledanimals:digitalizedAnimal.cow.name=Digitalized Cow
 item.bottledanimals:digitalizedAnimal.ocelot.name=Digitalized Ocelot
+item.bottledanimals:digitalizedAnimal.rabbit.name=Digitalized Rabbit
+
     #Digitalized Baby Animals
 item.bottledanimals:digitalizedBabyAnimal.chicken.name=Digitalized Baby Chicken
 item.bottledanimals:digitalizedBabyAnimal.pig.name=Digitalized Baby Pig
@@ -44,6 +48,7 @@ item.bottledanimals:digitalizedBabyAnimal.moosh.name=Digitalized Baby Mooshroom
 item.bottledanimals:digitalizedBabyAnimal.wolf.name=Digitalized Baby Wolf
 item.bottledanimals:digitalizedBabyAnimal.cow.name=Digitalized Baby Cow
 item.bottledanimals:digitalizedBabyAnimal.ocelot.name=Digitalized Baby Ocelot
+item.bottledanimals:digitalizedBabyAnimal.rabbit.name=Digitalized Baby Rabbit
 
 
 
@@ -64,8 +69,8 @@ tile.bottledanimals:machineFrame.name=Machine Frame
 
 
 #Fluid
-tile.bottledanimals:bamilk.name=Food Fluid
-tile.bottledanimals:bamilk.name=Milk Fluid
+fluid.bottledanimals:food=Food Fluid
+fluid.bottledanimals:bamilk=Milk Fluid
 
 
 

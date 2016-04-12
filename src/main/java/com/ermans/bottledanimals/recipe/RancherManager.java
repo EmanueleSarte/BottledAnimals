@@ -53,13 +53,8 @@ public class RancherManager {
 
         for (int i = 0; i < Animals.animalsList.size(); i++) {
             Animals animal = Animals.animalsList.get(i);
-            if (animal.getRanchableItem() != null) {
-                RancherRecipe recipe;
-                if (animal.getRanchableFluid() != null) {
-                    recipe = new RancherRecipe(new ItemStack(ModItems.itemDigitalizedAnimal, 1, animal.getID()), animal.getRanchableItem(), animal.getRanchableFluid());
-                } else {
-                    recipe = new RancherRecipe(new ItemStack(ModItems.itemDigitalizedAnimal, 1, animal.getID()), animal.getRanchableItem(), animal.getRanchableFluid());
-                }
+            if (animal.getRanchableItem() != null || animal.getRanchableFluid() != null) {
+                RancherRecipe recipe = new RancherRecipe(new ItemStack(ModItems.itemDigitalizedAnimal, 1, animal.getID()), animal.getRanchableItem(), animal.getRanchableFluid());
                 recipe.setCode(i * 7).setRecipeTime(animal.getRanchableTime());
                 addRecipe(recipe);
             }
@@ -98,11 +93,11 @@ public class RancherManager {
 
 
         public ItemStack getOutput() {
-            return output.get();
+            return getOutput(false);
         }
 
         public ItemStack getOutput(boolean original) {
-            return original ? output.getOriginal() : output.get();
+            return output == null ? null : original ? output.getOriginal() : output.get();
         }
 
         public FluidStack getFluidOutput() {

@@ -1,6 +1,5 @@
 package com.ermans.bottledanimals;
 
-import com.ermans.bottledanimals.animal.Animals;
 import com.ermans.bottledanimals.handlers.BucketHandler;
 import com.ermans.bottledanimals.network.PacketHandler;
 import com.ermans.bottledanimals.reference.Reference;
@@ -52,8 +51,8 @@ public class BottledAnimals {
 
 
 //TODO Add support for other mods
-// TODO: 05/04/2016 add support for 1.8 things
-// TODO: 05/04/2016 new Animals class
+// TODO: 05/04/2016 add support for 1.8 things                                              DONE
+// TODO: 05/04/2016 new Animals class                                                       DONE
 // TODO: 05/04/2016 remove milkBucket and use fluid from dictionary
 // TODO: 05/04/2016 generator divides energy and cached system                              DONE
 // TODO: 05/04/2016 lang italiano
@@ -62,4 +61,5 @@ public class BottledAnimals {
 // TODO: 06/04/2016 join energy powered and energy provider
 // TODO: 06/04/2016 support IC2 power
 // TODO: 08/04/2016 textures animation
-// TODO: 08/04/2016 fix recipes
+// TODO: 08/04/2016 fix recipes                                                             DONE
+// TODO: 10/04/2016 fix light                                                               DONE

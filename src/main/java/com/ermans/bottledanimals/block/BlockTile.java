@@ -153,7 +153,11 @@ public abstract class BlockTile extends BlockBase implements IGuiHandler, ITileE
 
     @Override
     public int getLightValue(IBlockAccess world, BlockPos pos) {
-        return world.getBlockState(pos).getValue(PROPERTY_ACTIVE) ? 12 : 0;
+        TileEntity entity = world.getTileEntity(pos);
+        if (entity != null && entity instanceof TileBottledAnimals) {
+            return ((TileBottledAnimals) entity).isActive() ? 12 : 0;
+        }
+        return 0;
     }
 
 

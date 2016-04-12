@@ -37,6 +37,7 @@ public abstract class TileGenerator extends TileEnergyProvider implements ITileI
         LOW_GEN,
         BALANCING,
         RIGHT_GEN,
+        USING_BUFFER,
         OFF
     }
 
@@ -52,111 +53,106 @@ public abstract class TileGenerator extends TileEnergyProvider implements ITileI
     public void update() {
         super.update();
 
+        if (worldObj.isRemote) {
+            return;
+        }
+
         boolean sendUpdate = false;
         boolean hasChanged = isActive;
 
-        if (!worldObj.isRemote) {
+        if (remaining > 0) {
 
-            if (remaining > 0) {
+            int energyGenerated = maxRF;
 
-                int energyGenerated = maxRF;
-
-                if (lastEnergyOut == 0) {
-                    if (isStorageHalfFull()) {
-                        actualRate--;
-                        if (actualRate <= 0) {
-                            actualRate = 1;
-                        }
-                        energyGenerated = actualRate;
-                        state = STATE.LOW_GEN;
-                    } else {
-                        actualRate = energyGenerated;
-                        state = STATE.BALANCING;
+            if (lastEnergyOut == 0) {
+                if (isStorageNinetyPercentFull()) {
+                    actualRate--;
+                    if (actualRate <= 0) {
+                        actualRate = 1;
                     }
+                    energyGenerated = actualRate;
+                    state = STATE.LOW_GEN;
                 } else {
-                    if (isStorageHalfFull()) {
+                    actualRate = energyGenerated;
+                    state = STATE.BALANCING;
+                }
+            } else {
+                if (isStorageHalfFull()) {
 
-                        if (actualRate > lastEnergyOut) {
-                            actualRate--;
-                            if (actualRate < lastEnergyOut) {
-                                actualRate = lastEnergyOut;
-                            }
-                        } else {
-                            actualRate++;
-                            if (actualRate > lastEnergyOut) {
-                                actualRate = lastEnergyOut;
-                            }
-                        }
-                        state = STATE.RIGHT_GEN;
-                        energyGenerated = actualRate;
-                    } else {
-                        actualRate = energyGenerated;
-                        state = STATE.BALANCING;
+                    actualRate--;
+                    if (actualRate <= 0){
+                        actualRate = 1;
                     }
+                    state = STATE.USING_BUFFER;
+                    energyGenerated = actualRate;
+                } else {
+                    actualRate = energyGenerated;
+                    state = STATE.RIGHT_GEN;
                 }
-
-                energyGenerated = Math.min(energyGenerated, remaining);
-                remaining -= energyGenerated;
-                modifyEnergyStored(energyGenerated);
-
-                if (remaining <= 0) {
-                    isActive = false;
-                    sendUpdate = true;
-                }
-
             }
+
+            energyGenerated = Math.min(energyGenerated, remaining);
+            remaining -= energyGenerated;
+            modifyEnergyStored(energyGenerated);
 
             if (remaining <= 0) {
-                if (hasPassedRedstoneTest()) {
-                    if (!isStorageFull() && canStart()) {
-                        remaining = totalFuel = startProcess();
-                        sendUpdate = true;
-                        isActive = true;
-                    }
-                }
-                if (!isActive) {
-                    state = STATE.OFF;
-                    if (actualRate != 0) {
-                        actualRate = 0;
-                    }
-                }
+                isActive = false;
+                sendUpdate = true;
             }
 
+        }
 
-            lastEnergyOut = 0;
-            if (hasPassedRedstoneTest() && !isStorageEmpty()) {
-
-                if (receiversMap == null) {
-                    updateReceivers();
+        if (remaining <= 0) {
+            if (hasPassedRedstoneTest()) {
+                if (!isStorageFull() && canStart()) {
+                    remaining = totalFuel = startProcess();
+                    sendUpdate = true;
+                    isActive = true;
                 }
-                int good = receiversMap.size();
-                int badFaces = 0;
-                while (good > 0 && lastEnergyOut < maxRF && !isStorageFull()) {
-
-                    int actualAverage = (maxRF - lastEnergyOut) / good;
-                    int odd = (maxRF - lastEnergyOut) - actualAverage * good;
-
-                    good = 0;
-                    int counter = 1;
-                    for (EnumFacing face : receiversMap.keySet()) {
-                        IEnergyReceiver receiver = receiversMap.get(face);
-                        if ((badFaces & counter) != counter) {
-
-                            int energy = receiver.receiveEnergy(face, extractEnergy(face, actualAverage + odd, true), false);
-                            lastEnergyOut += extractEnergy(face, energy, false);
-
-                            if (energy == actualAverage + odd && receiver.receiveEnergy(face, 1, true) > 0) {
-                                good++;
-                            }else{
-                                badFaces = badFaces | counter;
-                            }
-                            odd = 0;
-                        }
-                        counter = counter * 2;
-                    }
+            }
+            if (!isActive) {
+                state = STATE.OFF;
+                if (actualRate != 0) {
+                    actualRate = 0;
                 }
             }
         }
+
+
+        lastEnergyOut = 0;
+        if (hasPassedRedstoneTest() && !isStorageEmpty()) {
+
+            if (receiversMap == null) {
+                updateReceivers();
+            }
+            int good = receiversMap.size();
+            int badFaces = 0;
+            while (good > 0 && lastEnergyOut < maxRF && !isStorageEmpty()) {
+
+                int actualAverage = (maxRF - lastEnergyOut) / good;
+                int odd = (maxRF - lastEnergyOut) - actualAverage * good;
+
+                good = 0;
+                int counter = 1;
+                for (EnumFacing face : receiversMap.keySet()) {
+                    IEnergyReceiver receiver = receiversMap.get(face);
+                    if ((badFaces & counter) != counter) {
+
+                        int energy = receiver.receiveEnergy(face, extractEnergy(face, actualAverage + odd, true), false);
+                        lastEnergyOut += extractEnergy(face, energy, false);
+
+                        if (energy == actualAverage + odd && receiver.receiveEnergy(face, 1, true) > 0) {
+                            good++;
+                        } else {
+                            badFaces = badFaces | counter;
+                        }
+                        odd = 0;
+                    }
+                    counter = counter * 2;
+                }
+            }
+        }
+
 
         if (sendUpdate) {
             syncMachine(hasChanged != isActive);
@@ -175,7 +171,7 @@ public abstract class TileGenerator extends TileEnergyProvider implements ITileI
     }
 
     protected void updateReceivers() {
-        if (facing == null){
+        if (facing == null) {
             return;
         }
         receiversMap = new HashMap<EnumFacing, IEnergyReceiver>();
@@ -203,6 +199,10 @@ public abstract class TileGenerator extends TileEnergyProvider implements ITileI
     public void onNeighborBlockChange(BlockPos pos, IBlockState state, Block neighborBlock) {
         super.onNeighborBlockChange(pos, state, neighborBlock);
         updateReceivers();
+    }
+
+    protected boolean isStorageNinetyPercentFull() {
+        return getEnergyStored(null) >= 0.9 * getMaxEnergyStored(null);
     }
 
     protected boolean isStorageHalfFull() {

@@ -16,7 +16,7 @@ public class TileFoodCrusher extends TileFluidTank {
 
     private FoodCrusherManager recManager = FoodCrusherManager.INSTANCE;
 
-    private static final int TANK_CAPACITY = 10 * FluidContainerRegistry.BUCKET_VOLUME;
+    private static final int TANK_CAPACITY = 16 * FluidContainerRegistry.BUCKET_VOLUME;
 
     private static final int input = 0;
     private static final int fluidInput = 1;
@@ -71,6 +71,9 @@ public class TileFoodCrusher extends TileFluidTank {
         }
 
         Item container = inventory[input].getItem().getContainerItem();
+        if (inventory[input].getItem() == Items.mushroom_stew || inventory[input].getItem() == Items.rabbit_stew){
+            container = Items.bowl;
+        }
         if (container == null) {
             return recipe;
         }
@@ -102,7 +105,7 @@ public class TileFoodCrusher extends TileFluidTank {
         if (inventory[input].getItem().hasContainerItem(inventory[input])) {
             increaseStackSize(foodContainer, new ItemStack(inventory[input].getItem().getContainerItem()));
         } else {
-            if (inventory[input].getItem() == Items.mushroom_stew) {
+            if (inventory[input].getItem() == Items.mushroom_stew || inventory[input].getItem() == Items.rabbit_stew) {
                 increaseStackSize(foodContainer, new ItemStack(Items.bowl));
             }
         }
