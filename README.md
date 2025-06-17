@@ -1,3 +1,5 @@
+This is a (very old) mod for Minecraft Java Edition 1.7.10.
+
 # BottledAnimals
 
 Just a Minecraft Mod :D
